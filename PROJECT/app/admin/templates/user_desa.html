@@ -1,0 +1,104 @@
+  <link href="static/hummingbird-treeview.css" id="theme" rel="stylesheet">
+ 
+ <style type="text/css">
+	 [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+		position: inherit;
+		left: -9999px;
+		opacity: 1;
+	}
+</style>
+ <div class="col-lg-12">
+              <div class="card card-outline-info">
+                <div class="card-body">
+					<div class="col-md-10">
+                        <div class="form-group">
+                         <label class="bmd-label-floating">Desa *</label>
+						  <div class="input-group">
+							  <input type="hidden" class="form-control" id="desa_id" value="{{desa_id}}" />
+							  <input type="text" class="form-control" disabled id="desa_desc" value="{{desa_desc}}" />
+							  <button type="button" class="btn waves-effect waves-light btn-info" onclick="fnDropdownlistDesa() ">. . .</button>
+						  </div>
+                        </div>
+                      </div>
+					
+					</div>
+					
+					<div id="areatreeview">
+					
+					</div>
+		
+				</div>
+			</div>
+</div>
+
+<script src="static/hummingbird-treeview.js"></script>
+
+<script>
+
+	var tipe = 1;
+	fnDropdownlistDesa=function(){
+		tipe = 1;
+		getDropdownList("master/desa/dropdownlist?type=1")
+	}
+	
+	fnGetValueSelectDropdownlist=function(){		
+		if (tipe==1){
+			$('#desa_id').val(valueSelectedDropdownlist[0])
+			$('#desa_desc').val(valueSelectedDropdownlist[1])	
+			getHTML('admin//user_desa/data?id_desa='+$('#desa_id').val(),initfuncgsi)
+		}
+	}
+
+	var idd = '';
+	
+	var arraySave = []
+	
+	initfuncgsi=function(data, status){
+				//alert("Data: " + data + "\nStatus: " + status);
+				//$('.content').html(data)
+				$('#areatreeview').html('');
+				var btnsave = '<div><button type="button" class="btn btn-success" id="btnSubmit"> <i class="fa fa-check"></i>Save</button></div><br />'
+						
+				$('#areatreeview').html(btnsave + data.data);			
+				
+				
+				$('#btnSubmit').on('click',function(){
+					//console.log($('#node-15-24'))
+					arraySave = [];
+					
+					$.each($(".noparentTreeview1"), function() {
+						var colom = $(this); //.find("input:checkbox");
+						//console.log(colom.attr('data-id'))
+						//console.log(colom.is(':checked'))
+						if (colom.is(':checked') == true){
+							
+							var jsonD = {'data_id':colom.attr('data-id')}
+							//arraySave.push(colom1.attr('data-id'))
+							arraySave.push(jsonD)
+						}
+						
+					});
+					
+				
+					
+					execData('admin/user_desa/submit',{
+							'user_desa_id_user': $('#desa_id').val(),
+							'user_desa_data': arraySave
+						});
+					
+				});
+				
+		}
+
+	$(document).ready(function() {
+		
+		
+		
+		
+		
+		
+    });
+	
+	
+	
+ </script>

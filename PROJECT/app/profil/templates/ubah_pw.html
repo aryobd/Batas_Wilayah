@@ -1,0 +1,105 @@
+<div class="col-12">
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="form-group row">
+                <label for="password_active" class="col-sm-2 col-form-label">Password Aktif</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+
+                        <input type="password" class="form-control" id="password_active" value=""
+                          placeholder="Masukan Password Aktif">
+                        <div class="input-group-append">
+                          <div class="input-group-text c-pointer" onclick="togglePw('#password_active',this)">
+                            <span class="fa fa-eye-slash"></span>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password_baru" class="col-sm-2 col-form-label">Password Baru</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+
+                        <input type="password" class="form-control" id="password_baru" value=""
+                          placeholder="Masukan Password Baru">
+                        <div class="input-group-append">
+                          <div class="input-group-text c-pointer" onclick="togglePw('#password_baru',this)">
+                            <span class="fa fa-eye-slash"></span>
+                          </div>
+                        </div>
+                        <div class="pw-stat" id="strengthMessage"></div>
+                      </div>
+                    
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password_konfirmasi" class="col-sm-2 col-form-label">Konfirmasi Password</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+
+                        <input type="password" class="form-control" id="password_konfirmasi" value=""
+                          placeholder="Masukan Ulang Password Baru">
+                        <div class="input-group-append">
+                          <div class="input-group-text c-pointer" onclick="togglePw('#password_konfirmasi',this)">
+                            <span class="fa fa-eye-slash"></span>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary pull-right" onclick="submitFormPw()">Simpan Perubahan</button>
+        </div>
+    </div>
+</div>
+<script>
+    $("#password_baru").on("keyup", function (e) {
+        // console.log(e.target.val)
+        let pw = $(this).val()
+        // console.log(pw)
+        checkStrength(pw, "#strengthMessage")
+    })
+    function togglePw(target, obj) {
+            let iconList = ['fa fa-eye', 'fa fa-eye-slash']
+            let chldr = $(obj).children()
+
+            let iconName = $(chldr[0]).attr('class')
+            let currentState = iconList.indexOf(iconName);
+            let newState = (currentState + 1) % 2;
+            $(chldr[0]).attr('class', iconList[newState]);
+            if (newState == 0) {
+                $(target).attr("type", "text")
+            } else {
+                $(target).attr("type", "password")
+            }
+
+        }
+    submitFormPw = function () {
+        let params = {
+            password_active: $("#password_active").val(),
+            password_baru: $("#password_baru").val(),
+            password_konfirmasi: $("#password_konfirmasi").val()
+        }
+        let errMsg = [];
+        pwStrs = ["Good", "Strong"]
+        if (params.password_active.length == 0) errMsg.push("Harap password Aktif");
+
+        if (params.password_baru.length == 0) errMsg.push("Harap password baru");
+        else if (!pwStrs.includes($("#strengthMessage").html())) errMsg.push("Minimal kekuatan password Good")
+
+        if (params.password_baru != params.password_konfirmasi) errMsg.push("Password konfirmasi tidak sama");
+        // checkpw
+        // console.log(params)
+        if (errMsg.length == 0) {
+            execData('profil/ubahpw', params)
+        } else {
+            errMsg.forEach(msg => showNotificationParam("error", msg)
+            )
+        }
+    }
+</script>

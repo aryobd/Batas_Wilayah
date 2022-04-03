@@ -1,0 +1,1193 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
+    <title>TASWIL - BIG </title>
+    <link rel="canonical" href="https://www.wrappixel.com/templates/materialpro/">
+    <link rel="stylesheet" type="text/css" href="static/dataTables.bootstrap4.css">
+    <link rel="stylesheet" type="text/css" href="static/responsive.dataTables.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="static/jquery.toast.css" rel="stylesheet">
+    <link href="static/style.css" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="static/default-dark.css" id="theme" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="static/html5shiv.js"></script>
+        <script src="static/respond.min.js"></script>
+        <![endif]-->
+    <style type="text/css">
+        .jqstooltip {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            visibility: hidden;
+            background: rgb(0, 0, 0) transparent;
+            background-color: rgba(0, 0, 0, 0.6);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+            -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+            color: white;
+            font: 10px arial, san serif;
+            text-align: left;
+            white-space: nowrap;
+            padding: 5px;
+            border: 1px solid white;
+            z-index: 10000;
+        }
+
+        .jqsfield {
+            color: white;
+            font: 10px arial, san serif;
+            text-align: left;
+        }
+
+
+        #divDroddownList table tr:hover,
+        tr.selected {
+            background-color: #FFCF8B
+        }
+
+        #divDroddownList table td {
+            padding: 5px;
+        }
+
+        .card-no-border .left-sidebar,
+        .card-no-border .sidebar-nav {
+            background: #c8c7bc;
+        }
+
+        .mini-sidebar .sidebar-nav #sidebarnav>li>ul {
+            background: #c8c7bc;
+        }
+
+        .sidebar-nav ul li a.active,
+        .sidebar-nav ul li a:hover {
+            color: #1b1d1e;
+        }
+
+        .sidebar-nav>ul>li>a.active i,
+        .sidebar-nav>ul>li>a:hover i {
+            color: #1b1d1e;
+        }
+
+        .mini-sidebar .sidebar-nav {
+            background: transparent;
+        }
+
+        .sidebar-nav ul li a {
+            padding: 8px 35px 8px 0px;
+            font-size: 13px;
+        }
+
+        .pw-stat.Short {
+            width: 100%;
+            background-color: #dc3545;
+            margin-top: 5px;
+            height: 3px;
+            color: #dc3545;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .pw-stat.Weak {
+            width: 100%;
+            background-color: #ffc107;
+            margin-top: 5px;
+            height: 3px;
+            color: #ffc107;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .pw-stat.Good {
+            width: 100%;
+            background-color: #28a745;
+            margin-top: 5px;
+            height: 3px;
+            color: #28a745;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .pw-stat.Strong {
+            width: 100%;
+            background-color: #d39e00;
+            margin-top: 5px;
+            height: 3px;
+            color: #d39e00;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        .c-pointer {
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body class="fix-header fix-sidebar card-no-border">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader" style="display: none;">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+        </svg>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <!-- ============================================================== -->
+                <!-- Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <!-- Logo icon --><b>
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Dark Logo icon -->
+                            <!-- <img src="static/logo-icon.png" alt="homepage" class="dark-logo"> -->
+                            <!-- Light Logo icon -->
+                            <!-- <img src="static/logo-light-icon.png" alt="homepage" class="light-logo"> -->
+                            <img src="static/big.png" alt="homepage" class="dark-logo">
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span style="display: none;">
+                            <!-- dark Logo text -->
+                            <!-- <img src="static/logo-text.png" alt="homepage" class="dark-logo"> -->
+                            <!-- Light Logo text -->
+                            <!-- <img src="static/logo-light-text.png" class="light-logo" alt="homepage"> -->
+                            <b>TASWIL <sup>.ID</sup> </b>
+                        </span>
+                    </a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav mr-auto mt-md-0">
+                        <!-- This is  -->
+                        <li class="nav-item"> <a
+                                class="nav-link nav-toggler d-block d-md-none text-muted waves-effect waves-dark"
+                                href="javascript:void(0)">
+                                <i id="formSideMenu" class="mdi mdi-menu"></i></a> </li>
+                        <li class="nav-item">
+                            <a class="nav-link sidebartoggler d-none d-md-block text-muted waves-effect waves-dark"
+                                href="javascript:void(0)">
+                                <i class="ti-menu"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- User profile and search -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav my-lg-0">
+
+
+                        <!-- ============================================================== -->
+                        <!-- Profile -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown">
+                            {{ profille }}
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href=""
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                                    src="https://ui-avatars.com/api/?background=random&name={{session['fullname']}}"
+                                    alt="user" class="profile-pic"></a>
+                            <div class="dropdown-menu dropdown-menu-right scale-up">
+                                <ul class="dropdown-user">
+
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" onclick="execURL('/profil')"><i class="ti-user"></i> My
+                                            Profile</a></li>
+
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/logout"><i class="fa fa-power-off"></i> Logout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- User profile -->
+                <!--
+                <div class="user-profile" style="background: url(static/user-info.jpg) no-repeat;">
+                   
+                    <div class="profile-img">
+                        <img src="static/profile.png" alt="user"> </div>
+                    
+                    <div class="profile-text">
+                        <a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Markarn Doe</a>
+                        <div class="dropdown-menu animated flipInY">
+                            <a href="#" class="dropdown-item">
+                                <i class="ti-user"></i> My Profile</a>
+                           
+                           
+                            <div class="dropdown-divider"></div>
+                            <a href="pages-login.html" class="dropdown-item">
+                                <i class="fa fa-power-off"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+				-->
+                <!-- End User profile text-->
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    {{menu_html}}
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper" style="min-height: 482px;">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 col-12 align-self-center">
+                        <h3 class="text-themecolor mb-0 mt-0" id="formHeader">WELCOME</h3>
+                        <!--   <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="javascript:void(0)">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Table Data table</li>
+                        </ol> -->
+                    </div>
+
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row" style="display: none;" id="pageLoading">
+
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" id="pageContent">
+
+                    <div class="col-12">
+                        {{home_alert}}
+                    </div>
+                    <!-- 
+					<input type="button" value="test" onclick="aaaaaaa()" />
+				-->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <div class="row" id="formContent">
+
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer">
+                © 2020 SAM
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+
+
+    <!-- Top modal content -->
+    <div id="divDroddownArea" class="modal fade" tabindex="-1" user="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-top modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="topModalLabel">Select</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" placeholder="Search in table..." id="js-search">
+                        </div>
+                    </div>
+                    <div id="divDroddownList">
+                        <table class="table js-table">
+                            <thead class="js-thead"></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsSelectDropdownlist">Select</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="modalGantiAkun" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Ganti Akun
+                </div>
+                <div class="modal-body">
+                    <div>Pilih Akun</div>
+                    {{dd_change_user}}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Kembali</button>
+                    <button class="btn btn-primary" onclick="gantiAkun()">Pilih</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="static/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="static/popper.min.js"></script>
+    <script src="static/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="static/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="static/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="static/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="static/sticky-kit.min.js"></script>
+    <script src="static/jquery.sparkline.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="static/custom.min.js"></script>
+    <!-- This is data table -->
+    <script src="static/jquery.dataTables.min.js"></script>
+    <script src="static/dataTables.responsive.min.js"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="static/dataTables.buttons.min.js"></script>
+    <script src="static/buttons.flash.min.js"></script>
+    <script src="static/jszip.min.js"></script>
+    <script src="static/zip.min.js"></script>
+    <script src="static/pdfmake.min.js"></script>
+    <script src="static/vfs_fonts.js"></script>
+    <script src="static/buttons.html5.min.js"></script>
+    <script src="static/buttons.print.min.js"></script>
+    <script src="static/jquery.toast.js"></script>
+    <script src="static/validation.js"></script>
+
+   
+
+    <!-- end - This is for export functionality only -->
+    <script>
+
+
+
+
+    </script>
+
+
+    <script>
+        /*const LEN_ID_PROVINSI = 2;
+        const LEN_ID_KABKOTA = 4;
+        const LEN_ID_KECAMATAN = 7;
+        const LEN_ID_DESA = 10;*/
+		const LEN_ID_PROVINSI = 2;
+        const LEN_ID_KABKOTA = 5;
+        const LEN_ID_KECAMATAN = 8;
+        const LEN_ID_DESA = 13;
+        // Modal ganti akun
+        document.addEventListener('keydown', (ev) => {
+            if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === 'u') {
+                $("#modalGantiAkun").modal('show')
+            }
+        });
+
+        gantiAkun = function () {
+            let id_user = $("#dropdown-c-user").val()
+            // console.log(id_user)
+            window.location.href = "/cuser?idu=" + id_user
+        }
+        var isAdd = 'False';
+        var isUpdate = 'False';
+        var isDelete = 'False';
+        var isApprove = 'False';
+        setDataUrl = function () {
+            /*$('a .nav-link').parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+               $('.dropdown-submenu .show').removeClass("show");
+            });
+            */
+            $('#sidebarnav a').each(function (i, obj) {
+                //test
+                var attr = $(this).attr('dataurl');
+                if (typeof attr !== typeof undefined && attr !== false) {
+                    if ($(this).attr('dataurl') != '') {
+                        $(this).bind('click', function () {
+                            isAdd = $(this).attr('isAdd');
+                            isUpdate = $(this).attr('isUpdate');
+                            isDelete = $(this).attr('isDelete');
+                            isApprove = $(this).attr('isApprove');
+                            //console.log(isAdd+isUpdate+isDelete+isApprove)
+                            execURL($(this).attr('dataurl'));
+                            //alert($(this).attr('dataurl'));
+                            buttonFunc();
+                        })
+                    }
+                }
+
+            });
+        }
+
+        setPageContentByUrl = function () {
+            let currentUrl = window.location.href;
+            if (currentUrl.split("#").length == 2) {
+                let url = currentUrl.split("#")[1]
+                if (url.length > 0) {
+                    let currentMenu = $("[dataurl='" + url + "']");
+                    // console.log(currentMenu)
+                    isAdd = currentMenu.attr('isAdd');
+                    isUpdate = currentMenu.attr('isUpdate');
+                    isDelete = currentMenu.attr('isDelete');
+                    isApprove = currentMenu.attr('isApprove');
+                    execURL(url)
+                }
+            } else {
+                // ambil notifikasi
+                let a_id_wilayah = '{{a_id_wilayah}}'
+                // infopermintaan
+                console.log(a_id_wilayah)
+                if (a_id_wilayah.length == 10) {
+                    let url = "/transaction/desabersebelahan/data?tipe=2&id_wilayah=" + a_id_wilayah;
+                    $.get(url, function (res) {
+                        if (res.status) {
+                            let { list } = res.data;
+                            let c = 0
+                            list.forEach(val => { if (val.tipe.toLowerCase() == "permintaan" & val.status.toLowerCase() == "menunggu konfirmasi") { c++ } })
+                            // console.log(res)
+
+                            let notif = '   <a class="col-4" href="javascript:void(0)" onclick="execURL(' + "'/transaction/desabersebelahan'" + ')">' +
+                                '<div class="card">' +
+                                '<h4 class="card-header">Permintaan Desa Bersebelahan</h4>' +
+                                '<div class="card-body">' +
+                                'Menunggu Konfirmasi : <label class="badge badge-info">' + c + '</label>' +
+                                '</div>' +
+                                '</div>' +
+                                ' </a>'
+                            if (c > 0) {
+                                $("#pageContent").append(notif)
+                            }
+                        }
+                    })
+                }
+
+            }
+        }
+
+        checkRoleButton = function () {
+            $.each($("#btnInsert"), function () {
+                if (isAdd == 'False') $(this).remove();
+            });
+            $.each($(".btnDeleteForm"), function () {
+                if (isDelete == 'False') $(this).remove();
+            });
+            $.each($(".btnEditForm"), function () {
+                if (isUpdate == 'False') $(this).remove();
+            });
+            $.each($(".btnApproveForm"), function () {
+                if (isApprove == 'False') $(this).remove();
+            });
+        }
+
+        execURL = function (url) {
+            /*$.ajax({
+              url: url,
+              data: data,
+              success: success,
+              dataType: dataType
+            });
+            */
+            $("#pageContent").hide()
+            $("#pageLoading").show();
+            $.get(url, function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                //$('.content').html(data)
+                if (data.data != false) {
+                    $('#pageContent').html(data.data);
+                    $('#formHeader').html(data.header);
+                    $('#pageContent').show();
+                    $('#formContent').hide();
+
+                    let currentUrl = window.location.href;
+                    // console.log(currentUrl,url)
+                    if (!currentUrl.includes(url)) {
+                        let newUrl = location.protocol + "//" + location.host + "/#" + url;
+                        // console.log(newUrl)
+                        history.pushState({}, "", newUrl)
+
+                    }
+                    // history.pushState()
+                    checkRoleButton();
+                } else {
+                    showNotificationParam("error", data.header)
+                }
+                $("#pageContent").show()
+                $("#pageLoading").hide();
+            });
+        }
+
+        execForm = function (url) {
+            $("#formContent").html('<div class="col-12"> <div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div></div>')
+
+            /*$.ajax({
+              url: url,
+              data: data,
+              success: success,
+              dataType: dataType
+            });
+            */
+            $.get(url, function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                //$('.content').html(data)
+                $('#formContent').html('');
+                $('#formContent').html(data.data);
+                $('#pageContent').hide();
+                $('#formContent').show();
+                $('.btnCancel').each(function (i, obj) {
+
+                    $(this).bind('click', function () {
+                        // hideForm();
+                        setPageContentByUrl()
+                    })
+
+                });
+                checkRoleButton();
+            });
+        }
+
+        hideForm = function () {
+            $('#pageContent').show();
+            $('#formContent').hide();
+        }
+
+        execData = function (url, values, callBack = true) {
+            $("#pageContent").hide()
+            $("#pageLoading").show();
+
+            $.ajax({
+                url: url,
+                type: "post",
+                data: JSON.stringify(values),
+                contentType: 'application/json',
+                success: function (response) {
+                    $("#pageContent").show()
+                    $("#pageLoading").hide();
+                    if (response.result == true) {
+                        if (typeof callBack == "function") {
+                            showNotificationParam('success', response.error, callBack(response));
+                        } else {
+                            showNotificationParam('success', response.error);
+                        }
+                        //tableDataTable.ajax.reload(initComplete);
+                        // if (typeof tableDataTable !== "undefined") {
+
+                        // }
+                        if (typeof callBack != "function") {
+
+                            setPageContentByUrl()
+                        }
+                        hideForm();
+                    }
+                    else {
+
+                        showNotificationParam('error', response.error);
+                    }
+                    // You will get response from your PHP page (what you echo or print)
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#pageContent").show()
+                    $("#pageLoading").hide();
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+
+        var tableDataTable
+        var initComplete
+
+        generateDataTable = function (id, url, columns, fninitComplete,responsive=true) {
+            // console.log(tableDataTable)
+            if (typeof tableDataTable != "undefined") {
+                tableDataTable.destroy()
+            }
+            initComplete = fninitComplete;
+            // return
+            tableDataTable = $(id).DataTable({
+                language: {
+                    url: "./static/dataTables.lang.id.json"
+                },
+                responsive: responsive,
+                serverSide: true,
+                columns: columns
+                , ajax: url
+                //,"initComplete":fninitComplete
+                , "initComplete": function () {
+                    fninitComplete(); // add this here too
+                    checkRoleButton();
+                }
+
+            })
+
+            //tableDataTable.on( 'draw.dt', fninitComplete );
+
+        }
+
+        showNotificationParam = function (type, mess, callBack, callbBackFireOn = "end") {
+            //type = ['', 'info', 'danger', 'success', 'warning', 'rose', 'primary'];
+            var cfgToast = {
+                heading: '',
+                text: mess,
+                position: 'bottom-right',
+                loaderBg: '#ff6849',
+                icon: type,
+                hideAfter: 3500,
+            }
+            let fireCallBack = "afterHidden"
+
+            if (callbBackFireOn == "start") fireCallBack = "beforeShow";
+            // console.log(callbBackFireOn)
+            if (typeof callBack == "function") {
+                cfgToast[fireCallBack] = () => { callBack() }
+            }
+
+            $.toast(cfgToast);
+        }
+
+        buttonFunc = function () {
+            $('#formSideMenu').addClass("ti-menu");
+        }
+
+
+        $(document).ready(function () {
+            setDataUrl();
+            setPageContentByUrl()
+            let a_id_wilayah = '{{a_id_wilayah}}'
+            // infopermintaan
+            if(a_id_wilayah.length ==10){
+                let url =  "/transaction/desabersebelahan/data?tipe=2&id_wilayah="+a_id_wilayah;
+                $.get(url,function(res){
+                    if(res.status){
+                        let {permintaan}=res.data;
+                        let c = 0
+						if (permintaan)
+							permintaan.forEach(val=>{if(val.status.toLowerCase()=="belum dikonfirmasi"){c++}})
+
+                        let notif ='   <a class="col-4" href="javascript:void(0)" onclick="execURL('+"'/transaction/desabersebelahan'"+')">'+
+                '<div class="card">'+
+                    '<h4 class="card-header">Permintaan Desa Bersebelahan</h4>'+
+                    '<div class="card-body">'+
+                        'Menunggu Konfirmasi : <label class="badge badge-info">'+c+'</label>'+
+                    '</div>'+
+                '</div>'+
+                ' </a>'
+                if(c >0){
+                    $("#pageContent").append(notif)
+                }
+                    }
+                })
+            }
+            
+        });
+
+
+        getHTML = function (url, initfunction) {
+            $.get(url, initfunction);
+        }
+
+        getDropdownList1 = function (url) {
+
+            $("#divDroddownList thead").html('');
+            $("#divDroddownList tbody").html('');
+
+            $.get(url, function (data1, status) {
+                var data11 = data1.data;
+                console.log(data11);
+
+                var thead = "";
+                var tbody = "";
+                var keyNames = Object.keys(data11[0]);
+                for (var i = 0; i < keyNames.length; i++) {
+                    thead += "<th>" + keyNames[i] + "</th>";
+                    //console.log(data11[0][keyNames[i]]);
+                }
+
+                for (var j = 0; j < data11.length; j++) {
+                    tbody += "<tr>";
+                    for (var i = 0; i < keyNames.length; i++) {
+                        tbody += "<td>" + data11[j][keyNames[i]] + "</td>";
+                    }
+                    tbody += "</tr>";
+                }
+
+                $("#divDroddownList thead").append("<tr>" + thead + "</tr>");
+                $("#divDroddownList tbody").append(tbody);
+                $('#divDroddownArea').modal('toggle');
+
+
+                $("#js-search").keyup(function () {
+                    _this = this;
+                    $.each($(".js-table tbody tr"), function () {
+                        if ($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
+                            $(this).hide();
+                        else
+                            $(this).show();
+                    });
+                });
+
+
+
+
+            });
+
+        }
+
+        var changeDropdownlist;
+        var lengthSearchDropdownlist = 0;
+        var valueSelectedDropdownlist = [];
+
+        getDropdownList = function (url) {
+            $('#divDroddownArea').modal('toggle');
+            $("#divDroddownList thead").html('');
+            $("#divDroddownList tbody").html('');
+            $("#js-search").val('');
+
+            $("#js-search").keyup(function (e) {
+                var charserach = $(this).val();
+
+                clearTimeout(changeDropdownlist);
+                changeDropdownlist = setTimeout(function () {
+
+                    $("#divDroddownList thead").html('');
+                    $("#divDroddownList tbody").html('');
+
+                    $.get(url + "&search=" + charserach, function (data1, status) {
+
+                        var data11 = data1.data;
+                        //console.log(data11);
+                        if (data11.length > 0) {
+
+                            var thead = "";
+                            var tbody = "";
+                            var keyNames = Object.keys(data11[0]);
+                            lengthSearchDropdownlist = keyNames.length - 1;
+                            for (var i = 0; i < keyNames.length; i++) {
+                                thead += "<th>" + keyNames[i] + "</th>";
+                                //console.log(data11[0][keyNames[i]]);
+                            }
+
+                            for (var j = 0; j < data11.length; j++) {
+                                tbody += "<tr>";
+                                for (var i = 0; i < keyNames.length; i++) {
+                                    tbody += "<td>" + data11[j][keyNames[i]] + "</td>";
+                                }
+                                tbody += "</tr>";
+                            }
+
+                            $("#divDroddownList thead").append("<tr>" + thead + "</tr>");
+                            $("#divDroddownList tbody").append(tbody);
+                            $("#divDroddownList tbody tr").click(function () {
+                                valueSelectedDropdownlist = [];
+                                $(this).addClass("selected").siblings().removeClass("selected");
+
+                                var currentRow = $(this);
+                                for (var i = 0; i < keyNames.length; i++) {
+                                    valueSelectedDropdownlist.push(currentRow.find("td:eq(" + i + ")").text());
+                                }
+
+
+                            });
+
+                        }
+                    });
+
+
+
+                }, 800);
+            });
+
+
+
+        }
+        /*
+        aaaaaaa=function (){
+        	
+            getDropdownList("admin/dropdownlist?type=1")
+        }
+        */
+
+        fnGetValueSelectDropdownlist = function () {
+
+            //console.log(valueSelectedDropdownlist)
+        }
+
+
+        $("#btnsSelectDropdownlist").click(function (e) {
+            if (valueSelectedDropdownlist.length <= 0) {
+                showNotificationParam('warning', 'Please select the data.');
+                return;
+            }
+            $('#divDroddownArea').modal('toggle'); fnGetValueSelectDropdownlist()
+        }
+        );
+
+
+        /*
+$("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() { 
+      formatCurrency($(this), "blur");
+    }
+});
+*/
+
+
+        function formatNumber(n) {
+            // format number 1000000 to 1,234,567
+            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }
+
+
+        function formatCurrency(input, blur) {
+            // appends $ to value, validates decimal side
+            // and puts cursor back in right position.
+
+            // get input value
+            var input_val = input.val();
+
+            // don't validate empty input
+            if (input_val === "") { return; }
+
+            // original length
+            var original_len = input_val.length;
+
+            // initial caret position 
+            var caret_pos = input.prop("selectionStart");
+
+            // check for decimal
+            if (input_val.indexOf(".") >= 0) {
+
+                // get position of first decimal
+                // this prevents multiple decimals from
+                // being entered
+                var decimal_pos = input_val.indexOf(".");
+
+                // split number by decimal point
+                var left_side = input_val.substring(0, decimal_pos);
+                var right_side = input_val.substring(decimal_pos);
+
+                // add commas to left side of number
+                left_side = formatNumber(left_side);
+
+                // validate right side
+                right_side = formatNumber(right_side);
+
+                // On blur make sure 2 numbers after decimal
+                if (blur === "blur") {
+                    right_side += "00";
+                }
+
+                // Limit decimal to only 2 digits
+                right_side = right_side.substring(0, 2);
+
+                // join number by .
+                input_val = left_side + "." + right_side;
+
+            } else {
+                // no decimal entered
+                // add commas to number
+                // remove all non-digits
+                input_val = formatNumber(input_val);
+                input_val = input_val;
+
+                // final formatting
+                if (blur === "blur") {
+                    input_val += ".00";
+                }
+            }
+
+            // send updated string to input
+            input.val(input_val);
+
+            // put caret back in the right position
+            var updated_len = input_val.length;
+            caret_pos = updated_len - original_len + caret_pos;
+            input[0].setSelectionRange(caret_pos, caret_pos);
+        }
+
+
+
+        generateDropdownProvinsi = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, initChild = false, onComplete = () => { } }) {
+            try {
+                let listProvinsi = await $.get("/master/provinsi/dropdownlist?type=2");
+                let listHtml = '<option value="" disabled selected>--Pilih Provinsi--</option>';
+                if (initialValue != "") {
+                    listHtml = '<option value="" disabled selected>--Pilih Provinsi--</option>'
+                }
+                listProvinsi.data.forEach(el => {
+                    let selected = "";
+                    if (initialValue.substring(0, 2) == el.id) {
+                        selected = 'selected';
+                    }
+                    listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
+                })
+                // console.log(listHtml)
+                $(selector).html(listHtml)
+                $(selector).on('change', function () {
+                    if (typeof onChangeEvent == "function") {
+
+                        onChangeEvent($(this).val())
+                    }
+                })
+                if (initChild) {
+                    onChangeEvent(initialValue)
+                }
+                if (typeof onComplete == "function") onComplete()
+
+            } catch (error) {
+                showNotificationParam("error", error.toString())
+            }
+
+        }
+
+
+        generateDropdownKabKota = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { } }) {
+            try {
+                let listHtml = '<option value="" disabled selected>--Pilih Kabupaten/Kota--</option>';
+                if (initialValue != "") {
+                    listHtml = '<option value="" disabled selected>--Pilih Kabupaten/Kota--</option>'
+                }
+                // console.log(parentValue, initialValue)
+                if (parentValue.length == 0) {
+                    parentValue = initialValue.substring(0, 2)
+                }
+				console.log("fsdfsdfsd",parentValue)
+                if (parentValue.length != 0) {
+                    let listProvinsi = await $.get("/master/kabkota/dropdownlist?type=2&id_provinsi=" + parentValue);
+
+                    listProvinsi.data.forEach(el => {
+                        let selected = "";
+                        if (initialValue.substring(0, 5) == el.id) {
+                            selected = 'selected';
+                        }
+                        listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
+                    })
+                }
+
+                // console.log(listHtml)
+                $(selector).html(listHtml)
+                $(selector).on('change', function () {
+
+                    if (typeof onChangeEvent == "function") {
+
+                        onChangeEvent($(this).val())
+                    }
+                })
+                if (initChild) {
+                    onChangeEvent(initialValue)
+                }
+                if (typeof onComplete == "function") onComplete()
+
+            } catch (error) {
+                showNotificationParam("error", error.toString())
+            }
+
+        }
+
+        generateDropdownKecamatan = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { }, }) {
+            try {
+                let listHtml = '<option value="" disabled selected>--Pilih Kecamatan--</option>';
+                if (initialValue != "") {
+                    listHtml = '<option value="" disabled selected>--Pilih Kecamatan--</option>'
+                }
+                // console.log(parentValue, initialValue)
+                if (parentValue.length == 0) {
+                    parentValue = initialValue.substring(0, 5)
+                }
+                if (parentValue.length != 0) {
+                    let listProvinsi = await $.get("/master/kecamatan/dropdownlist?type=2&id_kabkota=" + parentValue);
+
+                    listProvinsi.data.forEach(el => {
+                        let selected = "";
+                        if (initialValue.substring(0, 8) == el.id) {
+                            selected = 'selected';
+                        }
+                        listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
+                    })
+                }
+                // console.log(listHtml)
+                $(selector).html(listHtml)
+                $(selector).on('change', function () {
+                    if (typeof onChangeEvent == "function") {
+
+                        onChangeEvent($(this).val())
+                    }
+                })
+                if (initChild) {
+                    onChangeEvent(initialValue)
+                }
+                if (typeof onComplete == "function") onComplete()
+            } catch (error) {
+                showNotificationParam("error", error.toString())
+            }
+
+        }
+        generateDropdownDesa = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { },deactivatefilter=false,parentType="kecamatan",withParentName=false }) {
+            try {
+                let listHtml = '<option value="" disabled selected>--Pilih Desa / Kelurahan--</option>';
+                if (initialValue != "") {
+                    listHtml = '<option value="" disabled selected>--Pilih Desa / Kelurahan--</option>'
+                }
+                // console.log(parentValue, initialValue)
+                if (parentValue.length == 0) {
+                    parentValue = initialValue.substring(0, 8)
+                }
+                let strDeactivate = ""
+                if(deactivatefilter){
+                    strDeactivate = "&deactivatefilter=true"
+                }
+                if (parentValue.length != 0) {
+                    let listProvinsi = await $.get("/master/desa/dropdownlist?type=2&id_"+parentType+"=" + parentValue+strDeactivate);
+
+                    listProvinsi.data.forEach(el => {
+                        let selected = "";
+                        if (initialValue.substring(0, 13) == el.id) {
+                            selected = 'selected';
+                        }
+                        if(withParentName){
+
+                            listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name+', '+el.parent_name + '</option>';
+                        }else{
+
+                            listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
+                        }
+                    })
+                }
+                // console.log(listHtml)
+                $(selector).html(listHtml)
+                $(selector).on('change', function () {
+                    if (typeof onChangeEvent == "function") {
+
+                        onChangeEvent($(this).val())
+                    }
+                })
+                if (initChild) {
+                    onChangeEvent(initialValue)
+                }
+                if (typeof onComplete == "function") onComplete()
+            } catch (error) {
+                showNotificationParam("error", error.toString())
+            }
+
+        }
+
+        function checkStrength(password, idSelector = '#strengthMessage') {
+            var strength = 0
+
+            if (password.length == 0) {
+                $(idSelector).removeClass()
+                $(idSelector).html('')
+                return
+            } else if (password.length < 6) {
+                $(idSelector).removeClass()
+                $(idSelector).addClass('pw-stat Short')
+                $(idSelector).html('Too short')
+                return
+            }
+            if (password.length > 7) strength += 1
+            // If password contains both lower and uppercase characters, increase strength value.  
+            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1
+            // If it has numbers and characters, increase strength value.  
+            if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1
+            // If it has one special character, increase strength value.  
+            if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+            // If it has two special characters, increase strength value.  
+            if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+            // Calculated strength value, we can return messages  
+            // If value is less than 2  
+            if (strength < 2) {
+                $(idSelector).removeClass()
+                $(idSelector).addClass('pw-stat Weak')
+                $(idSelector).html('Weak')
+            } else if (strength == 2) {
+                $(idSelector).removeClass()
+                $(idSelector).addClass('pw-stat Good')
+                $(idSelector).html('Good')
+            } else {
+                $(idSelector).removeClass()
+                $(idSelector).addClass('pw-stat Strong')
+                $(idSelector).html('Strong')
+            }
+        }
+
+    </script>
+    <!-- ============================================================== -->
+    <!-- Style switcher -->
+    <!-- ============================================================== -->
+    <script src="static/jQuery.style.switcher.js"></script>
+
+
+</body>
+
+</html>

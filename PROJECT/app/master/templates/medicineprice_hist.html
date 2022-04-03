@@ -1,0 +1,137 @@
+<div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">List</h4>
+							   
+								
+                                <div class="table-responsive mt-4">
+                                 
+									 <table id="example23"
+                                        class="display nowrap table table-hover table-striped table-bordered"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                               <th>CATEGORY</th>
+                                                <th>NAME</th>
+												<th>DESCRIPTION</th>
+												<th>UNIT MEASURE</th>
+												 <th>AMOUNT</th>
+                                                <th></th>
+                                                
+                                            </tr>
+                                        </thead>
+                                      
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                      
+                    </div>
+					
+								
+<!-- Top modal content -->
+                                <div id="top-modal" class="modal fade" tabindex="-1" medicine="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-top">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="topModalLabel">Confirmation</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">×</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>Are you sure to delete this data ?</h5>
+                                               
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" id='btnDelete'>Delete</button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+
+<script>
+	var idd = '';
+	
+
+	$(document).ready(function() {
+		$('#btnInsert').bind('click', function(){
+								execForm("/master/medicinepricehist/form?type=1");
+								//execURL($(this).attr('dataurl'));
+								//alert($(this).attr('dataurl'));
+								//buttonFunc();
+		})
+    
+		/*
+		$('#example23').DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            columnDefs: [
+                { responsivePriority: 3, targets: 0 },
+                { responsivePriority: 2, targets: -1 }
+            ]
+			
+            ,buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+		*/
+		
+		generateDataTable('#example23',"master/medicinepricehist/data",[
+			
+				{ "data": "category" }			,	
+				{ "data": "name" }			,	
+				{ "data": "desc" }			,	
+				{ "data": "unit_mes" }			,	
+				{ "data": "amount", render: $.fn.dataTable.render.number( ',', '.', 2 ) }	
+				,{ "data": "btn","width":"50px","orderable": false}	
+			],initcom)
+	
+	
+		
+		$('#example23').on('click', '.btnEditForm', function() {
+			//console.log($(this).attr('dataid'));
+			execForm("/master/medicinepricehist/form?id="+$(this).attr('dataid')+"&type=2");
+		});
+		
+		$('#example23').on('click', '.btnDeleteForm', function() {
+			idd = $(this).attr('dataid');
+			console.log(idd);
+		});
+		
+    });
+	
+	
+	function initcom( settings, json){
+	
+				
+				//alert('initComplete');
+				$('#dt-buttons .btnEditForm').each(function(i, obj) {
+					//test
+					
+					var attr = $(this).attr('dataid');					
+					if (typeof attr !== typeof undefined && attr !== false) {						
+						if($(this).attr('dataid') != ''){
+							//console.log($(this).attr('dataid'));
+							/*
+							$(this).bind('click', function(){
+								console.log('11111111aaaaaaaaaaaaaa');
+								//execForm("/master/medicine/form?id="+$(this).attr('dataid')+"&type=2");
+								
+							})
+							*/
+							//console.log($(this));	
+							
+						}
+					}
+					
+				});
+				
+				
+				
+				
+				
+			}
+	
+  </script>

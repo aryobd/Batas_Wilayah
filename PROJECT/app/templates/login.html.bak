@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="robots" content="noindex, nofollow">
+    <title>Login - TASWIL - BIG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-all.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="static/dataTables.bootstrap4.css">
+    <link href="static/style.css" rel="stylesheet">
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+
+    <style>
+        .content {
+            height: 100vh;
+        }
+
+        .c-pointer {
+            cursor: pointer;
+        }
+
+        .bg-login {
+            background-image: url('static/bg-login2.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        #bg-login {
+            background-image: url('static/bg-login3.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .contents {
+            background-color: #f1f1f1;
+        }
+
+        #login-form div.input-group {
+            background-color: transparent;
+        }
+
+        #login-form .input-group .icon {
+            background-color: transparent;
+        }
+
+        #login-form .input-group .icon.left {
+            border-width: 1px 0px 1px 1px;
+
+        }
+
+        .rounded-left {
+            border-radius: 50px 0px 0px 50px !important;
+        }
+
+        .rounded-right {
+            border-radius: 0px 50px 50px 0px !important;
+        }
+
+        #login-form .input-group .icon.right {
+            border-width: 1px 1px 1px 0px;
+        }
+
+        #login-form input {
+            background-color: transparent;
+            color: #fff;
+        }
+
+        #login-form input::placeholder {
+            /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #eee;
+            opacity: 1;
+            /* Firefox */
+        }
+
+        .container-form {
+            width: 100%;
+            max-width: 375px;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px white inset !important;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="bg-login">
+        <div class="row justify-content-center">
+            <div class="container-form pt-4">
+                <div class="my-4 text-center">
+                    <img src="static/BIG_highlight.png" width="110" alt="">
+                </div>
+                <div class="my-4 pt-4 text-center">
+                    <h3 class="mb-1 text-white">Login</h3>
+                    <p class="mb-4 text-white">Sistem Informasi Batas Desa</p>
+                </div>
+                <form id="login-form" action="/" method="post">
+                    <div class="form-group first">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text icon left rounded-left">
+                                    <span class="fa fa-user text-white"></span>
+                                </div>
+                            </div>
+                            <input type="text" name="txtUsername" class="form-control rounded-right" id="username"
+                                placeholder="Masukan Username" style="border-left-width: 0px;">
+                        </div>
+
+
+                    </div>
+                    <div class="form-group last">
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text c-pointer icon left rounded-left">
+                                    <span class="fa fa-key text-white"></span>
+                                </div>
+                            </div>
+                            <input type="password" name="txtPassword" class="form-control" id="password_active" value=""
+                                placeholder="Masukan Password" style="border-width: 1px 0px;">
+                            <div class="input-group-append">
+                                <div class="input-group-text text-white c-pointer icon right rounded-right"
+                                    onclick="togglePw('#password_active',this)">
+                                    <span class="fa fa-eye-slash "></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="LOGIN" class="btn btn-block bg-white text-primary">
+
+                    <span id="msgLogin" class="badge badge-danger mt-4" style="width: 100%;">{{error}}</span>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="static/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="static/popper.min.js"></script>
+    <script src="static/bootstrap.min.js"></script>
+
+    <script>
+
+        let msg = $("#msgLogin").html();
+        // console.log(msg)
+        if (msg.length > 0) {
+            $("#msgLogin").removeClass('d-none')
+        }
+        function togglePw(target, obj) {
+            let iconList = ['fa fa-eye', 'fa fa-eye-slash']
+            let chldr = $(obj).children()
+
+            let iconName = $(chldr[0]).attr('class')
+            let currentState = iconList.indexOf(iconName);
+            let newState = (currentState + 1) % 2;
+            $(chldr[0]).attr('class', iconList[newState]);
+            if (newState == 0) {
+                $(target).attr("type", "text")
+            } else {
+                $(target).attr("type", "password")
+            }
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,688 @@
+
+
+<!-- Leaflet -->
+    <link rel="stylesheet" href="static/leaflet/leaflet.css">
+    <link rel="stylesheet" href="static/leaflet/plugin/leaflet-controllayerstree.css">
+ <link rel="stylesheet" href="static/leaflet/plugin/leaflet-fullscreen.min.css">
+<style>
+    input.leaflet-control-layers-selector {
+        opacity: 1 !important;
+        position: static !important;
+        left: 2px;
+        margin-right: 4px;
+    }
+	#mapGambarBatasDesa{
+        z-index: 1;
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div class="col-lg-12">
+
+    <div class="card card-outline">
+        <div class="card-header pb-0">
+            <table>
+                <tr>
+                    <td style="width: 100%;">
+                        <div id="title-map" style="display: none;">
+                            <div class="font-weight-bold badge badge-danger">ID : #123123</div>
+
+                        </div>
+
+                        <span class="font-weight-bold">Gambar Peta Desa : <span
+                                id="gambarDesa-NamaDesa">{{nama_wilayah}}</span>
+                        </span>
+                        <div>
+                    </td>
+					
+                </tr>
+            </table>
+
+
+        </div>
+        <div class="card-body">
+			<div id="mapGambarBatasDesa" style="width: 100%;height: 60vh;"></div>
+			<div class="card card-outline-info">
+				 <div class="card-header">
+					<h4 class="mb-0 text-white">Informasi Kesepakatan</h4>
+				 </div>
+				 <div class="card-body">
+					
+					<div class="form-group row">
+						<label for="staticEmail" class="col-sm-2 col-form-label">Tanggal</label>
+						<div class="col-sm-10">
+						  <input type="date"  class="form-control-plaintext" id="txtTanggal" value="{{txtTanggal}}">
+						</div>
+					  </div>
+					  <div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Lokasi / Tempat</label>
+						<div class="col-sm-10">
+						  <input type="text" class="form-control" id="txtLokasi" value="{{txtLokasi}}">
+						</div>
+					  </div>
+					  <div class="form-group row">						
+						<div class="col-sm-6">
+						  Kecamatan {{kecamatan1}}, Desa {{desa_asal}}  ( {{desa1}} )
+						</div>
+						<div class="col-sm-6">
+						  Kecamatan {{kecamatan2}}, Desa {{desa_tujuan}} ( {{desa2}} )
+						</div>
+					  </div>
+					  <div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">{{namaJabDsAsal}}</label>
+						<div class="col-sm-4">
+						  {{txtKades1}}
+						</div>
+						<label for="inputPassword" class="col-sm-2 col-form-label">{{namaJabDsTujuan}}</label>
+						<div class="col-sm-4">
+						  {{txtKades2}}
+						</div>
+					  </div>
+					  <div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Camat</label>
+						<div class="col-sm-4">
+						 {{txtCamat1}}
+						</div>
+						<label for="inputPassword" class="col-sm-2 col-form-label">Camat</label>
+						<div class="col-sm-4">
+						  {{txtCamat2}}
+						</div>
+					  </div>
+					  
+					  <div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Tim PPBDES</label>
+						<div class="col-sm-10">
+						  <input type="text" class="form-control" id="txtPbdes" value="{{txtPbdes}}">
+						</div>
+					  </div>
+					  <div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Data Dasar</label>
+						<div class="col-sm-10">
+						  <textarea class="form-control" id="txtDataDasar" rows="3">{{txtDataDasar}}</textarea>
+						</div>
+					  </div>
+					  <button 
+                                        class="btn btn-primary tp-enabled  d-inline"
+                                        title="Simpan Data" onclick="processForm()"
+                                       ><i
+                                            class="mdi mdi-content-save"></i></button>
+					 
+				  </div>
+			</div>
+			<div style="width: 100%">
+				<table  id="listsubsegmen"  class="table">	
+					<thead>
+						<tr><th colspan=2>List Sub Segmen</th></tr>
+						<tr><th>Keterangan</th><th>TK Dari</th><th>TK Ke</th></tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div style="width: 100%">
+				<table  id="listTitikKartometri"  class="table">	
+					<thead>
+						<tr><th colspan=2>List Titik Kartometri</th></tr>
+						<tr><th>Titik</th><th>No</th><th>Keterangan</th><th>Urutan</th></tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+            
+        </div>
+    </div>
+    
+    
+	
+	
+	
+	
+</div>
+
+
+	
+
+    <script src="static/leaflet/leaflet-src.js"></script>
+   
+		
+    <script src="static/leaflet/plugin/leaflet-controllayerstree.js"></script>
+    <script src="static/leaflet/plugin/leaflet-fullscreen.min.js"></script>
+   
+   
+<script src="static/leaflet/esri-leaflet.js"></script>
+
+    
+    <script src="static/leaflet/draw/src/Leaflet.draw.js"></script>
+    <script src="static/leaflet/draw/src/Leaflet.Draw.Event.js"></script>
+    <link rel="stylesheet" href="static/leaflet/draw/src/leaflet.draw.css"/>
+
+    <script src="static/leaflet/draw/src/Toolbar.js"></script>
+    <script src="static/leaflet/draw/src/Tooltip.js"></script>
+
+    <script src="static/leaflet/draw/src/ext/GeometryUtil.js"></script>
+    <script src="static/leaflet/draw/src/ext/LatLngUtil.js"></script>
+    <script src="static/leaflet/draw/src/ext/LineUtil.Intersect.js"></script>
+    <script src="static/leaflet/draw/src/ext/Polygon.Intersect.js"></script>
+    <script src="static/leaflet/draw/src/ext/Polyline.Intersect.js"></script>
+    <script src="static/leaflet/draw/src/ext/TouchEvents.js"></script>
+
+    <script src="static/leaflet/draw/src/draw/DrawToolbar.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.Feature.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.Polyline.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.Marker.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.Circle.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.CircleMarker.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.Polygon.js"></script>
+    <script src="static/leaflet/draw/src/draw/handler/Draw.Rectangle.js"></script>
+
+
+    <script src="static/leaflet/draw/src/edit/EditToolbar.js"></script>
+    <script src="static/leaflet/draw/src/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="static/leaflet/draw/src/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="static/leaflet/draw/src/Control.Draw.js"></script>
+
+    <script src="static/leaflet/draw/src/edit/handler/Edit.Poly.js"></script>
+    <script src="static/leaflet/draw/src/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="static/leaflet/draw/src/edit/handler/Edit.Rectangle.js"></script>
+    <script src="static/leaflet/draw/src/edit/handler/Edit.Marker.js"></script>
+    <script src="static/leaflet/draw/src/edit/handler/Edit.CircleMarker.js"></script>
+    <script src="static/leaflet/draw/src/edit/handler/Edit.Circle.js"></script>
+
+
+<script>
+var map
+
+	var idDesa1 = "{{desa1}}";
+	 
+	 var idDesa2 = "{{desa2}}";
+	 
+	 var kecamatan1 = "{{kecamatan1}}";
+	 
+	 var kecamatan2 = "{{kecamatan2}}";
+	 
+		var editorDesaIdWilayah = "{{id_wilayah}}";
+
+	
+	 var klaimidDesa1 = "{{klaimidDesa1}}";
+	 
+	 var klaimidDesa2 = "{{klaimidDesa2}}";
+var id_desa_bersebelahan = "{{id_desa_bersebelahan}}";
+    // feature leaflet dara data json
+    var datageo
+
+   var Esri_WorldImagery = L.esri.tiledMapLayer({
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+	   
+       , minZoom: 1
+	,maxZoom: 19
+    })
+	
+    var Esri_DarkGreyCanvas = L.tileLayer(
+        "http://{s}.sm.mapstack.stamen.com/" +
+        "(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/" +
+        "{z}/{x}/{y}.png",
+        {
+            attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, ' +
+                'NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+        }
+    );
+
+    var Apimaxbox = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox/light-v9',
+        tileSize: 512,
+        zoomOffset: -1
+    });
+   
+   
+   
+ var layer_rbi = L.tileLayer('http://portal.ina-sdi.or.id/arcgis/rest/services/IGD/RupabumiIndonesia/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: ''
+
+    });
+
+
+    var layer_rbiesri = L.esri.tiledMapLayer({
+        url: 'https://portal.ina-sdi.or.id/arcgis/rest/services/RBI/Basemap/MapServer',
+        opacity: 1
+    })
+	
+	
+	 var layer_indikatif2 = L.esri.dynamicMapLayer({
+        url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
+        opacity: 1
+		,layers : 0
+	})
+	 var layer_indikatif = L.esri.featureLayer({
+		  url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer/0'
+		  //,fields : ['NAMOBJ']
+		  ,onEachFeature: function (feature, layer) {
+					var label = L.marker(layer.getBounds().getCenter(), {
+					  icon: L.divIcon({
+						className: 'label',
+						//html: '<div style="font-size: 15px;font-weight:bold"><b>'+feature.properties.NAMOBJ+'</b></div>',
+						html: '<div style="color:black">'+feature.properties.NAMOBJ+'</div>',
+						//html: feature.properties.NAMOBJ,
+						iconSize: [200, 40]
+					  })
+					})
+					//console.log(label)
+					//return label
+					//layer.addLayer(label)
+					label.addTo(map)
+				}
+			,style: function (feature) {
+					return {weight: 2,
+					  dashArray: '5, 10',
+					  lineCap: 'square', // Optional, just to avoid round borders.
+					  color: 'black'
+					 }
+				},
+		  
+		})//.addTo(map);
+		//console.log(query)
+
+
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+     var layersTree = [
+        {
+            label: 'Indonesia',
+            children: [
+                { label: 'RBI BIG', layer: layer_rbi },
+               // { label: 'RBI BIG - OS', layer: layer_rbibaru },
+                { label: 'RBI BIG - Esri', layer: layer_rbiesri },
+
+            ]
+        }, {
+            label: "Dunia",
+            children: [ { label: 'OpenStreetMap', layer: OpenStreetMap_Mapnik },
+			{ label: 'Satellite ESRI', layer: Esri_WorldImagery }
+            //{ label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
+           // { label: 'Mapbox', layer: Apimaxbox },
+           ,]
+        }]
+
+    map = L.map('mapGambarBatasDesa', {
+        layers: [layer_rbiesri],
+        //pmIgnore: false,
+       // maxZoom: 17,
+       // fullscreenControl: true,
+       // fullscreenControlOptions: {
+      //      position: 'topleft'
+      //  }
+    }).setView([-6.491857302, 106.848663298], 15);
+	
+	
+	
+	
+		var overlayMaps = {
+			//"Indikatif": layer_indikatif
+			label: 'Indikatif',
+            children: [
+                { label: 'Indikatif', layer: layer_indikatif },
+               
+            ]
+		};
+		
+		
+		
+    var ctr = L.control.layers.tree(layersTree, overlayMaps, {
+        //namedToggle: true,
+        selectorBack: false,
+        closedSymbol: '&#8862; &#x1f5c0;',
+        openedSymbol: '&#8863; &#x1f5c1;',
+        // collapseAll: 'Collapse all',
+        // expandAll: 'Expand all',
+        collapsed: true,
+    }).addTo(map)
+
+
+
+// define custom marker
+var MyCustomMarker = L.Icon.extend({
+  options: {
+    shadowUrl: null,
+    iconAnchor: new L.Point(12, 12),
+    iconSize: new L.Point(24, 24),
+    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Information_icon4_orange.svg'
+  }
+});
+
+
+
+var geojsonPointCreated = {}
+var layerCreated 
+var arrayIddesatitikkartometri = []
+
+var charGenerateNo = "" 
+
+
+
+
+	var klaimidDesa1Nama = ""
+	var klaimidDesa2Nama = ""
+	var arrayLayerTitikKartometri = []
+	
+	loadGeojson2 = function(){
+		 $.get("transaction/setsubsegmen/geojson1", function(data, status){
+			bicycleRental = data.data
+			center = data.center
+			klaimidDesa2Nama =  data.nama
+			var testststs = L.geoJSON(bicycleRental, {
+				style: function (feature) {
+					 return { color: 'black' }
+					//return feature.properties && feature.properties.style;
+				},
+				pointToLayer: function (feature, latlng) {
+					
+				}
+				,onEachFeature: function (feature, layer) {
+					
+					var index1 = feature.properties.index
+					layer.options.zIndex = 100;
+				aa = "<table>"
+					a1 = "<tr>"
+					
+					if (feature.properties && feature.properties.keterangan) {
+						aa += "<tr><td>Keterangan</td><td>"+feature.properties.keterangan+"</td></tr>"
+						a1 += "<td>"+feature.properties.keterangan+"</td>"
+					}
+					if (feature.properties && feature.properties.tk_dari) {
+						aa += "<tr><td>TK Dari</td><td>"+feature.properties.tk_dari+"</td></tr>"
+						a1 += "<td>"+feature.properties.tk_dari+"</td>"
+					} 
+					
+					if (feature.properties && feature.properties.tk_ke) {
+						aa += "<tr><td>TK Ke</td><td>"+feature.properties.tk_ke+"</td></tr>"
+						a1 += "<td>"+feature.properties.tk_ke+"</td>"
+					}
+					a1 += "</tr>"
+					$('#listsubsegmen > tbody').append(a1)
+					//aa += "<tr><td></td><td><input type='button' value='Mulai Buat Sub Segmen' data-x='"+feature.properties.cx+"'  data-y='"+feature.properties.cy+"' onclick='startsubsegmen(this)' /></td></tr>"
+					aa += "</table>"
+					layer.bindPopup(aa,{ 'maxWidth': '1000'});
+					layer.bringToFront()
+					arrayLayerTitikKartometri[index1] = layer
+					
+					map.addLayer(layer);
+					
+				},
+				
+			})
+			//editableLayers.addLayer(testststs);
+			//map.addLayer(testststs);
+			
+		  });
+		  
+	}
+	
+	loadGeojson1 = function(){
+		 $.get("transaction/settitikkartometri/geojson1?id1="+idDesa1+"&id2="+idDesa2, function(data, status){
+			bicycleRental = data.data
+			center = data.center
+			klaimidDesa2Nama =  data.nama
+			var testststs = L.geoJSON(bicycleRental, {
+
+				style: function (feature) {
+					//return feature.properties && feature.properties.style;
+				},
+			
+
+				//onEachFeature: onEachFeature,
+		
+				pointToLayer: function (feature, latlng) {
+					if (feature.properties && feature.properties.simpul == 2) {
+						var marker = 
+						 L.circleMarker(latlng, {					
+							radius: 10,
+							fillColor: "#ff7800",
+							color: "#000",
+							weight: 1,
+							opacity: 1,
+							fillOpacity: 0.8
+							
+						});
+						
+						return marker;
+					} else {
+						var marker = 
+						 L.circleMarker(latlng, {					
+							radius: 10,
+							fillColor: "#32CD32",
+							color: "#000",
+							weight: 1,
+							opacity: 1,
+							fillOpacity: 0.8
+							
+						});
+						
+						return marker;
+					}
+					
+				}
+				,onEachFeature: function (feature, layer) {
+					var index1 = feature.properties.index
+					layer.options.zIndex = 100;
+					aa = "<table>"
+					a1 = "<tr>"
+					if (feature.properties && feature.properties.simpul == 2) {
+						aa += "<tr><td colspan=2>TITIK SIMPUL</td></tr>"
+						a1 += "<td>TITIK SIMPUL</td>"
+					} else {
+						aa += "<tr><td colspan=2>TITIK KARTOMETRI</td></tr>"
+						a1 += "<td>TITIK KARTOMETRI</td>"
+					}
+					if (feature.properties && feature.properties.no) {
+						aa += "<tr><td>No</td><td>"+feature.properties.no+"</td></tr>"
+						a1 += "<td><span data-index='"+index1+"' onclick='showTitikPopup(this)' style='text-decoration:underline;cursor:pointer'>"+feature.properties.no+"</span></td>"
+					} 
+					if (feature.properties && feature.properties.keterangan) {
+						aa += "<tr><td>Keterangan</td><td>"+feature.properties.keterangan+"</td></tr>"
+						a1 += "<td>"+feature.properties.keterangan+"</td>"
+					}
+					if (feature.properties && feature.properties.urut) {
+						aa += "<tr><td>No Urut</td><td>"+feature.properties.urut+"</td></tr>"
+						a1 += "<td>"+feature.properties.urut+"</td>"
+					} else {
+						a1 += "<td>0</td>"
+					}
+					if (feature.properties && feature.properties.geom) {
+						aa += "<tr><td>Geojson</td><td>"+ JSON.stringify(feature.properties.geom)+"</td></tr>"
+					}
+					a1 += "</tr>"
+					$('#listTitikKartometri > tbody').append(a1)
+					
+					aa += "</table>"
+					layer.bindPopup(aa,{ 'maxWidth': '1000'});
+					layer.bringToFront()
+					arrayLayerTitikKartometri[index1] = layer
+					map.addLayer(layer);
+					
+				},
+				
+			})
+			//editableLayers.addLayer(testststs);
+			//map.addLayer(testststs);
+			loadGeojson2()
+		  });
+		  
+	}
+
+	loadGeojson = function(){	
+		$(".tp-enabled").tooltip('enable')
+		setTimeout(function(){ map.invalidateSize()}, 400);
+		$('#txtDesa').html('')
+		
+		$('#txtUrut').on('change',function(){
+			var urut = $('#txtUrut').val()
+			urut = ('0000'+urut)
+			urut = urut.substr(urut.length - 3);
+			console.log(urut);
+			$('#txtNo').html(charGenerateNo+'-'+urut);
+		})
+	
+	
+	
+		  $.get("transaction/settitikkartometri/geojson?id1="+idDesa1+"&id2="+idDesa2, function(data, status){
+			bicycleRental = data.data
+			center = data.center
+			klaimidDesa1Nama =  data.nama
+			var testststs = L.geoJson(bicycleRental, {
+
+				style: function (feature) {
+					//return feature.properties && feature.properties.style;
+					//return feature.properties && feature.properties.style;\
+					if (feature.properties.type == 1){
+						return {color: "#ff007f"}
+					}
+					return {color: "#583470"}
+				},
+			
+
+				//onEachFeature: onEachFeature,
+		
+				pointToLayer: function (feature, latlng) {
+					
+					
+					const myCustomColour = '#583470'
+
+					const markerHtmlStyles = `
+					  background-color: ${myCustomColour};
+					  width: 1.5rem;
+					  height: 1.5rem;
+					  display: block;
+					  left: -1.5rem;
+					  top: -1.5rem;
+					  position: relative;
+					  border-radius: 3rem 3rem 0;
+					  transform: rotate(45deg);
+					  border: 1px solid #FFFFFF`
+
+					const icon = L.divIcon({
+					  className: "my-custom-pin",
+					  iconAnchor: [0, 24],
+					  labelAnchor: [-6, 0],
+					  popupAnchor: [0, -36],
+					  html: `<span style="${markerHtmlStyles}" />`
+					})
+					
+					if (feature.properties.type == 1){
+						return L.circleMarker(latlng, {
+							radius: 10,
+							fillColor: "#ff007f",
+							color: "#000",
+							weight: 1,
+							opacity: 1,
+							fillOpacity: 0.8
+						});
+					}
+					/*return L.marker(latlng, {
+						radius: 7,
+						fillColor: "#ff7800",
+						color: "#000",
+						weight: 1,
+						opacity: 1,
+						fillOpacity: 0.8
+					});*/
+					return L.marker(latlng,{icon: icon});
+				}
+				,onEachFeature: function(feature, layer) {
+					/*var label = L.marker(layer.getBounds().getCenter(), {
+					  icon: L.divIcon({
+						className: 'label',
+						html: feature.properties.nama,
+						iconSize: [100, 40]
+					  })
+					}).addTo(map);
+					*/
+					aa = "<table>"
+					aa += "<tr><td colspan=2><b>"+feature.properties.nama+"</b></td></tr>"
+					aa += "<tr><td>Geom</td><td>"+JSON.stringify(feature.geometry)+"</td>"
+					aa += "<tr><td>Keterangan</td><td>"+JSON.stringify(feature.properties.description)+"</td>"
+					
+					aa += "</table>"
+					layer.bindPopup(aa);
+					if ($('#txtDesa').html() != "")
+						$('#txtDesa').append("<br />"+feature.properties.nama)
+					else 
+						$('#txtDesa').append(feature.properties.nama)
+						
+				  }
+				
+			})//.addTo(map);
+			map.addLayer(testststs);
+			//console.log(testststs.getBounds())
+			
+			center = center.replace("POINT(","").replace(")","")
+			splitcenter = center.split(" ")
+			
+			map.setView([splitcenter[1], splitcenter[0]], 15)
+			loadGeojson1()
+		  });
+		
+		
+		 
+			
+		  
+	}
+	
+	
+	
+	$(document).ready(function() {
+		loadGeojson();
+		
+		
+    });
+	processForm = function(){
+		let errMsg = [];
+		if ($('#txtTanggal').val() == "") {
+		  errMsg.push("Harap pilih tanggal")
+		}
+		if ($('#txtLokasi').val() == "") {
+		  errMsg.push("Harap isi Lokasi")
+		}
+		
+		if ($('#txtPbdes').val() == "") {
+		  errMsg.push("Harap isi Tim PBDES")
+		}
+		if ($('#txtDataDasar').val() == "") {
+		  errMsg.push("Harap isi Data Dasar")
+		}
+	
+		if (errMsg.length == 0) {
+		  execData('transaction/kesepakatan/crud',{
+		  'txtTanggal':$('#txtTanggal').val(), 
+		  'txtLokasi': $('#txtLokasi').val(),
+		 
+		  'txtPbdes':$('#txtPbdes').val(), 
+		  'txtDataDasar': $('#txtDataDasar').val()
+		 
+			})
+		} else {
+		  errMsg.forEach(msg => showNotificationParam("error", msg)
+		  )
+		}
+	
+		
+		
+	}
+	
+	
+	showTitikPopup = function(a){
+		var index = $(a).attr('data-index')
+		arrayLayerTitikKartometri[index].openPopup();
+	}
+	
+	
+	
+	
+</script>

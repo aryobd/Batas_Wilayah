@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Vector Layer</title>
+    <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
+    <script src="https://unpkg.com/elm-pep"></script>
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=fetch,requestAnimationFrame,Element.prototype.classList,URL,TextDecoder,Number.isInteger"></script>
+	
+    <style>
+      .map {
+        width: 100%;
+        height:400px;
+      }
+    </style>
+	<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.7.0/build/ol.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.7.0/css/ol.css">
+<script src="/../static/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="/../static/popper.min.js"></script>
+    <script src="/../static/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="/../static/jquery.slimscroll.js"></script>
+    
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <div id="info">&nbsp;</div>
+   <!-- <script src="main.js"></script> -->
+   <script>
+   var vectors
+   
+   $( document ).ready(function() {
+		vectors = new ol.layer.Vector({
+			source: new ol.source.Vector({
+				//url: site_url + 'toponim_detail/geoJSONs/' + id,
+				url: '/toponim/test',
+				format: new ol.format.GeoJSON()
+			}),
+			style: function (feature, resolution) {
+				return new ol.style.Style({
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 0, 0, 0.2)'
+					}),
+					stroke: new ol.style.Stroke({
+						color: '#ff0000',
+						width: 2
+					}),
+					image: new ol.style.Circle({
+						radius: 5,
+						fill: new ol.style.Fill({
+							color: '#ff0000'
+						})
+					}),
+					text: new ol.style.Text({
+						text: (resolution > 16 ? '' : feature.get('name')),
+						textAlign: feature.get('tipe_geometri') == 'Garis' ? 'center' : 'left',
+						textBaseline: 'bottom',
+						placement: feature.get('tipe_geometri') == 'Garis' ? 'line' : 'point',
+						stroke: new ol.style.Stroke({
+							color: '#fff',
+							width: 2
+						})
+					})
+				})
+			}
+		});
+	});
+   
+   var source = new ol.source.XYZ();//TileArcGISRest();
+	/*
+	var vectors = new ol.layer.Vector({
+		source: new ol.source.Vector({
+			//url: site_url + 'toponim_detail/geoJSONs/' + id,
+			url: '/toponim/test',
+			format: new ol.format.GeoJSON()
+		}),
+		style: function (feature, resolution) {
+			return new ol.style.Style({
+				fill: new ol.style.Fill({
+					color: 'rgba(255, 0, 0, 0.2)'
+				}),
+				stroke: new ol.style.Stroke({
+					color: '#ff0000',
+					width: 2
+				}),
+				image: new ol.style.Circle({
+					radius: 5,
+					fill: new ol.style.Fill({
+						color: '#ff0000'
+					})
+				}),
+				text: new ol.style.Text({
+					text: (resolution > 16 ? '' : feature.get('name')),
+					textAlign: feature.get('tipe_geometri') == 'Garis' ? 'center' : 'left',
+					textBaseline: 'bottom',
+					placement: feature.get('tipe_geometri') == 'Garis' ? 'line' : 'point',
+					stroke: new ol.style.Stroke({
+						color: '#fff',
+						width: 2
+					})
+				})
+			})
+		}
+	});
+	*/
+	
+	var vector = new ol.layer.Vector({
+		source: new ol.source.Vector({
+			//url: site_url + 'toponim_detail/geoJSON/' + id,
+			url: '/toponim/test',
+			
+			format: new ol.format.GeoJSON()
+		}),
+		style: function (feature, resolution) {
+			return new ol.style.Style({
+				fill: new ol.style.Fill({
+					color: (feature.get('jumlah') ? 'rgba(255, 204, 0, 0.2)' : 'rgba(0, 153, 255, 0.2)')
+				}),
+				stroke: new ol.style.Stroke({
+					color: (feature.get('jumlah') ? '#ffcc33' : '#0099ff'),
+					width: 2
+				}),
+				image: new ol.style.Circle({
+					radius: 5,
+					fill: new ol.style.Fill({
+						color: (feature.get('jumlah') ? '#ffcc33' : '#0099ff')
+					})
+				}),
+				text: new ol.style.Text({
+					text: (resolution > 16 ? '' : feature.get('name')),
+					textAlign: feature.get('tipe_geometri') == 'Garis' ? 'center' : 'left',
+					textBaseline: 'bottom',
+					placement: feature.get('tipe_geometri') == 'Garis' ? 'line' : 'point',
+					stroke: new ol.style.Stroke({
+						color: '#fff',
+						width: 2
+					})
+				})
+			})
+		}
+	});
+	/*
+	if(jenis_toponim == 'Titik')
+		var view = new ol.View({
+			center: ol.proj.fromLonLat([Number(Lon), Number(Lat)]),
+			zoom: 15
+		});
+	else
+		var view = new ol.View({
+			
+		});
+	*/
+	var layersOther = new ol.layer.Group({
+		layers: [
+			new ol.layer.Tile({
+				source: source
+			}),
+			vectors,
+			vector
+		]
+	});
+	
+	var layersOSM = new ol.layer.Group({
+		layers: [
+			new ol.layer.Tile({
+				source: new ol.source.OSM()
+			}),
+			vectors,
+			vector
+		]
+	});
+	
+	var layersBing = new ol.layer.Group({
+		layers: [
+			new ol.layer.Tile({
+				source: new ol.source.BingMaps({
+					key: 'ArWoHMgwSNhqO5gNIsFTpUcuv2ULx0zMheV81u4iFEBKh78etseKOOOKbqtgrP_V',
+					imagerySet: 'Aerial'
+				})
+			}),
+			vectors,
+			vector
+		]
+	});
+
+	var nort = document.createElement("span");
+	
+	nort.className = "fa fa-chevron-up";
+	
+	var map = new ol.Map({
+		controls: ol.control.defaults({attribution: false}).extend([
+			new ol.control.FullScreen({
+				tipLabel: 'Layar Penuh'
+			}),
+			new ol.control.MousePosition({
+				projection: 'EPSG:4326'
+			}),
+			new ol.control.ScaleLine(),
+			new ol.control.Zoom({
+				zoomInTipLabel: 'Perbesar',
+				zoomOutTipLabel: 'Perkecil'
+			}),
+			new ol.control.Rotate({
+				label: nort,
+				tipLabel: 'Reset Rotasi Utara',
+				autoHide: false
+			})
+		]),
+		target: 'map',
+		loadTilesWhileAnimating: true,
+		//view: view
+	});
+	/*
+	$('.ol-zoom-in, .ol-zoom-out').tooltip({
+		placement: 'right'
+	});
+	
+	$('.ol-full-screen').tooltip({
+		placement: 'left'
+	});
+	
+	$('#peta_dasar').change(function () {
+		var url = $(this).val();
+		
+		if(url == 'OSM')
+			map.setLayerGroup(layersOSM);
+		else if(url == 'Bing Aerial')
+			map.setLayerGroup(layersBing);
+		else {
+			if(url.indexOf('FOTO') >= 0)
+				source = new ol.source.TileArcGISRest();
+			else {
+				source = new ol.source.XYZ();
+				url += '/tile/{z}/{y}/{x}';
+			}
+			
+			layersOther.getLayers().getArray()[0].setSource(source);
+			map.setLayerGroup(layersOther);
+			source.setUrl(url);
+		}
+	});
+	
+	$('#peta_dasar').change();
+	*/
+	function Progress(el) {
+		this.el = el;
+		this.loading = 0;
+		this.loaded = 0;
+	}
+	
+	Progress.prototype.addLoading = function() {
+		if (this.loading === 0) {
+			this.show();
+		}
+		
+		++this.loading;
+		this.update();
+	};
+	
+	Progress.prototype.addLoaded = function() {
+		var this_ = this;
+		
+		setTimeout(function() {
+			++this_.loaded;
+			this_.update();
+		}, 100);
+	};
+	
+	Progress.prototype.update = function() {
+		var width = (this.loaded / this.loading * 100).toFixed(1) + '%';
+		
+		this.el.style.width = width;
+		
+		if (this.loading === this.loaded) {
+			this.loading = 0;
+			this.loaded = 0;
+			
+			var this_ = this;
+			
+			setTimeout(function() {
+				this_.hide();
+			}, 500);
+		}
+	};
+	
+	Progress.prototype.show = function() {
+		this.el.style.visibility = 'visible';
+	};
+	
+	Progress.prototype.hide = function() {
+		if (this.loading === this.loaded) {
+			this.el.style.visibility = 'hidden';
+			this.el.style.width = 0;
+		}
+	};
+	
+	var progress = new Progress(document.getElementById('progress'));
+	
+	source.on('tileloadstart', function() {
+		progress.addLoading();
+	});
+	
+	source.on('tileloadend', function() {
+		progress.addLoaded();
+	});
+	
+	source.on('tileloaderror', function() {
+		progress.addLoaded();
+	});
+		
+	/**
+	* Elements that make up the popup.
+	*/
+	var container = document.getElementById('popup');
+	var content = document.getElementById('popup-content');
+	var closer = document.getElementById('popup-closer');
+	/*
+	$('#popup').removeClass('hide');
+	*?
+	/**
+	* Create an overlay to anchor the popup to the map.
+	*/
+	var overlay = new ol.Overlay(/** @type {olx.OverlayOptions} */ ({
+		element: container,
+        autoPan: true,
+        autoPanAnimation: {
+			duration: 250
+        }
+	}));
+	
+	map.addOverlay(overlay);
+	
+	/**
+	* Add a click handler to hide the popup.
+	* @return {boolean} Don't follow the href.
+	*/
+	/*
+	closer.onclick = function() {
+		overlay.setPosition(undefined);
+        closer.blur();
+        
+		return false;
+	};
+	*/
+	
+	/**
+	* Add a click handler to the map to render the popup.
+	*/
+	map.on('singleclick', function(evt) {
+		var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+			return feature;
+		});
+		
+        if (feature && feature.get('id') != id) {
+			var coordinate = evt.coordinate;
+			
+			$('#name').html('[' + feature.get('id') + '] ' + feature.get('name'));
+			$('#popup_foto1').prop('src', base_url + 'assets/images/foto/' + feature.get('foto1'));
+			$('#link').prop('href', site_url + 'toponim_detail/index/' + feature.get('id'));
+				
+			overlay.setPosition(coordinate);
+		}
+	});
+	
+	var modify, draw, snap; // global so we can remove them later
+	
+	function addInteractions() {
+		modify = new ol.interaction.Modify({
+			source: vector.getSource(),
+			deleteCondition: function(event) {
+				return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
+			}
+		});
+		
+		map.addInteraction(modify);
+	}
+	/*
+	if(jenis_toponim != 'Titik')
+		map.getView().fit(
+			ol.proj.transformExtent([Number(minx), Number(miny), Number(maxx), Number(maxy)], 'EPSG:4326', 'EPSG:3857')
+		);
+	
+	$('#edit').click(function () {
+		$('.upload').removeClass('hide');
+		$(this).hide();
+		$('#update').removeClass('hide');
+		$('#editSpatial').hide();
+		$('#cancel').removeClass('hide');
+		
+		$('.approve_S').hide();
+		$('.approve_V2').hide();
+		$('.reject_V2').hide();
+		$('.approve_V1').hide();
+		$('.reject_V1').hide();
+		$('.approve_B').hide();
+		$('.reject_B').hide();
+		$('.approve_A').hide();
+		$('.reject_A').hide();
+		$('.revision_A').hide();
+		$('.duplicate').hide();
+		
+		statusEdit = false;
+		
+		enable_disable();
+		
+		$("#id_lingkup").change();
+	});
+	*/
+	
+	var statusEditSpatial;
+	/*
+	$('#editSpatial').click(function () {
+		addInteractions();
+		
+		$('#edit').hide();
+		$('#editSpatial').hide();
+		$('#updateSpatial').removeClass('hide');
+		$('#cancel').removeClass('hide');
+		
+		$('.approve_S').hide();
+		$('.approve_V2').hide();
+		$('.reject_V2').hide();
+		$('.approve_V1').hide();
+		$('.reject_V1').hide();
+		$('.approve_B').hide();
+		$('.reject_B').hide();
+		$('.approve_A').hide();
+		$('.reject_A').hide();
+		$('.revision_A').hide();
+		$('.duplicate').hide();
+	});
+	*/
+	
+	function dms(coordinate) {
+		return (parseInt(Math.abs(coordinate[0])) < 10 ? '00' + parseInt(Math.abs(coordinate[0])) : (parseInt(Math.abs(coordinate[0])) < 100 ? '0' + parseInt(Math.abs(coordinate[0])) : parseInt(Math.abs(coordinate[0])))) + String.fromCharCode(176) + (parseInt((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0]))) * 60) < 10 ? '0' + parseInt((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0]))) * 60) : parseInt((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0]))) * 60)) + String.fromCharCode(8242) + (parseFloat(Math.round((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0])) - parseInt((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0]))) * 60) / 60) * 3600 * 100) / 100).toFixed(2) < 10 ? '0' + parseFloat(Math.round((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0])) - parseInt((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0]))) * 60) / 60) * 3600 * 100) / 100).toFixed(2) : parseFloat(Math.round((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0])) - parseInt((Math.abs(coordinate[0]) - parseInt(Math.abs(coordinate[0]))) * 60) / 60) * 3600 * 100) / 100).toFixed(2)) + String.fromCharCode(8243) + ' ' + (coordinate[0] < 0 ? 'B' : 'T') + '  ' + (parseInt(Math.abs(coordinate[1])) < 10 ? '0' + parseInt(Math.abs(coordinate[1])) : parseInt(Math.abs(coordinate[1]))) + String.fromCharCode(176) + (parseInt((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1]))) * 60) < 10 ? '0' + parseInt((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1]))) * 60) : parseInt((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1]))) * 60)) + String.fromCharCode(8242) + (parseFloat(Math.round((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1])) - parseInt((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1]))) * 60) / 60) * 3600 * 100) / 100).toFixed(2) < 10 ? '0' + parseFloat(Math.round((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1])) - parseInt((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1]))) * 60) / 60) * 3600 * 100) / 100).toFixed(2) : parseFloat(Math.round((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1])) - parseInt((Math.abs(coordinate[1]) - parseInt(Math.abs(coordinate[1]))) * 60) / 60) * 3600 * 100) / 100).toFixed(2)) + String.fromCharCode(8243) + ' ' + (coordinate[1] < 0 ? 'S' : 'U');
+	}
+	/*
+	$('#updateSpatial').click(function () {
+		var feature = vector.getSource().getFeatureById(id);
+		var type = feature.getGeometry().getType();
+		var coordinates = feature.getGeometry().getCoordinates();
+		
+		if(type == 'Point') {
+			var koordinat1 = dms(ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326'));
+			var koordinat2 = null;
+		}
+		else if(type == 'LineString') {
+			var koordinat1 = dms(ol.proj.transform(coordinates[0], 'EPSG:3857', 'EPSG:4326'));
+			var koordinat2 = dms(ol.proj.transform(coordinates[coordinates.length - 1], 'EPSG:3857', 'EPSG:4326'));
+		}
+		else if(type == 'Polygon') {
+			var koordinat1 = dms(ol.proj.transform(coordinates[0][0], 'EPSG:3857', 'EPSG:4326'));
+			var koordinat2 = null;
+		}
+		
+		$.ajax({
+			url: site_url + 'toponim/update_geom/' + id,
+			dataType: 'json',
+			method: 'POST',
+			data: {
+				type: type,
+				coordinates: feature.getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates(),
+				koordinat1: koordinat1,
+				koordinat2: koordinat2
+			},
+			beforeSend: function () {
+				//$('#show_loading').modal('show');
+			},
+			success: function (response) {
+				//$('#show_loading').modal('hide');
+				
+				if(response)
+					window.location = site_url + 'toponim_detail/index/' + id;
+			}
+		});
+	});
+	
+	$('#cancel').click(function () {
+		window.location = site_url + 'toponim_detail/index/' + id;
+		
+		$('.upload').addClass('hide');
+		$('#edit').show();
+		$('#update').addClass('hide');
+		$('#editSpatial').show();
+		$('#updateSpatial').addClass('hide');
+		$('#cancel').addClass('hide');
+		
+		map.removeInteraction(modify);
+		
+		statusEdit = true;
+		
+		enable_disable();
+	});
+	
+	$('#id_klasifikasi_toponim').change(function () {
+		//$('#id_unsur').children().remove().trigger('liszt:updated');
+		$('#id_unsur').children().remove().trigger('change');
+		
+		$.ajax({
+			url: site_url + 'unsur/view_by_id_klasifikasi_toponim/' + $(this).val(),
+			dataType: 'json',
+			success: function (response) {
+				$.each(response, function (key, value) {
+					//$("#id_unsur").append('<option value="' + value.id_unsur + '">' + value.ftype + '</option>').trigger('liszt:updated');
+					$("#id_unsur").append('<option value="' + value.id_unsur + '">' + value.ftype + '</option>').trigger('change');
+				});
+				
+				//$("#id_unsur").val(id_unsur).trigger('liszt:updated');
+				$("#id_unsur").val(id_unsur).trigger('change');
+			}
+		});
+	});
+	
+	$('#id_klasifikasi_toponim').change();
+	
+	$('#id_unsur').change(function () {
+		$.ajax({
+			url: site_url + 'unsur/view/' + $(this).val(),
+			dataType: 'json',
+			success: function (response) {
+				if(statusEdit) {
+					if(response.ftype.toLowerCase().includes('ibukota'))
+						$('#namlok').prop('disabled', true);
+					else
+						$('#namlok').prop('disabled', false);
+				}
+			}
+		});
+	});
+	
+	$('.foto').click(function () {
+		var id = $(this).attr("data-id");
+		
+		$('#foto-title').html('Foto ' + id);
+		$('#foto').prop('src', $('#foto' + id).prop('src'));
+	});
+	
+	$('.sketsa').click(function () {
+		$('#foto-title').html('Sketsa');
+		$('#foto').prop('src', $('#sketsa').prop('src'));
+	});
+	
+	$("#id_lingkup").on('change', function () {
+		switch($(this).val()) {
+			case '1' :
+				$('#id_provinsi').prop('disabled', false).trigger('change');
+				$('#id_kabkota').prop('disabled', true).trigger('change');
+				$('#id_kecamatan').prop('disabled', true).trigger('change');
+				$('#id_desa_kelurahan').prop('disabled', true).trigger('change');
+				
+				break;
+			case '2' :
+				$('#id_provinsi').prop('disabled', false).trigger('change');
+				$('#id_kabkota').prop('disabled', false).trigger('change');
+				$('#id_kecamatan').prop('disabled', true).trigger('change');
+				$('#id_desa_kelurahan').prop('disabled', true).trigger('change');
+				
+				break;
+			case '3' :
+				$('#id_provinsi').prop('disabled', false).trigger('change');
+				$('#id_kabkota').prop('disabled', false).trigger('change');
+				$('#id_kecamatan').prop('disabled', false).trigger('change');
+				$('#id_desa_kelurahan').prop('disabled', true).trigger('change');
+				
+				break;
+			case '4' :
+				$('#id_provinsi').prop('disabled', false).trigger('change');
+				$('#id_kabkota').prop('disabled', false).trigger('change');
+				$('#id_kecamatan').prop('disabled', false).trigger('change');
+				$('#id_desa_kelurahan').prop('disabled', false).trigger('change');
+				
+				break;
+		}
+	});
+	
+	$("#id_kabupaten_kota").on('change', function () {
+		//$("#id_wilayah_administrasi").children().remove().trigger('liszt:updated');
+		$("#id_wilayah_administrasi").children().remove().trigger('change');
+		
+		if($("#id_lingkup").val() == 3) {
+			$.ajax({
+				url: site_url + 'kecamatan/view_by_id_kabupaten_kota/' + $(this).val(),
+				dataType: 'json',
+				success: function (response) {
+					$.each(response, function (key, value) {
+						//$("#id_wilayah_administrasi").append('<option value="' + value.id_kecamatan + '">' + value.kecamatan + '</option>').trigger('liszt:updated');
+						$("#id_wilayah_administrasi").append('<option value="' + value.id_kecamatan + '">' + value.kecamatan + '</option>').trigger('change');
+					});
+					
+					//$("#id_wilayah_administrasi").val(id_wilayah_administrasi).trigger('liszt:updated');
+					$("#id_wilayah_administrasi").val(id_wilayah_administrasi).trigger('change');
+				}
+			});
+		}
+		else if($("#id_lingkup").val() == 4) {
+			$.ajax({
+				url: site_url + 'desa_kelurahan/view_each_kecamatan_by_id_kabupaten_kota/' + $(this).val(),
+				dataType: 'json',
+				success: function (response) {
+					//$("#id_wilayah_administrasi").append(response.map((value, key) => '<optgroup label="' + value.kecamatan + '">' + value.detail.map((row, index) => '<option value="' + row.id_desa_kelurahan + '">' + row.desa_kelurahan + '</option>') + '</optgroup>')).trigger('liszt:updated');
+					$("#id_wilayah_administrasi").append(response.map((value, key) => '<optgroup label="' + value.kecamatan + '">' + value.detail.map((row, index) => '<option value="' + row.id_desa_kelurahan + '">' + row.desa_kelurahan + '</option>') + '</optgroup>')).trigger('change');
+					
+					//$("#id_wilayah_administrasi").val(id_wilayah_administrasi).trigger('liszt:updated');
+					$("#id_wilayah_administrasi").val(id_wilayah_administrasi).trigger('change');
+				}
+			});
+		}
+	});
+	
+	$('.audio').click(function () {
+		var id = $(this).attr("data-id");
+		
+		window.document.getElementById('audio' + id).play();
+	});
+	
+	$(".sketch").click(function () {
+		$('#sketch').fileinput('clear');
+	});
+	
+	$(".photo").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_foto").val(id);
+			$("#form-foto-title").html('Form Foto ' + id);
+			
+			$('#photo').fileinput('clear');
+		}
+		else
+			return;
+	});
+	
+	$(".delete_photo").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('F1');
+			$("#id_foto").val(id);
+			$("#confirms_str").html('Apakah Anda yakin akan menghapus foto?');
+		}
+		else
+			return;
+	});
+	
+	$(".rekaman").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_rekaman").val(id);
+			$("#rekaman-title").html('Form Rekaman ' + id);
+			
+			$('#rekaman').fileinput('clear');
+		}
+		else
+			return;
+	});
+	
+	$(".delete_rekaman").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('F2');
+			$("#id_rekaman").val(id);
+			$("#confirms_str").html('Apakah Anda yakin akan menghapus rekaman?');
+		}
+		else
+			return;
+	});
+	
+	$(".delete_sketch").click(function () {
+		$("#approve").attr("data-id", '0');
+		$("#id_approve").val('F3');
+		$("#confirms_str").html('Apakah Anda yakin akan menghapus sketsa?');
+	});
+	
+	$(".duplicate").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('D');
+			$("#confirms_str").html('Apakah Anda yakin akan menduplikasi data?');
+		}
+		else
+			return;
+	});
+	
+	$(".approve_S").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('S');
+			$("#confirms_str").html('Apakah Anda yakin akan melakukan pengajuan?');
+		}
+		else
+			return;
+	});
+	
+	$(".approve_V2").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('V2');
+			$("#confirms_str").html('Apakah Anda yakin akan menerima pengajuan?');
+		}
+		else
+			return;
+	});
+	
+	$(".approve_V1").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('V1');
+			$("#confirms_str").html('Apakah Anda yakin akan menerima pengajuan?');
+		}
+		else
+			return;
+	});
+	
+	$(".approve_B").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('B');
+			$("#confirms_str").html('Apakah Anda yakin akan menerima pengajuan?');
+		}
+		else
+			return;
+	});
+	
+	$(".approve_A").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('A');
+			$("#confirms_str").html('Apakah Anda yakin akan melakukan Penetapan?');
+		}
+		else
+			return;
+	});
+	
+	$(".revision_A").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$("#approve").attr("data-id", id);
+			$("#id_approve").val('R');
+			$("#confirms_str").html('Apakah Anda yakin akan melakukan Revisi Pembakuan?');
+		}
+		else
+			return;
+	});
+	
+	$("#approve").click(function () {
+		var ids = $(this).attr("data-id");
+		
+		if(ids) {
+			//$('#show_loading').modal('show');
+			
+			switch($('#id_approve').val()) {
+				case 'F1' :
+					window.location = site_url + 'toponim/delete_photo/' + id + '/' + ids;
+					break;
+				case 'F2' :
+					window.location = site_url + 'toponim/delete_rekaman/' + id + '/' + ids;
+					break;
+				case 'F3' :
+					window.location = site_url + 'toponim/delete_sketsa/' + id;
+					break;
+				case 'D' :
+					window.location = site_url + 'toponim/duplicate/' + ids;
+					break;
+				case 'S' :
+					window.location = site_url + 'toponim/approve_S/' + ids;
+					break;
+				case 'V2' :
+					window.location = site_url + 'toponim/approve_V2/' + ids;
+					break;
+				case 'V1' :
+					window.location = site_url + 'toponim/approve_V1/' + ids;
+					break;
+				case 'B' :
+					window.location = site_url + 'toponim/approve_B/' + ids;
+					break;
+				case 'A' :
+					window.location = site_url + 'toponim/approve_A/' + ids;
+					break;
+				case 'R' :
+					window.location = site_url + 'toponim/revision_A/' + ids;
+					break;
+			}
+		}
+		else
+			return;
+	});
+	
+	$(".reject_V2").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$('#catatan').val('');
+			
+			$("#form_reject").attr("action", site_url + "toponim/reject_V2/" + id);
+		}
+		else
+			return;
+	});
+	
+	$(".reject_V1").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$('#catatan').val('');
+			
+			$("#form_reject").attr("action", site_url + "toponim/reject_V1/" + id);
+		}
+		else
+			return;
+	});
+	
+	$(".reject_B").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$('#catatan').val('');
+			
+			$("#form_reject").attr("action", site_url + "toponim/reject_B/" + id);
+		}
+		else
+			return;
+	});
+	
+	$(".reject_A").click(function () {
+		var id = $(this).attr("data-id");
+		
+		if(id) {
+			$('#catatan').val('');
+			
+			$("#form_reject").attr("action", site_url + "toponim/reject_A/" + id);
+		}
+		else
+			return;
+	});
+	
+	$("#tglsurvei").datetimepicker({
+		locale: 'id',
+		format: 'L',
+		//defaultDate: new Date(),
+		ignoreReadonly: true
+	});
+	
+	$('#ucapan .input-group-addon').click(function () {
+		if(! $('#ucapan input').prop('disabled')) {
+			$('#diakritik').val($('#ucapan input').val());
+			$('#modal_ucapan').modal('show');
+		}
+	});
+	
+	$("#status_publikasi").change(function() {
+		var id = $(this).data('id');
+		
+		$.ajax({
+			url: site_url + 'toponim/update_status_publikasi/' + id,
+			data: {
+				id_status_publikasi: $(this).prop('checked') ? 1 : 2
+			},
+			dataType: 'json',
+			method: 'POST',
+			beforeSend: function () {
+				//$('#show_loading').modal('show');
+			},
+			success: function(response) {
+				//$('#show_loading').modal('hide');
+				
+				//window.location = site_url + 'toponim_detail/index/' + id;
+			}
+		});
+		return false;
+	});
+	
+	$('.diakritik').click(function () {
+		$('#diakritik').val($('#diakritik').val().slice(0, $('#diakritik').caret()) + $(this).html().trim() + $('#diakritik').val().slice($('#diakritik').caret()));
+	});
+	
+	$('#ucapan_diakritik').click(function () {
+		$('#ucapan input').val($('#diakritik').val());
+		$('#modal_ucapan').modal('hide');
+	});
+	*/
+	
+	/*$(document).on('submit', '#form_reject', function () {
+		$('#show_loading').modal('show');
+	});*/
+   
+	 /*  
+
+var Map = ol.Map;
+var View = ol.View;
+var CircleStyle = ol.style.Circle;
+var Fill = ol.style.Fill;
+var Stroke = ol.style.Stroke;
+var Style = ol.style.Style;
+var VectorLayer = ol.layer.Vector;
+var VectorSource = ol.source.Vector;
+var GeoJSON = ol.format.GeoJSON;
+
+
+		const style = new Style({
+		  fill: new Fill({
+			color: 'rgba(255, 255, 255, 0.6)',
+		  }),
+		  stroke: new Stroke({
+			color: '#319FD3',
+			width: 1,
+		  }),
+		  text: new Text({
+			font: '12px Calibri,sans-serif',
+			fill: new Fill({
+			  color: '#000',
+			}),
+			stroke: new Stroke({
+			  color: '#fff',
+			  width: 3,
+			}),
+		  }),
+		});
+
+		const vectorLayer = new VectorLayer({
+		  source: new VectorSource({
+			//url: 'data/geojson/countries.geojson',
+			url: 'https://openlayers.org/en/latest/examples/data/geojson/countries.geojson',
+			format: new GeoJSON(),
+		  }),
+		  style: function (feature) {
+			//style.getText().setText(feature.get('name'));
+			console.log(feature.get('name'))
+			return style;
+		  },
+		});
+
+		const map = new Map({
+		  layers: [vectorLayer],
+		  target: 'map',
+		  view: new View({
+			center: [0, 0],
+			zoom: 1,
+		  }),
+		});
+
+		const highlightStyle = new Style({
+		  stroke: new Stroke({
+			color: '#f00',
+			width: 1,
+		  }),
+		  fill: new Fill({
+			color: 'rgba(255,0,0,0.1)',
+		  }),
+		  text: new Text({
+			font: '12px Calibri,sans-serif',
+			fill: new Fill({
+			  color: '#000',
+			}),
+			stroke: new Stroke({
+			  color: '#f00',
+			  width: 3,
+			}),
+		  }),
+		});
+
+		const featureOverlay = new VectorLayer({
+		  source: new VectorSource(),
+		  map: map,
+		  style: function (feature) {
+			//highlightStyle.getText().setText(feature.get('name'));
+			console.log(feature.get('name'))
+			return highlightStyle;
+		  },
+		});
+
+		let highlight;
+		const displayFeatureInfo = function (pixel) {
+		  const feature = map.forEachFeatureAtPixel(pixel, function (feature) {
+			return feature;
+		  });
+
+		  const info = document.getElementById('info');
+		  if (feature) {
+			info.innerHTML = feature.getId() + ': ' + feature.get('name');
+		  } else {
+			info.innerHTML = '&nbsp;';
+		  }
+
+		  if (feature !== highlight) {
+			if (highlight) {
+			  featureOverlay.getSource().removeFeature(highlight);
+			}
+			if (feature) {
+			  featureOverlay.getSource().addFeature(feature);
+			}
+			highlight = feature;
+		  }
+		};
+
+		map.on('pointermove', function (evt) {
+		  if (evt.dragging) {
+			return;
+		  }
+		  const pixel = map.getEventPixel(evt.originalEvent);
+		  displayFeatureInfo(pixel);
+		});
+
+		map.on('click', function (evt) {
+		  displayFeatureInfo(evt.pixel);
+		});
+
+   */
+   </script>
+  </body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Vector Layer</title>
+    <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
+    <script src="https://unpkg.com/elm-pep"></script>
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=fetch,requestAnimationFrame,Element.prototype.classList,URL,TextDecoder,Number.isInteger"></script>
+	
+    <style>
+      .map {
+        width: 100%;
+        height:400px;
+      }
+    </style>
+	<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.7.0/build/ol.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.7.0/css/ol.css">
+<script src="/../static/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="/../static/popper.min.js"></script>
+    <script src="/../static/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="/../static/jquery.slimscroll.js"></script>
+    
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <div id="info">&nbsp;</div>
+   <!-- <script src="main.js"></script> -->
+   <script>
+   var vectors
+   /*
+   $( document ).ready(function() {
+		vectors = new ol.layer.Vector({
+			source: new ol.source.Vector({
+				//url: site_url + 'toponim_detail/geoJSONs/' + id,
+				url: '/toponim/test',
+				format: new ol.format.GeoJSON()
+			}),
+			style: function (feature, resolution) {
+				return new ol.style.Style({
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 0, 0, 0.2)'
+					}),
+					stroke: new ol.style.Stroke({
+						color: '#ff0000',
+						width: 2
+					}),
+					image: new ol.style.Circle({
+						radius: 5,
+						fill: new ol.style.Fill({
+							color: '#ff0000'
+						})
+					}),
+					text: new ol.style.Text({
+						text: (resolution > 16 ? '' : feature.get('name')),
+						textAlign: feature.get('tipe_geometri') == 'Garis' ? 'center' : 'left',
+						textBaseline: 'bottom',
+						placement: feature.get('tipe_geometri') == 'Garis' ? 'line' : 'point',
+						stroke: new ol.style.Stroke({
+							color: '#fff',
+							width: 2
+						})
+					})
+				})
+			}
+		});
+	});
+	*/
+	/*
+ import 'ol/ol.css';
+import GeoJSON from 'ol/format/GeoJSON';
+import Map from 'ol/Map';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import View from 'ol/View';
+import {Fill, Stroke, Style, Text} from 'ol/style';
+*/
+
+var Style = ol.style.Style
+var Fill = ol.style.Fill
+var Stroke = ol.style.Stroke
+
+var VectorLayer = ol.layer.Vector
+var VectorSource = ol.source.Vector
+var View = ol.View
+var GeoJSON = ol.format.GeoJSON
+
+const style = new Style({
+  fill: new Fill({
+    color: 'rgba(255, 255, 255, 0.6)',
+  }),
+  stroke: new Stroke({
+    color: '#319FD3',
+    width: 1,
+  }),
+  text: new Text({
+    font: '12px Calibri,sans-serif',
+    fill: new Fill({
+      color: '#000',
+    }),
+    stroke: new Stroke({
+      color: '#fff',
+      width: 3,
+    }),
+  }),
+});
+
+const vectorLayer = new VectorLayer({
+  source: new VectorSource({
+    //url: 'data/geojson/countries.geojson',
+	//url: '/toponim/test',
+    
+	//url: '/static/countries.geojson',
+	
+	url: 'https://openlayers.org/en/latest/examples/data/geojson/countries.geojson',
+	
+	format: new GeoJSON(),
+  }),
+  style: function (feature) {
+    style.getText().setText(feature.get('name'));
+    return style;
+  },
+});
+
+
+const map = new Map({
+  layers: [vectorLayer],
+  target: 'map',
+  view: new View({
+    center: [0, 0],
+    zoom: 1,
+  }),
+});
+
+
+const highlightStyle = new Style({
+  stroke: new Stroke({
+    color: '#f00',
+    width: 1,
+  }),
+  fill: new Fill({
+    color: 'rgba(255,0,0,0.1)',
+  }),
+  text: new Text({
+    font: '12px Calibri,sans-serif',
+    fill: new Fill({
+      color: '#000',
+    }),
+    stroke: new Stroke({
+      color: '#f00',
+      width: 3,
+    }),
+  }),
+});
+
+const featureOverlay = new VectorLayer({
+  source: new VectorSource(),
+  map: map,
+  style: function (feature) {
+    highlightStyle.getText().setText(feature.get('name'));
+    return highlightStyle;
+  },
+});
+
+let highlight;
+const displayFeatureInfo = function (pixel) {
+  const feature = map.forEachFeatureAtPixel(pixel, function (feature) {
+    return feature;
+  });
+
+  const info = document.getElementById('info');
+  if (feature) {
+    info.innerHTML = feature.getId() + ': ' + feature.get('name');
+  } else {
+    info.innerHTML = '&nbsp;';
+  }
+
+  if (feature !== highlight) {
+    if (highlight) {
+      featureOverlay.getSource().removeFeature(highlight);
+    }
+    if (feature) {
+      featureOverlay.getSource().addFeature(feature);
+    }
+    highlight = feature;
+  }
+};
+
+map.on('pointermove', function (evt) {
+  if (evt.dragging) {
+    return;
+  }
+  const pixel = map.getEventPixel(evt.originalEvent);
+  displayFeatureInfo(pixel);
+});
+
+map.on('click', function (evt) {
+  displayFeatureInfo(evt.pixel);
+});
+   </script>
+  </body>
+</html>

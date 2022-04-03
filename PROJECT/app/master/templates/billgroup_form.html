@@ -1,0 +1,59 @@
+        
+            <div class="col-lg-12">
+              <div class="card card-outline-info">
+               
+				<div class="card-header">
+                                <h4 class="mb-0 text-white">{{type}}</h4>
+                </div>
+                <div class="card-body">
+                  <form>
+                    
+                    <div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Name</label>
+                          <input type="text" class="form-control" id="billgroup_name_group" value="{{a_billgroup_name_group}}" />
+                        </div>
+                      </div>					  
+                    </div>
+					<div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Active</label>
+                          <select id="billgroup_active" class="form-control" >
+							  <option value="0">Active</option>
+							  <option value="1">Non</option>							
+							</select>
+                        </div>
+                      </div>					  
+                    </div>
+					
+                    <input type="button" class="btn btn-primary pull-right" value="Save" onclick="test()" />
+					<input type="button" class="btn btn-primary pull-right btnCancel" value="Cancel"  />
+                    <div class="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+		
+<script>
+	function test(){
+		//alert("asdfsadfasdf");
+		execData('master/billgroup/crud',{
+			'billgroup_id_group': $('#billgroup_id_group').val(),
+			'billgroup_name_group': $('#billgroup_name_group').val(),
+			'billgroup_active':$('#billgroup_active').val()
+		})
+	}
+	
+	$(document).ready(function() {
+		
+		
+		$('#billgroup_active').val({{a_billgroup_active}})
+		
+    });
+
+	
+
+	
+  </script>

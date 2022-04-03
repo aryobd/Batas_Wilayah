@@ -1,0 +1,98 @@
+<div class="col-lg-12">
+  <div class="card card-outline-info">
+
+    <div class="card-header">
+      <h4 class="mb-0 text-white">{{type}}</h4>
+    </div>
+    <div class="card-body">
+      <form>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="bmd-label-floating">ID</label>
+              <input type="text" class="form-control" {{a_role_disabled}} id="role_id_group" maxlength="4"
+                value="{{a_role_id_group}}" />
+            </div>
+          </div>
+
+
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="bmd-label-floating">Name</label>
+              <input type="text" class="form-control" id="role_name_group" value="{{a_role_name_group}}" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="bmd-label-floating">Scope</label>
+              <select id="role_scope" class="form-control">
+                {{a_role_scope}}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="bmd-label-floating">Active</label>
+              <select id="role_active" class="form-control">
+                <option value="0">Active</option>
+                <option value="1">Non</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary pull-right" value="Save" onclick="test()">Simpan</button>
+        <button type="button" class="btn btn-primary pull-right btnCancel" value="Cancel">Kembali</button>
+        <div class="clearfix"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function test() {
+    //alert("asdfsadfasdf");
+    // validasi isian
+    let f_id_group = $('#role_id_group').val(), f_name_group = $('#role_name_group').val(), f_role_active = $('#role_active').val(), f_role_scope = $("#role_scope").val();
+    let errorMessage = [];
+    if (f_id_group.length == 0) {
+      errorMessage.push("ID group tidak boleh kosong")
+    }
+    if (f_name_group.length == 0) {
+      errorMessage.push("Nama group tidak boleh kosong")
+    } if (role_scope.length == 0) {
+      errorMessage.push("Scope tidak boleh kosong")
+    } if (f_role_active.length == 0) {
+      errorMessage.push("Status group tidak boleh kosong")
+    }
+    if (errorMessage.length == 0) {
+      execData('admin/role/crud', {
+        'role_id_group': f_id_group,
+        'role_name_group': f_name_group,
+        'role_active': f_role_active,
+        'role_scope': f_role_scope
+      })
+    } else {
+      errorMessage.forEach(val => {
+        showNotificationParam('error', val)
+      })
+    }
+
+  }
+
+  $(document).ready(function () {
+
+    $('#role_active').val({{ a_role_active }})
+		
+    });
+
+
+
+
+</script>

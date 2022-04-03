@@ -1,0 +1,382 @@
+<html><head>
+    <title>Leaflet.draw vector editing handlers</title>
+
+    <script src="https://leaflet.github.io/Leaflet.draw/docs/examples/libs/leaflet-src.js"></script>
+    <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/docs/examples/libs/leaflet.css">
+
+    <script src="https://leaflet.github.io/Leaflet.draw/src/Leaflet.draw.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/Leaflet.Draw.Event.js"></script>
+    <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css">
+
+    <script src="https://leaflet.github.io/Leaflet.draw/src/Toolbar.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/Tooltip.js"></script>
+
+    <script src="https://leaflet.github.io/Leaflet.draw/src/ext/GeometryUtil.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/ext/LatLngUtil.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/ext/LineUtil.Intersect.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/ext/Polygon.Intersect.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/ext/Polyline.Intersect.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/ext/TouchEvents.js"></script>
+
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/DrawToolbar.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.Feature.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.Polyline.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.Marker.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.Circle.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.CircleMarker.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.Polygon.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/draw/handler/Draw.Rectangle.js"></script>
+
+
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/EditToolbar.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="https://leaflet.github.io/Leaflet.draw/src/Control.Draw.js"></script>
+
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/Edit.Poly.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/Edit.Rectangle.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/Edit.Marker.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/Edit.CircleMarker.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.draw/src/edit/handler/Edit.Circle.js"></script>
+	
+</head>
+<body>
+<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="test" onclick="test()">
+											<i class="fa fa-minus"></i>
+											TEST TOMBOL
+</button>
+<div id="map" style="width: 1200px; height: 780px; border: 1px solid #ccc"></div>
+
+<script>
+    /*
+	var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        osm = L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib }),
+        map = new L.Map('map', { center: new L.LatLng(51.505, -0.04), zoom: 13 }),
+        drawnItems = L.featureGroup().addTo(map);
+    L.control.layers({
+        'osm': osm.addTo(map),
+        "google": L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+            attribution: 'google'
+        })
+    }, { 'drawlayer': drawnItems }, { position: 'topleft', collapsed: false }).addTo(map);
+    map.addControl(new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems,
+            poly: {
+                allowIntersection: false
+            }
+        },
+        draw: {
+            polygon: {
+                allowIntersection: false,
+                showArea: true
+            }
+        }
+    }));
+
+    map.on(L.Draw.Event.CREATED, function (event) {
+        var layer = event.layer;
+
+        drawnItems.addLayer(layer);
+    });
+	*/
+	
+var map = L.map('map').setView([ -6.491857302,106.848663298 ], 15);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/light-v9',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(map);
+	
+	var drawnItems = new L.FeatureGroup();
+     map.addLayer(drawnItems);
+	
+
+	var baseballIcon = L.icon({
+		iconUrl: 'baseball-marker.png',
+		iconSize: [32, 37],
+		iconAnchor: [16, 37],
+		popupAnchor: [0, -28]
+	});
+
+	function onEachFeature(feature, layer) {
+		var popupContent = "<p>I started out as a GeoJSON " +
+				feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+		
+		
+		console.log(layer)
+		if (layer._latlngs != undefined){
+			console.log(layer._latlngs[0])
+			console.log(layer._latlngs[layer._latlngs.length-1])
+			popupContent+= '<div><button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="test" onclick="test1(\''+layer._latlngs[0].lat+'\',\''+layer._latlngs[0].lng+'\')"> '+
+						'<i class="fa fa-minus"></i> Add Sub Segment From Start Point </button></div>'
+		}
+		else {
+			popupContent+= '<div><button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="test" onclick="test1(\''+layer._latlng.lat+'\',\''+layer._latlng.lng+'\')"> '+
+						'<i class="fa fa-minus"></i> Add Sub Segment From Start Point </button></div>'
+		}
+		
+		layer.bindPopup(popupContent);
+		drawnItems.addLayer(layer);
+	}
+
+
+var bicycleRental = {
+  "crs": {
+    "properties": {
+      "name": "EPSG:3857"
+    }, 
+    "type": "name"
+  }, 
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            106.848663298, 
+            -6.491857302
+          ], 
+          [
+            106.848877504, 
+            -6.489185066
+          ], 
+          [
+            106.85021272, 
+            -6.489279659
+          ]
+        ], 
+        "type": "LineString"
+      }, 
+      "id": "A2", 
+      "properties": [
+        {
+          "foto1": "blank.png", 
+          "id": 2, 
+          "name": "Lipi 2", 
+          "tipe_geometri": "Garis"
+        }
+      ], 
+      "type": "Feature"
+    }, 
+    {
+      "geometry": {
+        "coordinates": [
+          106.849380455, 
+          -6.490804923
+        ], 
+        "type": "Point"
+      }, 
+      "id": "A1", 
+      "properties": [
+        {
+          "foto1": "blank.png", 
+          "id": 1, 
+          "name": "Badan Informasi Geospasial", 
+          "tipe_geometri": "Titik"
+        }
+      ], 
+      "type": "Feature"
+    }, 
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            106.85021272, 
+            -6.489279659
+          ], 
+          [
+            106.849977504, 
+            -6.497285066
+          ], 
+          [
+            106.858663298, 
+            -6.495857302
+          ]
+        ], 
+        "type": "LineString"
+      }, 
+      "id": "A3", 
+      "properties": [
+        {
+          "foto1": "blank.png", 
+          "id": 3, 
+          "name": "Lipi 2", 
+          "tipe_geometri": "Garis"
+        }
+      ], 
+      "type": "Feature"
+    }
+  ], 
+  "type": "FeatureCollection"
+}
+
+
+var hydro = new L.LayerGroup();
+var testststs = L.geoJSON([bicycleRental], {
+/*
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		},
+	*/	
+	/*
+		style: {
+			"color": "red",
+			"weight": 5,
+			"opacity": 0.65
+		},
+		*/
+		style: function (feature) {
+			//return feature.properties && feature.properties.style;
+			switch (feature.geometry.type) {
+				//case 'LineString': return {color: "#ff0000"};
+				case 'LineString': return {color: "#0000ff"};
+				//case 'Democrat':   return {color: "#0000ff"};
+			}
+		},
+
+		onEachFeature: onEachFeature,
+
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 8,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	});//.addTo(map);
+	
+	
+	var drawControl = new L.Control.Draw({
+            position: 'topright',
+            draw: {
+                polyline: true,
+                polygon: false,
+                circle: false,
+                marker: false
+				,circlemarker : false
+				,rectangle : false
+            },
+            edit: {
+                featureGroup: drawnItems,
+                remove: true
+            }
+        });
+        map.addControl(drawControl);
+	//testststs.snapediting.enable();
+
+	map.on(L.Draw.Event.CREATED, function (event) {
+        var layer = event.layer;
+
+        drawnItems.addLayer(layer);
+    });
+
+	
+	//L.control.layers(aaaa).addTo(map);
+
+/*
+	L.geoJSON([bicycleRental, campus], {
+
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		},
+
+		onEachFeature: onEachFeature,
+
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 8,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(map);
+
+	L.geoJSON(freeBus, {
+
+		filter: function (feature, layer) {
+			if (feature.properties) {
+				// If the property "underConstruction" exists and is true, return false (don't render features under construction)
+				return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+			}
+			return false;
+		},
+
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+	var coorsLayer = L.geoJSON(coorsField, {
+
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {icon: baseballIcon});
+		},
+
+		onEachFeature: onEachFeature
+	}).addTo(map);
+*/
+
+test = function(){
+	//alert('1');
+	//console.log(testststs)
+	//console.log(map)
+	map.eachLayer(function(layer) {
+		//if( layer instanceof L.TileLayer )
+			//console.log(layer._layers);
+			//console.log(layer._layers);
+			if (layer._layers != undefined)
+			{
+				for (var k in layer._layers) {
+					//console.log(k)
+					if (layer._layers.hasOwnProperty(k)) {
+					   //user[k] = data[k];
+					   console.log(layer._layers[k]._latlngs)
+					}
+				}
+				//console.log(layer._layers);
+				//console.log(Object.keys(layer._layers));
+				
+				//console.log(layer._layers["46"]);
+				//console.log(layer._layers["46"]._latlngs);
+			}
+	});
+	//console.log(map.getPanes())
+	//console.log(testststs._layers)
+	//console.log(testststs._layers[1])
+	//console.log(testststs._layers._latlng)
+}
+
+
+test1 = function(a,b){
+	console.log(a)
+	console.log(b)
+	var polylineDrawer = new L.Draw.Polyline(map, {})
+	polylineDrawer.enable();
+	var latlng = L.latLng(a,b);
+	polylineDrawer.addVertex(latlng);
+}
+
+//_latlng: Object { lat: -6.490804923, lng: 106.849380455 }
+//_latlng: Object { lat: -6.490804923, lng: 106.849380455 }
+
+
+</script>
+
+
+</body></html>

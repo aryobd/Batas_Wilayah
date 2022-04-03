@@ -1,0 +1,59 @@
+        
+            <div class="col-lg-12">
+              <div class="card card-outline-info">
+               
+				<div class="card-header">
+                                <h4 class="mb-0 text-white">{{type}}</h4>
+                </div>
+                <div class="card-body">
+                  <form>
+                    
+                    <div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Name</label>
+                          <input type="text" class="form-control" id="medicinecategory_name_group" value="{{a_medicinecategory_name_group}}" />
+                        </div>
+                      </div>					  
+                    </div>
+					<div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Active</label>
+                          <select id="medicinecategory_active" class="form-control" >
+							  <option value="0">Active</option>
+							  <option value="1">Non</option>							
+							</select>
+                        </div>
+                      </div>					  
+                    </div>
+					
+                    <input type="button" class="btn btn-primary pull-right" value="Save" onclick="test()" />
+					<input type="button" class="btn btn-primary pull-right btnCancel" value="Cancel"  />
+                    <div class="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+		
+<script>
+	function test(){
+		//alert("asdfsadfasdf");
+		execData('master/medicinecategory/crud',{
+			'medicinecategory_id_group': $('#medicinecategory_id_group').val(),
+			'medicinecategory_name_group': $('#medicinecategory_name_group').val(),
+			'medicinecategory_active':$('#medicinecategory_active').val()
+		})
+	}
+	
+	$(document).ready(function() {
+		
+		
+		$('#medicinecategory_active').val({{a_medicinecategory_active}})
+		
+    });
+
+	
+
+	
+  </script>

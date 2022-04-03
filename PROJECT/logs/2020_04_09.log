@@ -1,0 +1,968 @@
+2020-04-09 22:36:34,915 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 22:36:36,392 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 22:36:36,413 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 22:36:36,454 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 22:37:01,632 INFO app Thread-2 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 22:37:01,635 INFO app Thread-2 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:01,731 INFO werkzeug Thread-2 : 127.0.0.1 - - [09/Apr/2020 22:37:01] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 22:37:01,893 INFO app Thread-3 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+
+
+2020-04-09 22:37:01,893 INFO app Thread-3 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:01,903 INFO app Thread-4 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+
+
+2020-04-09 22:37:01,904 INFO app Thread-4 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:01,988 INFO werkzeug Thread-4 : 127.0.0.1 - - [09/Apr/2020 22:37:01] "[37mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 200 -
+2020-04-09 22:37:01,996 INFO app Thread-5 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+
+
+2020-04-09 22:37:01,996 INFO app Thread-5 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:02,173 INFO werkzeug Thread-5 : 127.0.0.1 - - [09/Apr/2020 22:37:02] "[37mGET /static/js/bootstrap.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:02,263 INFO werkzeug Thread-3 : 127.0.0.1 - - [09/Apr/2020 22:37:02] "[37mGET /static/js/jquery-1.11.1.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:02,285 INFO app Thread-6 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+
+
+2020-04-09 22:37:02,285 INFO app Thread-6 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:02,308 INFO werkzeug Thread-6 : 127.0.0.1 - - [09/Apr/2020 22:37:02] "[37mGET /static/img/photo.jpg.png HTTP/1.1[0m" 200 -
+2020-04-09 22:37:02,512 INFO app Thread-7 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+
+
+2020-04-09 22:37:02,513 INFO app Thread-7 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:02,514 INFO werkzeug Thread-7 : 127.0.0.1 - - [09/Apr/2020 22:37:02] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2020-04-09 22:37:08,176 INFO app Thread-9 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 22:37:08,177 INFO app Thread-9 : [2020-Apr-09 22:37] Body: b'txtUsername=test&txtPassword=password'
+2020-04-09 22:37:08,307 INFO werkzeug Thread-9 : 127.0.0.1 - - [09/Apr/2020 22:37:08] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+2020-04-09 22:37:08,522 INFO werkzeug Thread-10 : 127.0.0.1 - - [09/Apr/2020 22:37:08] "[37mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+2020-04-09 22:37:08,627 INFO werkzeug Thread-12 : 127.0.0.1 - - [09/Apr/2020 22:37:08] "[37mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:08,763 INFO werkzeug Thread-11 : 127.0.0.1 - - [09/Apr/2020 22:37:08] "[37mGET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:08,862 INFO werkzeug Thread-13 : 127.0.0.1 - - [09/Apr/2020 22:37:08] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+2020-04-09 22:37:08,914 INFO werkzeug Thread-14 : 127.0.0.1 - - [09/Apr/2020 22:37:08] "[37mGET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+2020-04-09 22:37:09,072 INFO werkzeug Thread-15 : 127.0.0.1 - - [09/Apr/2020 22:37:09] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+2020-04-09 22:37:19,001 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 22:37:19,115 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 22:37:21,193 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 22:37:21,223 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 22:37:21,289 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 22:37:23,009 INFO app Thread-3 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 22:37:23,010 INFO app Thread-3 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:23,041 INFO werkzeug Thread-3 : 127.0.0.1 - - [09/Apr/2020 22:37:23] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 22:37:27,474 INFO app Thread-4 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 22:37:27,475 INFO app Thread-4 : [2020-Apr-09 22:37] Body: b'txtUsername=test&txtPassword=password'
+2020-04-09 22:37:27,524 INFO werkzeug Thread-4 : 127.0.0.1 - - [09/Apr/2020 22:37:27] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 22:37:27,632 INFO app Thread-5 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:27,633 INFO app Thread-5 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:27,761 INFO werkzeug Thread-5 : 127.0.0.1 - - [09/Apr/2020 22:37:27] "[37mGET /static/css/css.css HTTP/1.1[0m" 200 -
+2020-04-09 22:37:27,843 INFO app Thread-6 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:27,845 INFO app Thread-6 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:27,906 INFO werkzeug Thread-6 : 127.0.0.1 - - [09/Apr/2020 22:37:27] "[37mGET /static/css/font-awesome.min.css HTTP/1.1[0m" 200 -
+2020-04-09 22:37:27,927 INFO app Thread-7 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:27,930 INFO app Thread-7 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:27,954 INFO app Thread-8 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:27,955 INFO app Thread-8 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:28,010 INFO werkzeug Thread-7 : 127.0.0.1 - - [09/Apr/2020 22:37:28] "[37mGET /static/css/material-dashboard.css HTTP/1.1[0m" 200 -
+2020-04-09 22:37:28,095 INFO werkzeug Thread-8 : 127.0.0.1 - - [09/Apr/2020 22:37:28] "[37mGET /static/css/demo.css HTTP/1.1[0m" 200 -
+2020-04-09 22:37:28,131 INFO app Thread-9 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:28,131 INFO app Thread-9 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:28,313 INFO app Thread-10 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:28,342 INFO app Thread-10 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:28,589 INFO app Thread-11 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:28,590 INFO app Thread-11 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:28,654 INFO werkzeug Thread-10 : 127.0.0.1 - - [09/Apr/2020 22:37:28] "[37mGET /static/js/core/popper.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:28,722 INFO werkzeug Thread-9 : 127.0.0.1 - - [09/Apr/2020 22:37:28] "[37mGET /static/js/core/jquery.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:28,819 INFO app Thread-12 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:28,820 INFO app Thread-12 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:28,951 INFO app Thread-13 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:28,951 INFO app Thread-13 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,042 INFO werkzeug Thread-11 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/core/bootstrap-material-design.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,086 INFO werkzeug Thread-12 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/perfect-scrollbar.jquery.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,195 INFO app Thread-14 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,196 INFO app Thread-14 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,269 INFO werkzeug Thread-13 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/moment.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,295 INFO app Thread-15 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,296 INFO app Thread-15 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,356 INFO app Thread-16 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,356 INFO app Thread-16 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,404 INFO werkzeug Thread-14 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/sweetalert2.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,475 INFO app Thread-17 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,476 INFO app Thread-17 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,507 INFO werkzeug Thread-16 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/jquery.bootstrap-wizard.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,538 INFO werkzeug Thread-15 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/jquery.validate.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,588 INFO app Thread-18 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,612 INFO app Thread-18 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,639 INFO app Thread-19 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,640 INFO app Thread-19 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,679 INFO werkzeug Thread-17 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/bootstrap-selectpicker.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,773 INFO app Thread-20 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,774 INFO app Thread-20 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,843 INFO app Thread-21 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,844 INFO app Thread-21 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:29,847 INFO werkzeug Thread-18 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/bootstrap-datetimepicker.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,870 INFO werkzeug Thread-20 : 127.0.0.1 - - [09/Apr/2020 22:37:29] "[37mGET /static/js/plugins/bootstrap-tagsinput.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:29,935 INFO app Thread-22 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:29,936 INFO app Thread-22 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,011 INFO werkzeug Thread-21 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/plugins/jasny-bootstrap.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,055 INFO app Thread-23 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,055 INFO app Thread-23 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,164 INFO app Thread-24 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,166 INFO app Thread-24 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,305 INFO app Thread-25 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,306 INFO app Thread-25 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,406 INFO werkzeug Thread-23 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/plugins/jquery-jvectormap.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,480 INFO app Thread-26 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,481 INFO app Thread-26 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,486 INFO werkzeug Thread-24 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/plugins/nouislider.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,502 INFO werkzeug Thread-25 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/plugins/arrive.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,558 INFO werkzeug Thread-22 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/plugins/fullcalendar.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,656 INFO app Thread-27 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,657 INFO app Thread-27 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,745 INFO werkzeug Thread-26 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/plugins/chartist.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,778 INFO werkzeug Thread-27 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/plugins/bootstrap-notify.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,789 INFO app Thread-28 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,790 INFO app Thread-28 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,796 INFO werkzeug Thread-28 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/material-dashboard.js?v=2.1.2 HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,866 INFO app Thread-29 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,867 INFO app Thread-29 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,878 INFO app Thread-30 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: application/font-woff2;q=1.0,application/font-woff;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: identity
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/static/css/font-awesome.min.css
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:30,879 INFO app Thread-30 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:30,920 INFO werkzeug Thread-29 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/js/demo.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:30,939 INFO werkzeug Thread-30 : 127.0.0.1 - - [09/Apr/2020 22:37:30] "[37mGET /static/fonts/fontawesome-webfont.woff2?v=4.7.0 HTTP/1.1[0m" 200 -
+2020-04-09 22:37:32,175 INFO app Thread-31 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:32,176 INFO app Thread-31 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:32,182 INFO app Thread-32 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:32,183 INFO app Thread-32 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:32,193 INFO werkzeug Thread-32 : 127.0.0.1 - - [09/Apr/2020 22:37:32] "[37mGET /static/img/favicon.png HTTP/1.1[0m" 200 -
+2020-04-09 22:37:32,240 INFO werkzeug Thread-31 : 127.0.0.1 - - [09/Apr/2020 22:37:32] "[37mGET /static/img/apple-icon.png HTTP/1.1[0m" 200 -
+2020-04-09 22:37:32,461 INFO werkzeug Thread-19 : 127.0.0.1 - - [09/Apr/2020 22:37:32] "[37mGET /static/js/plugins/jquery.dataTables.min.js HTTP/1.1[0m" 200 -
+2020-04-09 22:37:34,769 INFO app Thread-33 : [2020-Apr-09 22:37] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+
+
+2020-04-09 22:37:34,770 INFO app Thread-33 : [2020-Apr-09 22:37] Body: b''
+2020-04-09 22:37:34,804 INFO werkzeug Thread-33 : 127.0.0.1 - - [09/Apr/2020 22:37:34] "[37mGET /static/img/sidebar-1.jpg HTTP/1.1[0m" 200 -
+2020-04-09 22:38:22,204 INFO app Thread-35 : [2020-Apr-09 22:38] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 22:38:22,204 INFO app Thread-35 : [2020-Apr-09 22:38] Body: b''
+2020-04-09 22:38:22,239 INFO werkzeug Thread-35 : 127.0.0.1 - - [09/Apr/2020 22:38:22] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 23:02:42,721 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:02:44,435 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:02:44,456 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:02:44,496 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:02:48,978 INFO app Thread-3 : [2020-Apr-09 23:02] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:02:48,978 INFO app Thread-3 : [2020-Apr-09 23:02] Body: b''
+2020-04-09 23:02:49,058 INFO werkzeug Thread-3 : 127.0.0.1 - - [09/Apr/2020 23:02:49] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 23:02:56,439 INFO app Thread-6 : [2020-Apr-09 23:02] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:02:56,440 INFO app Thread-6 : [2020-Apr-09 23:02] Body: b''
+2020-04-09 23:02:56,456 INFO werkzeug Thread-6 : 127.0.0.1 - - [09/Apr/2020 23:02:56] "[37mGET /logout HTTP/1.1[0m" 200 -
+2020-04-09 23:03:01,379 INFO app Thread-7 : [2020-Apr-09 23:03] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/logout
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.Rptdf8Jc7JnCzwzOII0l1inDlLApeM_5GxCxLjg558E
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:03:01,380 INFO app Thread-7 : [2020-Apr-09 23:03] Body: b'txtUsername=test&txtPassword=password'
+2020-04-09 23:03:01,428 INFO werkzeug Thread-7 : 127.0.0.1 - - [09/Apr/2020 23:03:01] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 23:06:31,196 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:06:32,877 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:06:32,914 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:06:32,978 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:06:34,956 INFO app Thread-3 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:06:34,958 INFO app Thread-3 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:35,015 INFO werkzeug Thread-3 : 127.0.0.1 - - [09/Apr/2020 23:06:35] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 23:06:35,550 INFO app Thread-4 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:35,552 INFO app Thread-4 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:35,572 INFO werkzeug Thread-4 : 127.0.0.1 - - [09/Apr/2020 23:06:35] "[37mGET /static/css/css.css HTTP/1.1[0m" 200 -
+2020-04-09 23:06:35,843 INFO app Thread-5 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:35,844 INFO app Thread-5 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:35,855 INFO werkzeug Thread-5 : 127.0.0.1 - - [09/Apr/2020 23:06:35] "[37mGET /static/css/font-awesome.min.css HTTP/1.1[0m" 200 -
+2020-04-09 23:06:35,874 INFO app Thread-6 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:35,875 INFO app Thread-6 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:35,879 INFO werkzeug Thread-6 : 127.0.0.1 - - [09/Apr/2020 23:06:35] "[37mGET /static/css/material-dashboard.css HTTP/1.1[0m" 200 -
+2020-04-09 23:06:35,945 INFO app Thread-7 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:35,946 INFO app Thread-7 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:35,950 INFO werkzeug Thread-7 : 127.0.0.1 - - [09/Apr/2020 23:06:35] "[37mGET /static/css/demo.css HTTP/1.1[0m" 200 -
+2020-04-09 23:06:36,570 INFO app Thread-8 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:36,570 INFO app Thread-8 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:36,575 INFO app Thread-9 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:36,576 INFO werkzeug Thread-8 : 127.0.0.1 - - [09/Apr/2020 23:06:36] "[37mGET /static/img/apple-icon.png HTTP/1.1[0m" 200 -
+2020-04-09 23:06:36,577 INFO app Thread-9 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:36,589 INFO werkzeug Thread-9 : 127.0.0.1 - - [09/Apr/2020 23:06:36] "[37mGET /static/img/favicon.png HTTP/1.1[0m" 200 -
+2020-04-09 23:06:41,647 INFO app Thread-11 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:06:41,647 INFO app Thread-11 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:41,664 INFO werkzeug Thread-11 : 127.0.0.1 - - [09/Apr/2020 23:06:41] "[37mGET /logout HTTP/1.1[0m" 200 -
+2020-04-09 23:06:41,974 INFO app Thread-12 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/logout
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:41,974 INFO app Thread-12 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:41,982 INFO werkzeug Thread-12 : 127.0.0.1 - - [09/Apr/2020 23:06:41] "[37mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 200 -
+2020-04-09 23:06:42,204 INFO app Thread-13 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+
+
+2020-04-09 23:06:42,205 INFO app Thread-13 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:42,206 INFO werkzeug Thread-13 : 127.0.0.1 - - [09/Apr/2020 23:06:42] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2020-04-09 23:06:46,228 INFO app Thread-14 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 33
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/logout
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W3siaWQiOiJ0ZXN0In1dLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.tml0cqacs1f7iWUkIM07-aOqFlcc64TOztjXrnEJvGE
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:06:46,229 INFO app Thread-14 : [2020-Apr-09 23:06] Body: b'txtUsername=test&txtPassword=pass'
+2020-04-09 23:06:46,242 INFO werkzeug Thread-14 : 127.0.0.1 - - [09/Apr/2020 23:06:46] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 23:06:55,407 INFO app Thread-18 : [2020-Apr-09 23:06] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoicGFzcyJ9.ZkOobCyajsL0N-4Lbf6DWcvk5ppuVh713C6-kjFo8Fs
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:06:55,408 INFO app Thread-18 : [2020-Apr-09 23:06] Body: b''
+2020-04-09 23:06:55,411 INFO werkzeug Thread-18 : 127.0.0.1 - - [09/Apr/2020 23:06:55] "[37mGET /logout HTTP/1.1[0m" 200 -
+2020-04-09 23:07:00,241 INFO app Thread-19 : [2020-Apr-09 23:07] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 33
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/logout
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoicGFzcyJ9.ZkOobCyajsL0N-4Lbf6DWcvk5ppuVh713C6-kjFo8Fs
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:07:00,242 INFO app Thread-19 : [2020-Apr-09 23:07] Body: b'txtUsername=test&txtPassword=test'
+2020-04-09 23:07:00,248 INFO werkzeug Thread-19 : 127.0.0.1 - - [09/Apr/2020 23:07:00] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 23:07:46,594 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:07:46,720 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:07:48,691 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:07:48,717 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:07:48,762 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:07:53,770 INFO app Thread-3 : [2020-Apr-09 23:07] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:07:53,771 INFO app Thread-3 : [2020-Apr-09 23:07] Body: b''
+2020-04-09 23:07:53,826 INFO werkzeug Thread-3 : 127.0.0.1 - - [09/Apr/2020 23:07:53] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 23:08:01,873 INFO app Thread-7 : [2020-Apr-09 23:08] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:08:01,874 INFO app Thread-7 : [2020-Apr-09 23:08] Body: b''
+2020-04-09 23:08:01,895 INFO werkzeug Thread-7 : 127.0.0.1 - - [09/Apr/2020 23:08:01] "[37mGET /logout HTTP/1.1[0m" 200 -
+2020-04-09 23:08:08,440 INFO app Thread-9 : [2020-Apr-09 23:08] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 33
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/logout
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:08:08,440 INFO app Thread-9 : [2020-Apr-09 23:08] Body: b'txtUsername=test&txtPassword=test'
+2020-04-09 23:08:08,453 INFO werkzeug Thread-9 : 127.0.0.1 - - [09/Apr/2020 23:08:08] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 23:10:29,948 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:10:30,166 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:10:31,863 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:10:31,926 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:10:31,969 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:10:34,189 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:10:34,310 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:10:36,755 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:10:36,952 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:10:37,582 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:10:47,929 INFO app Thread-3 : [2020-Apr-09 23:10] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:10:47,929 INFO app Thread-3 : [2020-Apr-09 23:10] Body: b''
+2020-04-09 23:10:47,976 INFO werkzeug Thread-3 : 127.0.0.1 - - [09/Apr/2020 23:10:47] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 23:10:54,650 INFO app Thread-6 : [2020-Apr-09 23:10] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:10:54,651 INFO app Thread-6 : [2020-Apr-09 23:10] Body: b''
+2020-04-09 23:10:54,666 INFO werkzeug Thread-6 : 127.0.0.1 - - [09/Apr/2020 23:10:54] "[37mGET /logout HTTP/1.1[0m" 200 -
+2020-04-09 23:10:59,466 INFO app Thread-7 : [2020-Apr-09 23:10] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 33
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/logout
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:10:59,467 INFO app Thread-7 : [2020-Apr-09 23:10] Body: b'txtUsername=test&txtPassword=test'
+2020-04-09 23:10:59,542 INFO werkzeug Thread-7 : 127.0.0.1 - - [09/Apr/2020 23:10:59] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+2020-04-09 23:10:59,646 INFO werkzeug Thread-8 : 127.0.0.1 - - [09/Apr/2020 23:10:59] "[37mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+2020-04-09 23:10:59,796 INFO werkzeug Thread-9 : 127.0.0.1 - - [09/Apr/2020 23:10:59] "[37mGET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+2020-04-09 23:10:59,864 INFO werkzeug Thread-10 : 127.0.0.1 - - [09/Apr/2020 23:10:59] "[37mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+2020-04-09 23:10:59,946 INFO werkzeug Thread-11 : 127.0.0.1 - - [09/Apr/2020 23:10:59] "[37mGET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+2020-04-09 23:11:00,030 INFO werkzeug Thread-12 : 127.0.0.1 - - [09/Apr/2020 23:11:00] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+2020-04-09 23:11:00,245 INFO werkzeug Thread-13 : 127.0.0.1 - - [09/Apr/2020 23:11:00] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+2020-04-09 23:12:18,285 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:12:18,456 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:12:21,324 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:12:21,410 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:12:21,580 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:12:28,337 INFO app Thread-3 : [2020-Apr-09 23:12] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:12:28,338 INFO app Thread-3 : [2020-Apr-09 23:12] Body: b''
+2020-04-09 23:12:28,393 INFO werkzeug Thread-3 : 127.0.0.1 - - [09/Apr/2020 23:12:28] "[37mGET / HTTP/1.1[0m" 200 -
+2020-04-09 23:12:32,386 INFO app Thread-4 : [2020-Apr-09 23:12] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:12:32,387 INFO app Thread-4 : [2020-Apr-09 23:12] Body: b''
+2020-04-09 23:12:32,402 INFO werkzeug Thread-4 : 127.0.0.1 - - [09/Apr/2020 23:12:32] "[37mGET /logout HTTP/1.1[0m" 200 -
+2020-04-09 23:12:36,622 INFO app Thread-6 : [2020-Apr-09 23:12] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 33
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/logout
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:12:36,623 INFO app Thread-6 : [2020-Apr-09 23:12] Body: b'txtUsername=test&txtPassword=test'
+2020-04-09 23:12:36,641 INFO werkzeug Thread-6 : 127.0.0.1 - - [09/Apr/2020 23:12:36] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 23:12:41,227 INFO app Thread-7 : [2020-Apr-09 23:12] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 33
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:12:41,228 INFO app Thread-7 : [2020-Apr-09 23:12] Body: b'txtUsername=test&txtPassword=pass'
+2020-04-09 23:12:41,281 INFO werkzeug Thread-7 : 127.0.0.1 - - [09/Apr/2020 23:12:41] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 23:12:46,652 INFO app Thread-9 : [2020-Apr-09 23:12] Headers: Host: localhost:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+Origin: http://localhost:5000
+Dnt: 1
+Connection: keep-alive
+Referer: http://localhost:5000/
+Cookie: key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6W10sInBhc3N3b3JkIjoidGVzdCJ9.bs-ocw2haK-ItsGQArwO2uZUSVqRxkfQi8qn0VFADSk
+Upgrade-Insecure-Requests: 1
+
+
+2020-04-09 23:12:46,653 INFO app Thread-9 : [2020-Apr-09 23:12] Body: b'txtUsername=test&txtPassword=password'
+2020-04-09 23:12:46,662 INFO werkzeug Thread-9 : 127.0.0.1 - - [09/Apr/2020 23:12:46] "[37mPOST / HTTP/1.1[0m" 200 -
+2020-04-09 23:13:23,123 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:13:23,221 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:13:25,046 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:13:25,067 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:13:25,113 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:15:12,497 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:15:12,615 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:15:14,284 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:15:14,304 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:15:14,346 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:15:25,407 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:15:25,515 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:15:27,363 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:15:27,412 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:15:27,516 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:20:10,680 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:20:10,793 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:20:12,430 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:20:12,448 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:20:12,497 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:23:34,775 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:23:34,870 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:23:36,561 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:23:36,583 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:23:36,625 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-04-09 23:24:38,613 INFO werkzeug MainThread :  * Detected change in 'D:\\DATA\\PROJECT\\my-flask\\TEST\\project\\app\\__init__.py', reloading
+2020-04-09 23:24:38,757 INFO werkzeug MainThread :  * Restarting with stat
+2020-04-09 23:24:40,461 WARNING werkzeug MainThread :  * Debugger is active!
+2020-04-09 23:24:40,479 INFO werkzeug MainThread :  * Debugger PIN: 839-755-696
+2020-04-09 23:24:40,523 INFO werkzeug Thread-1 :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)

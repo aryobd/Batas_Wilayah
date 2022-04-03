@@ -1,0 +1,378 @@
+<div class="col-lg-12">
+  <div class="card card-outline-info">
+
+    <div class="card-header">
+      <h4 class="mb-0 text-white">{{type}}</h4>
+    </div>
+    <div class="card-body">
+      <form>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="bmd-label-floating">Group *</label>
+              <div class="input-group">
+                <select class="form-control" name="" id="user_group_id" {{a_user_disabled}}>
+                  {{a_option_group}}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="bmd-label-floating">Provinsi</label>
+              <div class="input-group">
+                <select id="user_provinsi" class="form-control" {{a_user_disabled}}></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating">Kabupaten Kota</label>
+              <div class="input-group">
+                <select id="user_kabkota" class="form-control" {{a_user_disabled}}></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating">Kecamatan</label>
+              <div class="input-group">
+                <select id="user_kecamatan" class="form-control" {{a_user_disabled}}></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating">Desa</label>
+              <div class="input-group">
+                <select id="user_desa" class="form-control" {{a_user_disabled}}></select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="bmd-label-floating">Username *</label>
+
+              <div class="input-group">
+                <input type="text" class="form-control " placeholder="Username Tergenrate Otomatis"
+                  id="user_username" {{a_user_disabled}} value="{{a_user_username}}" readonly />
+                <button type="button" class="btn waves-effect waves-light btn-info {{a_user_disabled}}"
+                  onclick="getUsername() "><i class="mdi mdi-refresh"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+           
+            <div class="form-group">
+              <label class="bmd-label-floating">Password *</label>
+              <div class="input-group mb-2">
+                
+                <input type="password" class="form-control" id="user_password" value="{{a_user_password}}"  placeholder="Masukan Password">
+                <div class="input-group-append">
+                  <div class="input-group-text c-pointer" onclick="togglePw('#user_password',this)">
+                    <span class="fa fa-eye-slash"></span>
+                  </div>
+                </div>
+                
+              <div class="pw-stat" id="strengthMessage"></div>
+              </div>
+              <p class="mt-2" style="text-align: justify; font-size: 10px;">Password min. 8 karakter, mengandung huruf besar (A,B,C), huruf kecil (a,b,c), angka (0,1,2,3,…,9), dan karakter spesial (~, !, @, #).</p>
+                   
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="bmd-label-floating">Email</label>
+              <input type="text" class="form-control" id="user_email" value="{{a_user_email}}" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="bmd-label-floating">Active</label>
+              <select id="user_active" class="form-control">
+                <option value="0">Active</option>
+                <option value="1">Non</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 d-none">
+            <div class="form-group">
+              <label>Address</label>
+              <div class="form-group">
+                <textarea class="form-control" id="user_address" rows="5">{{a_user_address}}</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <input type="button" class="btn btn-primary pull-right" value="Simpan" onclick="test()" />
+        <input type="button" class="btn btn-primary pull-right btnCancel" value="Batal" />
+        <div class="clearfix"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  var lenIdWil = 0;
+  var selectorIdWil = "";
+  var a_username = ""
+  var isEdit = ('{{ a_user_disabled }}' == 'disabled');
+  var arrSelectorIdWilayah = ["#user_provinsi", "#user_kabkota", "#user_kecamatan", "#user_desa"]
+
+  function togglePw(target, obj) {
+            let iconList = ['fa fa-eye', 'fa fa-eye-slash']
+            let chldr = $(obj).children()
+
+            let iconName = $(chldr[0]).attr('class')
+            let currentState = iconList.indexOf(iconName);
+            let newState = (currentState + 1) % 2;
+            $(chldr[0]).attr('class', iconList[newState]);
+            if (newState == 0) {
+                $(target).attr("type", "text")
+            } else {
+                $(target).attr("type", "password")
+            }
+
+        }
+
+
+  function setSelectionWilayah() {
+    arrSelectorIdWilayah.forEach(val => {
+      $(val).parent().parent().hide()
+    })
+  }
+  function test() {
+    //alert("asdfsadfasdf");\
+	 let id_group = $("#user_group_id").val();
+	let len_id = parseInt($("#user_group_id>[value=" + id_group + "]").attr("length-id"))
+    console.log(id_group, len_id)
+    getSelectorIdWilayah(len_id)
+	
+	var aaa = ""
+	if (a_username != "")
+		aaa = a_username
+	else
+		aaa =  $("#user_username").val()
+    var params = {
+      //'user_username': a_username,
+      'user_username': aaa,
+	  'user_password': $('#user_password').val(),
+      'user_fullname': $('#user_fullname').val(),
+      'user_group_id': $('#user_group_id').val(),
+      'user_email': $('#user_email').val(),
+      'user_active': $('#user_active').val(),
+      'user_id_wilayah': $(selectorIdWil).val()
+    }
+   
+    let errMsg = [];
+    if (params.user_group_id == null) {
+      errMsg.push("Harap pilih role group")
+    } else {
+      if (lenIdWil != 0) {
+        if (params.user_id_wilayah == null) errMsg.push("Harap pilih wilayah cakupan pengguna")
+      }
+    }
+	
+    pwStrs = ["Good", "Strong"]
+    if (params.user_username.length == 0) errMsg.push("Harap isi username");
+    if (params.user_email.length == 0) errMsg.push("Harap isi alamat email");
+    if (params.user_password.length == 0) errMsg.push("Harap password");
+    else if (!pwStrs.includes($("#strengthMessage").html())) errMsg.push("Minimal kekuatan password Good")
+
+    // checkpw
+	console.log(selectorIdWil)
+    console.log(params)
+    if (errMsg.length == 0) {
+      execData('admin/user/crud', params)
+    } else {
+      errMsg.forEach(msg => showNotificationParam("error", msg)
+      )
+    }
+
+  }
+
+
+  function getSelectorIdWilayah(len_id = 0) {
+    switch (len_id) {
+      case 2:
+        selectorIdWil = "#user_provinsi"
+        break;
+      case 4:
+        selectorIdWil = "#user_kabkota"
+        break;
+      case 7:
+        selectorIdWil = "#user_kecamatan"
+        break;
+      case 10:
+        selectorIdWil = "#user_desa"
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function getUsername() {
+    if (isEdit) return
+    //$("#user_username").val("")
+    a_username = ""
+
+    let id_group = $("#user_group_id").val();
+    let len_id = parseInt($("#user_group_id>[value=" + id_group + "]").attr("length-id"))
+    console.log(id_group, len_id)
+    getSelectorIdWilayah(len_id)
+    let id_wilayah = $(selectorIdWil).val();
+    // console.log(id_group, len_id, selectorIdWil, id_wilayah)
+    if (len_id != 0) {
+      if (id_group != null) {
+        if (id_wilayah == null) {
+          showNotificationParam("error", "Harap pilih ID wiliyah sesuai level group");
+
+          return
+        }
+        if (id_wilayah.length == len_id) {
+          $.get("/admin/generateUsername?id_group=" + id_group + "&id_wilayah=" + id_wilayah, function (res) {
+            // console.log(res)
+            const { username } = res;
+            if (username != undefined) {
+              $("#user_username").val(username)
+              a_username = username;
+            } else {
+              // $("#user_username").val(username)
+              showNotificationParam("error", "Terjadi kesalahan saat membuat username");
+            }
+          })
+        } else {
+          showNotificationParam("error", "Harap pilih ID wiliyah sesuai level group");
+        }
+      } else {
+        showNotificationParam("error", "Harap pilih Group User terlebih dahulu");
+      }
+    } else {
+      // ambil username admin
+      $.get("/admin/generateUsername?id_group=" + id_group, function (res) {
+        const { username } = res;
+        if (username != undefined) {
+          $("#user_username").val(username)
+          a_username = username;
+        } else {
+          // $("#user_username").val(username)
+          showNotificationParam("error", "Terjadi kesalahan saat membuat username");
+        }
+      })
+    }
+
+  }
+
+  function changeGroupUser() {
+    //$("#user_username").val("")
+    a_username = ""
+
+
+    lenIdWil = $("#user_group_id>[value=" + $('#user_group_id').val() + "]").attr("length-id")
+    // console.log(lenIdWil)
+    lenIdWil = parseInt(lenIdWil)
+    getSelectorIdWilayah()
+    setSelectionWilayah()
+    // generateDropdownProvinsi({ selector: "#user_provinsi", onc })
+    // console.log(lenIdWil)
+    var initialValue = '{{a_user_id_wilayah}}'
+    // console.log(initialValue, lenIdWil)
+    switch (lenIdWil) {
+      case 10:
+        $("#user_desa").parent().parent().show()
+        generateDropdownDesa({ selector: "#user_desa", initialValue: initialValue.substring(0, 10), onChangeEvent: () => { if (lenIdWil == 10) getUsername() } })
+
+      case 7:
+        $("#user_kecamatan").parent().parent().show()
+        generateDropdownKecamatan({
+          selector: "#user_kecamatan", initialValue: initialValue.substring(0, 7), onChangeEvent: function (val) {
+            generateDropdownDesa({ selector: "#user_desa", parentValue: val, onChangeEvent: () => { if (lenIdWil == 10) getUsername() } })
+          }
+        })
+      case 4:
+        $("#user_kabkota").parent().parent().show()
+        generateDropdownKabKota({
+          selector: "#user_kabkota", initialValue: initialValue.substring(0, 4), onChangeEvent: function (val) {
+            generateDropdownKecamatan({ selector: "#user_kecamatan", parentValue: val, onChangeEvent: () => { if (lenIdWil == 7) getUsername() } })
+          }
+        })
+      case 2:
+        $("#user_provinsi").parent().parent().show()
+        generateDropdownProvinsi({
+          selector: "#user_provinsi", initialValue: initialValue.substring(0, 2), onChangeEvent: function (val) {
+            if (lenIdWil == 2) getUsername()
+            generateDropdownKabKota({ selector: "#user_kabkota", parentValue: val, onChangeEvent: () => { if (lenIdWil == 4) getUsername() } })
+          }
+        })
+        break;
+
+      default:
+        break;
+    }
+
+  }
+
+
+  $(document).ready(function () {
+    setSelectionWilayah()
+
+    $("#user_group_id").on("change", function () {
+      changeGroupUser()
+    })
+
+    if (isEdit) {		
+      changeGroupUser()
+    }
+
+    $("#user_password").on("keyup", function (e) {
+      // console.log(e.target.val)
+      let pw = $(this).val()
+      // console.log(pw)
+      checkStrength(pw, "#strengthMessage")
+    })
+    /*	$('.datepicker').datetimepicker({
+       // format: 'MM/DD/YYYY',
+        format: 'YYYY-MM-DD',
+        icons: {
+        time: "fa fa-clock-o",
+        date: "fa fa-calendar",
+        up: "fa fa-chevron-up",
+        down: "fa fa-chevron-down",
+        previous: 'fa fa-chevron-left',
+        next: 'fa fa-chevron-right',
+        today: 'fa fa-screenshot',
+        clear: 'fa fa-trash',
+        close: 'fa fa-remove'
+        }
+      });
+      */
+    $('#user_active').val({{ a_user_active }})
+  $('#user_gender').val({{ a_user_sex }})
+  $('#user_tipe').val({{ a_user_tipe }})
+  var harinin = '{{a_user_bdate}}'.toString().split(' ')[0];
+  $("#user_bdate").val(harinin);
+		
+    });
+  var tipe = 1;
+  fnDropdownlistGroup = function () {
+    tipe = 1;
+    getDropdownList("admin/role/dropdownlist?type=1")
+  }
+
+  fnGetValueSelectDropdownlist = function () {
+    if (tipe == 1) {
+      $('#user_group_id').val(valueSelectedDropdownlist[0])
+      $('#user_group_desc').val(valueSelectedDropdownlist[1])
+    }
+  }
+
+
+</script>

@@ -1,0 +1,134 @@
+        
+            <div class="col-lg-12">
+              <div class="card card-outline-info">
+               
+				<div class="card-header">
+                                <h4 class="mb-0 text-white">Edit Profile</h4>
+                </div>
+                <div class="card-body">
+                  <form>
+                    <div class="row">
+                     
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Username</label>
+                          <input type="text" class="form-control" id="userprofile_user" value="{{userprofile_user}}" />
+                        </div>
+                      </div>
+					  
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">password</label>
+                          <input type="password" class="form-control"   id="userprofile_pass"  value="{{userprofile_pass}}" />
+                        </div>
+                      </div>
+					  <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Sex</label>
+                          <select id="userprofile_sex" class="form-control" >
+							  <option value="0">Male</option>
+							  <option value="1">Female</option>							
+							</select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Full Name</label>
+                          <input type="text" class="form-control"  id="userprofile_fullname"  value="{{userprofile_fullname}}" />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Phone / Mobile Phone</label>
+                          <input type="text" class="form-control"  id="userprofile_phone"  value="{{userprofile_phone}}" />
+                        </div>
+                      </div>
+                    </div>
+					<!--
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Adress</label>
+                          <input type="text" class="form-control"  id="userprofile_address"  value="{{userprofile_address}}" />
+                        </div>
+                      </div>
+                    </div>
+					-->
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Birth Place</label>
+                          <input type="text" class="form-control"  id="userprofile_bplace"  value="{{userprofile_bplace}}" />
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Birth Date</label>
+                          <input type="text" class="form-control datepicker"  id="userprofile_bdate"  value="{{userprofile_bdate}}"  />
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Email</label>
+                          <input type="text" class="form-control"  id="userprofile_email"  value="{{userprofile_email}}" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Address</label>
+                          <div class="form-group">                           
+                            <textarea class="form-control"  id="userprofile_address"  rows="5">{{userprofile_address}}</textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="button" class="btn btn-primary pull-right" value="Update Profile" onclick="test()" />
+                    <div class="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+		
+<script>
+	function test(){
+		//alert("asdfsadfasdf");
+		execData('admin/userprofile/update',{
+			'userprofile_user': $('#userprofile_user').val(),
+			'userprofile_pass':$('#userprofile_pass').val(),
+			'userprofile_fullname':$('#userprofile_fullname').val(),
+			'userprofile_phone':$('#userprofile_phone').val(),
+			'userprofile_address':$('#userprofile_address').val(),
+			'userprofile_bplace':$('#userprofile_bplace').val(),
+			'userprofile_bdate':$('#userprofile_bdate').val(),
+			'userprofile_email':$('#userprofile_email').val(),
+			'userprofile_sex':$('#userprofile_sex').val()
+		
+		})
+	}
+	$(document).ready(function() {
+		$('.datepicker').datetimepicker({
+		 // format: 'MM/DD/YYYY',
+		  format: 'YYYY-MM-DD',
+		  icons: {
+			time: "fa fa-clock-o",
+			date: "fa fa-calendar",
+			up: "fa fa-chevron-up",
+			down: "fa fa-chevron-down",
+			previous: 'fa fa-chevron-left',
+			next: 'fa fa-chevron-right',
+			today: 'fa fa-screenshot',
+			clear: 'fa fa-trash',
+			close: 'fa fa-remove'
+		  }
+		});
+		
+		$('#userprofile_sex').val({{userprofile_sex}})
+		
+    });
+
+	
+  </script>

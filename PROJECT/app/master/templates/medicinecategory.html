@@ -1,0 +1,198 @@
+<div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">List</h4>
+                                <div class="dt-buttons">
+								
+								<a class="dt-button buttons-copy buttons-html5" id="btnInsert" tabindex="0" aria-controls="example23" href="#"><span>Insert</span></a>
+								</div>
+                                <div class="table-responsive mt-4">
+                                 
+									 <table id="example23"
+                                        class="display nowrap table table-hover table-striped table-bordered"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                               
+                                                <th>NAME</th>
+												 <th>ACTIVE</th>
+                                                <th></th>
+                                                
+                                            </tr>
+                                        </thead>
+                                      
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                      
+                    </div>
+					
+								
+<!-- Top modal content -->
+                                <div id="top-modal" class="modal fade" tabindex="-1" medicinecategory="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-top">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="topModalLabel">Confirmation</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">×</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>Are you sure to delete this data ?</h5>
+                                               
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" id='btnDelete'>Delete</button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+
+<script>
+	var idd = '';
+	
+
+	$(document).ready(function() {
+		$('#btnInsert').bind('click', function(){
+								execForm("/master/medicinecategory/form?type=1");
+								//execURL($(this).attr('dataurl'));
+								//alert($(this).attr('dataurl'));
+								//buttonFunc();
+		})
+    
+		/*
+		$('#example23').DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            columnDefs: [
+                { responsivePriority: 3, targets: 0 },
+                { responsivePriority: 2, targets: -1 }
+            ]
+			
+            ,buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+		*/
+		
+		generateDataTable('#example23',"master/medicinecategory/data",[
+			
+				{ "data": "name" }			,	
+				{ "data": "active" }	
+				,{ "data": "btn","width":"50px","orderable": false}	
+			],initcom)
+		/*
+		tableDataTable = $('#example23').DataTable({
+            
+            responsive: true,
+			serverSide: true,
+           columns: [
+				{ "data": "id" },
+				{ "data": "name" }				
+				,{ "data": "btn","width":"50px","orderable": false}	
+			]
+			,ajax: "master/medicinecategory/data"
+			,"initComplete":function( settings, json){
+				
+				//alert('initComplete');
+				$('#dt-buttons .btnEditForm').each(function(i, obj) {
+					//test
+					console.log('11');
+					var attr = $(this).attr('dataid');
+					if (typeof attr !== typeof undefined && attr !== false) {
+						if($(this).attr('dataid') != ''){
+							$(this).bind('click', function(){
+								execForm("/master/medicinecategory/form?id="+$(this).attr('dataid')+"&type=2");
+								//execURL($(this).attr('dataurl'));
+								//alert($(this).attr('dataurl'));
+								//buttonFunc();
+							})
+						}
+					}
+					
+				});
+				
+			}
+        });
+		*/
+		
+		$('#btnDelete').bind('click', function(){
+			//alert(idd);
+			$('#top-modal').modal('toggle');
+			execData('master/medicinecategory/crud',{
+									'type': 3,
+									'id':idd								
+								})
+			
+		});
+		
+		
+		$('#example23').on('click', '.btnEditForm', function() {
+			//console.log($(this).attr('dataid'));
+			execForm("/master/medicinecategory/form?id="+$(this).attr('dataid')+"&type=2");
+		});
+		
+		$('#example23').on('click', '.btnDeleteForm', function() {
+			idd = $(this).attr('dataid');
+			console.log(idd);
+		});
+		
+    });
+	
+	
+	function initcom( settings, json){
+	
+				
+				//alert('initComplete');
+				$('#dt-buttons .btnEditForm').each(function(i, obj) {
+					//test
+					
+					var attr = $(this).attr('dataid');					
+					if (typeof attr !== typeof undefined && attr !== false) {						
+						if($(this).attr('dataid') != ''){
+							//console.log($(this).attr('dataid'));
+							/*
+							$(this).bind('click', function(){
+								console.log('11111111aaaaaaaaaaaaaa');
+								//execForm("/master/medicinecategory/form?id="+$(this).attr('dataid')+"&type=2");
+								
+							})
+							*/
+							//console.log($(this));	
+							
+						}
+					}
+					
+				});
+				
+				$('#dt-buttons .btnDeleteForm').each(function(i, obj) {
+					//test
+				
+					var attr = $(this).attr('dataid');
+					if (typeof attr !== typeof undefined && attr !== false) {
+						if($(this).attr('dataid') != ''){
+							//$(this).bind('click', function(){
+							
+							//	idd = $(this).attr('dataid');
+							//	console.log(idd);
+								/*
+								execData('master/medicinecategory/crud',{
+									'type': 3,
+									'id':$(this).attr('dataid')								
+								})
+								*/
+							//})
+						}
+					}
+					
+				});
+				
+				
+				
+				
+			}
+	
+  </script>

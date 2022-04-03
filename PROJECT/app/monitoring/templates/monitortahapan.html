@@ -1,0 +1,58 @@
+<div class="col-12">
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">List</h4>
+			
+			<div class="table-responsive mt-4">
+
+				<table id="example23" class="display nowrap table table-hover table-striped table-bordered"
+					cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th style="text-align: center;">Kecamatan</th>
+							<th style="text-align: center;">Desa</th>
+							<th style="text-align: center;">Kecamatan</th>
+							<th style="text-align: center;">Desa</th>
+							<th style="text-align: center;">Titik Simpul</th>
+							<th style="text-align: center;">Titik Kartometri</th>
+							<th style="text-align: center;">Sub Segmen</th>
+							<th style="text-align: center;">Kesepakatan</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for loopdata in loopdatas %}
+						<tr>
+						  <td>{{loopdata.kecamatan1}}</td>
+						  <td>{{loopdata.desa1}}</td>
+						  <td>{{loopdata.kecamatan2}}</td>
+						  <td>{{loopdata.desa2}}</td>					
+						   {% if loopdata.simpul > 0 %} 
+								 <td  style="text-align: center;"><i class="fas fa-check"></i></td>
+							{% else %}
+								 <td></td>
+							{% endif %}
+						  {% if loopdata.karto > 0 %} 
+								 <td  style="text-align: center;"><i class="fas fa-check"></i></td>
+							{% else %}
+								 <td></td>
+							{% endif %}
+							 {% if loopdata.subsegmen != "" %} 
+								 <td  style="text-align: center;"><i class="fas fa-check"></i></td>
+							{% else %}
+								 <td></td>
+							{% endif %}
+							 {% if loopdata.kesepakatan != "" %} 
+								 <td  style="text-align: center;"><i class="fas fa-check"></i></td>
+							{% else %}
+								 <td></td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+</div>
+

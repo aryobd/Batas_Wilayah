@@ -1,0 +1,198 @@
+<div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">List</h4>
+                                <div class="dt-buttons">
+								
+								<a class="dt-button buttons-copy buttons-html5" id="btnInsert" tabindex="0" aria-controls="example23" href="#"><span>Insert</span></a>
+								</div>
+                                <div class="table-responsive mt-4">
+                                 
+									 <table id="example23"
+                                        class="display nowrap table table-hover table-striped table-bordered"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>NAME</th>
+                                                <th></th>
+                                                
+                                            </tr>
+                                        </thead>
+                                      
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                      
+                    </div>
+					
+								
+<!-- Top modal content -->
+<div id="top-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-top">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="topModalLabel">Konfirmasi</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body">
+				<h5>Apakah anda yakin akan menghapus data tersebut ?</h5>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
+				<button type="button" class="btn btn-danger" id='btnDelete'>Ya</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+	var idd = '';
+
+
+	$(document).ready(function () {
+		$('#btnInsert').bind('click', function () {
+			execForm("/admin/role/form?type=1");
+			//execURL($(this).attr('dataurl'));
+			//alert($(this).attr('dataurl'));
+			//buttonFunc();
+		})
+
+		/*
+		$('#example23').DataTable({
+			dom: 'Bfrtip',
+			responsive: true,
+			columnDefs: [
+				{ responsivePriority: 3, targets: 0 },
+				{ responsivePriority: 2, targets: -1 }
+			]
+			
+			,buttons: [
+				'copy', 'csv', 'excel', 'pdf', 'print'
+			]
+		});
+		*/
+
+		generateDataTable('#example23', "admin/role/data", [
+			{ "data": "id" },
+			{ "data": "name" },
+			{ "data": "scope" },
+			{ "data": "btn", "width": "50px", "orderable": false }
+		], initcom)
+		/*
+		tableDataTable = $('#example23').DataTable({
+		    
+			responsive: true,
+			serverSide: true,
+		   columns: [
+				{ "data": "id" },
+				{ "data": "name" }				
+				,{ "data": "btn","width":"50px","orderable": false}	
+			]
+			,ajax: "admin/role/data"
+			,"initComplete":function( settings, json){
+				
+				//alert('initComplete');
+				$('#dt-buttons .btnEditForm').each(function(i, obj) {
+					//test
+					console.log('11');
+					var attr = $(this).attr('dataid');
+					if (typeof attr !== typeof undefined && attr !== false) {
+						if($(this).attr('dataid') != ''){
+							$(this).bind('click', function(){
+								execForm("/admin/role/form?id="+$(this).attr('dataid')+"&type=2");
+								//execURL($(this).attr('dataurl'));
+								//alert($(this).attr('dataurl'));
+								//buttonFunc();
+							})
+						}
+					}
+					
+				});
+				
+			}
+		});
+		*/
+
+		$('#btnDelete').bind('click', function () {
+			//alert(idd);
+			$("#top-modal").on("hidden.bs.modal", function () {
+				execData('admin/role/crud', {
+					'type': 3,
+					'id': idd
+				})
+			})
+			$('#top-modal').modal('hide');
+
+
+		});
+
+
+		$('#example23').on('click', '.btnEditForm', function () {
+			//console.log($(this).attr('dataid'));
+			execForm("/admin/role/form?id=" + $(this).attr('dataid') + "&type=2");
+		});
+
+		$('#example23').on('click', '.btnDeleteForm', function () {
+			idd = $(this).attr('dataid');
+			console.log(idd);
+		});
+
+	});
+
+
+	function initcom(settings, json) {
+
+
+		//alert('initComplete');
+		$('#dt-buttons .btnEditForm').each(function (i, obj) {
+			//test
+
+			var attr = $(this).attr('dataid');
+			if (typeof attr !== typeof undefined && attr !== false) {
+				if ($(this).attr('dataid') != '') {
+					//console.log($(this).attr('dataid'));
+					/*
+					$(this).bind('click', function(){
+						console.log('11111111aaaaaaaaaaaaaa');
+						//execForm("/admin/role/form?id="+$(this).attr('dataid')+"&type=2");
+						
+					})
+					*/
+					//console.log($(this));	
+
+				}
+			}
+
+		});
+
+		$('#dt-buttons .btnDeleteForm').each(function (i, obj) {
+			//test
+
+			var attr = $(this).attr('dataid');
+			if (typeof attr !== typeof undefined && attr !== false) {
+				if ($(this).attr('dataid') != '') {
+					//$(this).bind('click', function(){
+
+					//	idd = $(this).attr('dataid');
+					//	console.log(idd);
+					/*
+					execData('admin/role/crud',{
+						'type': 3,
+						'id':$(this).attr('dataid')								
+					})
+					*/
+					//})
+				}
+			}
+
+		});
+
+
+
+
+	}
+
+</script>

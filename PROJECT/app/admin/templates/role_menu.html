@@ -1,0 +1,120 @@
+<link href="static/hummingbird-treeview.css" id="theme" rel="stylesheet">
+
+<style type="text/css">
+	[type="checkbox"]:not(:checked),
+	[type="checkbox"]:checked {
+		position: inherit;
+		left: -9999px;
+		opacity: 1;
+	}
+</style>
+<div class="col-lg-12">
+	<div class="card card-outline-info">
+		<div class="card-body">
+			<div class="col-md-4">
+				<div class="form-group">
+					<label class="bmd-label-floating">Role</label>
+					{{role_menu_group}}
+				</div>
+			</div>
+			<div class="col-12">
+				<div id="areatreeview">
+
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+</div>
+</div>
+
+<script src="static/hummingbird-treeview.js"></script>
+
+<script>
+	var idd = '';
+
+	var arraySave = []
+
+	initfuncgsi = function (data, status) {
+		//alert("Data: " + data + "\nStatus: " + status);
+		//$('.content').html(data)
+		$('#areatreeview').html('');
+		var btnsave = '<div><button type="button" class="btn btn-success" id="btnSubmit"> <i class="fa fa-check"></i>Save</button></div><br />'
+
+		$('#areatreeview').html(btnsave + data.data);
+		$("#treeview1").hummingbird();
+
+		$('#btnSubmit').on('click', function () {
+			//console.log($('#node-15-24'))
+			arraySave = [];
+			$.each($(".parentTreeview1"), function () {
+				var attr = $(this).attr('data-id');
+				var check = $(this).is(":checked");
+				if (check == true) {
+					var jsonD = {
+						'data_id': attr, 'add': false
+						, 'update': false, 'delete': false
+						, 'approve': false
+					}
+					//arraySave.push(colom1.attr('data-id'))
+					arraySave.push(jsonD)
+				}
+			});
+			//$('#treeview1 input:checkbox').each(function(i, obj) {
+			$.each($(".noparentTreeview1"), function () {
+				var colom = $(this).find("input:checkbox");
+
+				if (colom[0].checked == true) {
+
+					var jsonD = {
+						'data_id': colom[0].dataset.id, 'add': colom[1].checked
+						, 'update': colom[2].checked, 'delete': colom[3].checked
+						, 'approve': colom[4].checked
+					}
+					//arraySave.push(colom1.attr('data-id'))
+					arraySave.push(jsonD)
+				}
+
+			});
+			//	console.log(arraySave)
+
+
+			execData('admin/role_menu/submit', {
+				'menu_role_id_group': $('#menu_role_id_group').val(),
+				'menu_role_data': arraySave
+			});
+
+		});
+
+	}
+
+	$(document).ready(function () {
+
+		$('#menu_role_id_group').on('change', function () {
+			//alert(  $(this).val() );
+			/*
+			$.get('admin/role_menu/data', function(data, status){
+				//alert("Data: " + data + "\nStatus: " + status);
+				//$('.content').html(data)
+					
+				$('#areatreeview').html(data.data);			
+					$("#treeview").hummingbird();
+			  });
+			  */
+			if ($(this).val() != '')
+				getHTML('admin/role_menu/data?id_group=' + $(this).val(), initfuncgsi)
+			else $('#areatreeview').html('');
+
+			// $("#treeview").hummingbird();
+			//  $("#treeview").hummingbird("checkNode",{attr:"id",name: "node-15-24-20",expandParents:false}); 
+		})
+
+
+
+
+	});
+
+
+
+</script>

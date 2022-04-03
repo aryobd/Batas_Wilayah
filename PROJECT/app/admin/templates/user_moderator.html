@@ -1,0 +1,104 @@
+  <link href="static/hummingbird-treeview.css" id="theme" rel="stylesheet">
+ 
+ <style type="text/css">
+	 [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+		position: inherit;
+		left: -9999px;
+		opacity: 1;
+	}
+</style>
+ <div class="col-lg-12">
+              <div class="card card-outline-info">
+                <div class="card-body">
+					<div class="col-md-10">
+                        <div class="form-group">
+                         <label class="bmd-label-floating">Desa *</label>
+						  <div class="input-group">
+							  <input type="hidden" class="form-control" id="moderator_id" value="{{moderator_id}}" />
+							  <input type="text" class="form-control" disabled id="moderator_desc" value="{{moderator_desc}}" />
+							  <button type="button" class="btn waves-effect waves-light btn-info" onclick="fnDropdownlistKabKota() ">. . .</button>
+						  </div>
+                        </div>
+                      </div>
+					
+					</div>
+					
+					<div id="areatreeview">
+					
+					</div>
+		
+				</div>
+			</div>
+</div>
+
+<script src="static/hummingbird-treeview.js"></script>
+
+<script>
+
+	var tipe = 1;
+	fnDropdownlistKabKota=function(){
+		tipe = 1;
+		getDropdownList("master/kabkota/dropdownlist?type=1")
+	}
+	
+	fnGetValueSelectDropdownlist=function(){		
+		if (tipe==1){
+			$('#moderator_id').val(valueSelectedDropdownlist[0])
+			$('#moderator_desc').val(valueSelectedDropdownlist[1])	
+			getHTML('admin/user_moderator/data?id_desa='+$('#moderator_id').val(),initfuncgsi)
+		}
+	}
+
+	var idd = '';
+	
+	var arraySave = []
+	
+	initfuncgsi=function(data, status){
+				//alert("Data: " + data + "\nStatus: " + status);
+				//$('.content').html(data)
+				$('#areatreeview').html('');
+				var btnsave = '<div><button type="button" class="btn btn-success" id="btnSubmit"> <i class="fa fa-check"></i>Save</button></div><br />'
+						
+				$('#areatreeview').html(btnsave + data.data);			
+				
+				
+				$('#btnSubmit').on('click',function(){
+					//console.log($('#node-15-24'))
+					arraySave = [];
+					
+					$.each($(".noparentTreeview1"), function() {
+						var colom = $(this); //.find("input:checkbox");
+						//console.log(colom.attr('data-id'))
+						//console.log(colom.is(':checked'))
+						if (colom.is(':checked') == true){
+							
+							var jsonD = {'data_id':colom.attr('data-id')}
+							//arraySave.push(colom1.attr('data-id'))
+							arraySave.push(jsonD)
+						}
+						
+					});
+					
+				
+					
+					execData('admin/user_moderator/submit',{
+							'user_moderator_id_user': $('#moderator_id').val(),
+							'user_moderator_data': arraySave
+						});
+					
+				});
+				
+		}
+
+	$(document).ready(function() {
+		
+		
+		
+		
+		
+		
+    });
+	
+	
+	
+ </script>

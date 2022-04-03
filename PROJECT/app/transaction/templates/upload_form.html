@@ -1,0 +1,168 @@
+        
+            <div class="col-lg-12">
+              <div class="card card-outline-info">
+               
+				<div class="card-header">
+                                <h4 class="mb-0 text-white">{{type}}</h4>
+                </div>
+                <div class="card-body">
+                  <form>
+                    <div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">NAMA *</label>
+                          <input type="text" class="form-control" {{a_user_disabled}} id="uNama"  value="{{a_user_username}}" />
+                        </div>
+                      </div>
+					  
+                    </div>
+					
+					<div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>KETERANGAN</label>
+                          <div class="form-group">                           
+                            <textarea class="form-control"  id="uDesc"  rows="5">{{a_user_address}}</textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+					<div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">File Upload</label>
+						  <div class="form-group">                           
+                            <input type="file"  id="uFilezipshp" />
+										 {{layer1_filezipshp}}
+                          </div>
+						  <div class="form-group">
+									<progress id="fileProgress" style="min-width=100%; display:none"></progress>
+							</div>
+                         
+										
+                        </div>
+                      </div>					  
+                    </div>
+				
+				
+					
+					
+					
+                    <input type="button" class="btn btn-primary pull-right" value="Save" onclick="uploadprocess1()" />
+					<input type="button" class="btn btn-primary pull-right btnCancel" value="Cancel"  />
+                    <div class="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+
+
+		
+<script>
+	function uploadprocess1(){
+	
+		
+		
+		var file_data = $('#uFilezipshp').prop('files')[0];   
+		var form_data = new FormData();                  
+		form_data.append('file', file_data);		
+		form_data.append('uDesc', $('#uDesc').val());
+		form_data.append('uNama', $('#uNama').val());
+		form_data.append('desa', id_kabkota_desa);
+	
+		$.ajax({
+					//url: 'upload.php',
+					url: "transaction/uploadpeta/crud",
+					dataType: 'text',
+					cache: false,
+					contentType: false,
+					processData: false,
+					data: form_data,                         
+					type: 'post',
+					
+					success: function(response){
+						$("#fileProgress").hide();
+						if (response == "")
+						{
+							showNotificationParam('success',"Berhasil");
+							//tableDataTable.ajax.reload(initComplete);
+							if (typeof tableDataTable !== "undefined") {
+								tableDataTable.ajax.reload(initComplete);
+							}
+							hideForm();
+						}
+						else
+							showNotificationParam('error',response);
+					   
+					 
+					},
+					xhr: function () {
+                                var fileXhr = $.ajaxSettings.xhr();
+                                if (fileXhr.upload) {
+                                    $("progress").show();
+                                    fileXhr.upload.addEventListener("progress", function (e) {
+                                        if (e.lengthComputable) {
+                                            $("#fileProgress").attr({
+                                                value: e.loaded,
+                                                max: e.total
+                                            });
+                                        }
+                                    }, false);
+                                }
+                                return fileXhr;
+                            },
+					error: function(jqXHR, textStatus, errorThrown) {
+					   console.log(textStatus, errorThrown);
+					}
+		 });
+		 
+		
+	}
+	
+	
+	var tipe = 1;
+	fnDropdownlistGroup=function(){
+		
+	}
+	
+	fnGetValueSelectDropdownlist=function(){		
+		
+		
+	}
+	
+	editprocess = function(){
+		
+		execData('transaction/upload/crud',{
+									'type': 2
+									,'layer2_title':$('#layer2_title').val()
+									,'layer2_abstract':$('#layer2_abstract').val()
+									,'layer2_epsd':$('#layer2_epsd').val()
+									,'layer3_keyword':$('#layer3_keyword').val()	
+									,'layer2_tags':$("#layer3_tags").tagsinput('items')								
+								})
+	}
+
+	$(document).ready(function(){
+		
+		
+		let type = '{{typechar}}'
+		
+		if (type=='TAMBAH'){
+			$('#uploadprocess').attr('onclick','uploadprocess1()');
+		} 
+		else
+		{
+			$('#uploadprocess').attr('onclick','editprocess()');
+			$('#layer3_filemetadata').remove()
+			$('#layer1_filezipshp').remove()
+			if (type=='LIHAT' ){
+				$('#uploadprocess').remove();
+			}
+			
+		}
+		
+		
+	});
+  </script>

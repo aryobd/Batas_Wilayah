@@ -1,0 +1,123 @@
+select * from taswil.m_desa
+
+select length(id_desa) from taswil.m17_desa
+
+/*
+insert into taswil.m_provinsi
+select id_prov,nm_prov,null,null from taswil.m17_prov
+	where id_prov not in (select id_provinsi from taswil.m_provinsi)
+
+update taswil.m_provinsi set nama = taswil.m17_prov.nm_prov
+from  taswil.m17_prov   where taswil.m17_prov.id_prov = taswil.m_provinsi.id_provinsi	
+
+ALTER TABLE taswil.m_kabkota
+    ALTER COLUMN id_kabkota TYPE character varying(5) COLLATE pg_catalog."default";
+
+insert into taswil.m_kabkota
+select id_kab,id_prov,nm_kab,null,null from taswil.m17_kab
+
+ALTER TABLE taswil.m_kecamatan
+    ALTER COLUMN id_kecamatan TYPE character varying(8) COLLATE pg_catalog."default";
+ALTER TABLE taswil.m_kecamatan
+    ALTER COLUMN id_kabkota TYPE character varying(5) COLLATE pg_catalog."default";
+	
+insert into taswil.m_kecamatan
+select id_kec,id_kab,nm_kec,null,null from taswil.m17_kec
+
+ALTER TABLE taswil.m_desa
+    ALTER COLUMN id_kecamatan TYPE character varying(8) COLLATE pg_catalog."default";
+ALTER TABLE taswil.m_desa
+    ALTER COLUMN id_desa TYPE character varying(14) COLLATE pg_catalog."default";	
+insert into taswil.m_desa
+select id_desa,id_kec,nm_desa,null,null from taswil.m17_desa
+
+
+ALTER TABLE taswil.t_desa_bersebelahan
+    ALTER COLUMN id_desa_asal TYPE character varying(14) COLLATE pg_catalog."default";
+
+ALTER TABLE taswil.t_desa_bersebelahan
+    ALTER COLUMN id_desa_tujuan TYPE character varying(14) COLLATE pg_catalog."default";
+
+ALTER TABLE taswil.t_desa_bersebelahan_2
+    ALTER COLUMN desa_1 TYPE character varying(14) COLLATE pg_catalog."default";
+
+ALTER TABLE taswil.t_desa_bersebelahan_2
+    ALTER COLUMN desa_2 TYPE character varying(14) COLLATE pg_catalog."default";
+
+ALTER TABLE taswil.a_user_desa
+    ALTER COLUMN id_desa TYPE character varying(14) COLLATE pg_catalog."default";
+
+ALTER TABLE taswil.t_dokumen_desa
+    ALTER COLUMN id_desa TYPE character varying(14) COLLATE pg_catalog."default";
+	
+ALTER TABLE taswil.t_klaim_batas_desa
+    ALTER COLUMN id_desa TYPE character varying(14) COLLATE pg_catalog."default";
+	
+ALTER TABLE taswil.t_titikkartometri_desa
+    ALTER COLUMN id_desa TYPE character varying(14) COLLATE pg_catalog."default";
+	
+ALTER TABLE taswil.t_uploadpeta
+    ALTER COLUMN id_desa TYPE character varying(14) COLLATE pg_catalog."default";
+
+ALTER TABLE taswil.a_user
+    ALTER COLUMN id_wilayah TYPE character varying(14) COLLATE pg_catalog."default";
+
+
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '32.06.17.2002' WHERE id_desa_asal =  '3206130006'
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '32.06.30.2001' WHERE id_desa_asal =  '3206211004';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '32.06.29.2001' WHERE id_desa_asal =  '3206212001';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '32.06.29.2002' WHERE id_desa_asal =  '3206212002';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '32.06.29.2004' WHERE id_desa_asal =  '3206212003';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '33.72.05.1012' WHERE id_desa_asal =  '3372050010';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '33.72.05.1002' WHERE id_desa_asal =  '3372050011';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_asal = '51.03.03.2002' WHERE id_desa_asal =  '5103050006';
+
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '32.06.17.2002' WHERE id_desa_TUJUAN =  '3206130006';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '32.06.30.2001' WHERE id_desa_TUJUAN =  '3206211004';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '32.06.29.2001' WHERE id_desa_TUJUAN =  '3206212001';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '32.06.29.2002' WHERE id_desa_TUJUAN =  '3206212002';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '32.06.29.2004' WHERE id_desa_TUJUAN =  '3206212003';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '33.72.05.1012' WHERE id_desa_TUJUAN =  '3372050010';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '33.72.05.1002' WHERE id_desa_TUJUAN =  '3372050011';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '51.03.03.2002' WHERE id_desa_TUJUAN =  '5103050006';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '32.06.01.2005' WHERE id_desa_TUJUAN =  '3206010010';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '32.06.29.2005' WHERE id_desa_TUJUAN =  '3206212004';
+UPDATE taswil.t_desa_bersebelahan SET id_desa_TUJUAN = '51.03.03.2005' WHERE id_desa_TUJUAN =  '5103050004';
+
+DELETE FROM TASWIL.T_UPLOADPETA
+DELETE FROM TASWIL.T_KESEPAKATAN
+DELETE FROM TASWIL.T_SUBSEGMEN
+DELETE FROM TASWIL.T_TITIKKARTOMETRI_dESA
+DELETE FROM TASWIL.T_TITIKKARTOMETRI
+DELETE FROM TASWIL.T_KLAIM_BATAS_DESA
+DELETE FROM TASWIL.t_desa_bersebelahan
+DELETE FROM TASWIL.t_desa_bersebelahan_2
+DELETE FROM TASWIL.t_DOKUMEN_DESA
+
+
+DELETE FROM TASWIL.A_USER
+	WHERE LENGTH(ID_WILAYAH) = 10
+
+DELETE FROM TASWIL.A_USER
+	WHERE LENGTH(ID_WILAYAH) = 7
+
+
+UPDATE taswil.A_USER SET ID_WILAYAH =  LEFT(ID_WILAYAH,2)||'.'||RIGHT(ID_WILAYAH,2) WHERE LENGTH(ID_WILAYAH) = 4
+
+DELETE FROM TASWIL.a_user_desa 
+DELETE FROM TASWIL.M_dESA WHERE LENGTH(ID_dESA) = 10
+DELETE FROM TASWIL.M_KECAMATAN WHERE ID_KECAMATAN NOT LIKE '%.%'
+
+DELETE FROM TASWIL.M_KABKOTA WHERE ID_KABKOTA NOT LIKE '%.%'
+
+update  taswil.a_level_group set length_id_wilayah = 13 where id_level = 5;
+update  taswil.a_level_group set length_id_wilayah = 8 where id_level = 4;
+update  taswil.a_level_group set length_id_wilayah = 5 where id_level = 3;
+
+
+update taswil.a_group set name_group = 'Admin Desa / Kelurahan' where id_Group = 'ds03'
+
+*/
+select *
+from taswil.m17_prov 
+	join taswil.m_provinsi  on taswil.m17_prov.id_prov = taswil.m_provinsi.id_provinsi

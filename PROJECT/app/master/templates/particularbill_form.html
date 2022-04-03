@@ -1,0 +1,109 @@
+        
+            <div class="col-lg-12">
+              <div class="card card-outline-info">
+               
+				<div class="card-header">
+                                <h4 class="mb-0 text-white">{{type}}</h4>
+                </div>
+                <div class="card-body">
+                  <form class="needs-validation" novalidate>
+                    
+                    <div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Category</label>  
+							 <div class="input-group">
+								<input type="hidden" class="form-control" id="particularbill_id_particularbill" value="{{a_particularbill_id_particularbillcategory}}" />
+								<input type="text" class="form-control" disabled id="particularbill_name_cat" value="{{a_particularbill_name_cat}}" required data-validation-required-message="This field is required"  />
+								<button type="button" class="btn waves-effect waves-light btn-info" {{a_medicine_disabled}} onclick="fnDropdownlistparticularbill() ">. . .</button>	
+								
+							</div>
+							
+                        </div>
+                      </div>					  
+                    </div>
+					 <div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Name</label>
+                          <input type="text" class="form-control" id="particularbill_name"  value="{{a_particularbill_name}}" required data-validation-required-message="This field is required" />
+                        </div>
+                      </div>					  
+                    </div>					
+					 
+
+                    <div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Active</label>
+                          <select id="particularbill_active" class="form-control" >
+							  <option value="0">Active</option>
+							  <option value="1">Non</option>							
+							</select>
+                        </div>
+                      </div>					  
+                    </div>
+
+                    <div class="row">                     
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Price *</label>
+                            <input type="text" class="form-control" id="particularbill_amount" 
+                            pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" 
+                            required data-validation-required-message="This field is required" value="{{a_particularbill_amount}}" style=" text-align: right; " />
+                        </div>
+                      </div>					  
+                    </div>
+					
+                    <input type="button" class="btn btn-primary pull-right" value="Save" onclick="test()" />
+					<input type="button" class="btn btn-primary pull-right btnCancel" value="Cancel"  />
+                    <div class="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+		
+<script>
+	function test(){
+	
+    var string1 = $('#particularbill_amount').val();
+		execData('master/particularbill/crud',{
+      'particularbill_amount':string1.replace(/,/g , ''),      
+      'particularbill_id_particularbill': $('#particularbill_id_particularbill').val(),
+      'particularbill_name': $('#particularbill_name').val(),
+			'particularbill_active':$('#particularbill_active').val()
+
+      
+		})
+		
+	}
+	
+	$(document).ready(function() {
+		
+		
+		$('#particularbill_active').val({{a_particularbill_active}});
+    $("#particularbill_amount").on({
+      keyup: function() {
+        formatCurrency($(this));
+      },
+      blur: function() { 
+        formatCurrency($(this), "blur");
+      }
+    });
+		formatCurrency($("#particularbill_amount"));
+  });
+
+  var tipe = 1;
+	fnDropdownlistparticularbill=function(){
+		tipe = 1;
+		getDropdownList("master/dropdownlist?type=2")
+	}
+	
+	fnGetValueSelectDropdownlist=function(){		
+		if (tipe==1){
+			$('#particularbill_id_particularbill').val(valueSelectedDropdownlist[0])
+			$('#particularbill_name_cat').val(valueSelectedDropdownlist[1])			
+		}
+	}
+	
+  </script>

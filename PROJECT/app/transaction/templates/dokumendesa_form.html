@@ -1,0 +1,127 @@
+<div class="col-lg-12">
+	<div class="card card-outline-info">
+
+		<div class="card-header">
+			<h4 class="mb-0 text-white">{{type}}</h4>
+		</div>
+		<div class="card-body">
+			<form>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="bmd-label-floating">Desa *</label>
+							<textarea type="text" class="form-control" disabled >{{nama_wilayah}}</textarea>
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label class="bmd-label-floating">Nama Dokumen *</label>
+							<input type="text" class="form-control" id="nama_dok" value="" />
+						</div>
+					</div>
+
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label>Keterangan</label>
+							<div class="form-group">
+								<textarea class="form-control" id="ket_dok" rows="5"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label>File Upload</label>
+							<div class="form-group">
+								<input type="file" class="form-control-file" id="exampleFormControlFile1">
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<input type="button" class="btn btn-primary pull-right" value="Save" onclick="test()" />
+				<input type="button" class="btn btn-primary pull-right btnCancel" value="Cancel" />
+				<div class="clearfix"></div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	var idDesaD = '{{id_desa}}'
+	function test() {
+		var file_data = $('#exampleFormControlFile1').prop('files')[0];
+		var form_data = new FormData();
+		form_data.append('file', file_data);
+		form_data.append('nama_dok', $('#nama_dok').val());
+		form_data.append('ket_dok', $('#ket_dok').val());
+		form_data.append('desa', idDesaD);
+
+
+		$.ajax({
+			//url: 'upload.php',
+			url: "transaction/dokumendesa/crud",
+			dataType: 'text',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: form_data,
+			type: 'post',
+			progress: function (e) {
+				if (e.lengthComputable) {
+					const completedPercentage = Math.round((e.loaded * 100) / e.total);
+					// You can inject completedPercentage into the DOM now
+					console.log(completedPercentage);
+				}
+			},
+			success: function (response) {
+
+				if (response == "") {
+
+					showNotificationParam('success', response);
+					//tableDataTable.ajax.reload(initComplete);
+					if (typeof tableDataTable !== "undefined") {
+						tableDataTable.ajax.reload(initComplete);
+
+					}
+
+					hideForm();
+
+				}
+				else
+					showNotificationParam('error', response);
+
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				console.log(textStatus, errorThrown);
+			}
+		});
+
+
+	}
+
+	$(document).ready(function () {
+
+
+
+	});
+	var tipe = 1;
+	fnDropdownlistGroup = function () {
+
+	}
+
+	fnGetValueSelectDropdownlist = function () {
+
+	}
+
+
+</script>

@@ -1,0 +1,247 @@
+<div class="col-12">
+	<div class="card">
+		<div class="card-header">
+			<h4>Daftar Dokumen Desa</h4>
+		</div>
+		<div class="card-body">
+			<div>
+				<div class="form-group row s-filter">
+					<label for="password_active" class="col-sm-2 col-form-label">Provinsi</label>
+					<div class="col-sm-8">
+						<select id="filter_provinsi" class="form-control">
+
+							<option value="" selected disabled>--Pilih Provinsi--</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row s-filter">
+					<label for="password_baru" class="col-sm-2 col-form-label">Kabupaten/Kota</label>
+					<div class="col-sm-8">
+						<select id="filter_kabkota" class="form-control">
+							<option value="" selected disabled>--Pilih Kabupaten/Kota--</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row s-filter">
+					<label for="password_konfirmasi" class="col-sm-2 col-form-label">Kecamatan</label>
+					<div class="col-sm-8">
+						<select id="filter_kecamatan" class="form-control">
+							<option value="" selected disabled>--Pilih Kecamatan--</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row s-filter">
+					<label for="password_konfirmasi" class="col-sm-2 col-form-label">Desa</label>
+					<div class="col-sm-8">
+						<select id="filter_desa" class="form-control">
+							<option value="" selected disabled>--Pilih Desa--</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="mb-4 d-flex flex-row-reverse">
+				<div class="d-flex flex-column">
+					<button  id="btnInsert" class="btn btn-primary pull-right tp-enabled"
+						data-toggle="tooltip" data-placement="left" title="Upload Dokumen Baru" disabled><i
+							class="mdi mdi-plus"></i>Upload Dokumen Baru</button>
+					<small style="max-width: 210;">* <strong>Pilih</strong> filter sampai <strong>level
+							desa</strong> untuk mengaktifkan tombol</small>
+				</div>
+			</div>
+
+			<div class="table-responsive mt-4">
+
+				<table id="example23" class="display nowrap table table-hover table-striped table-bordered"
+					cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>NAMA</th>
+							<th>KETERANGAN</th>
+							<th>TANGGAL</th>
+
+							<th></th>
+
+						</tr>
+					</thead>
+
+				</table>
+			</div>
+		</div>
+	</div>
+
+</div>
+<div id="areaView">
+
+</div>
+
+
+<!-- Top modal content -->
+<div id="top-modal" class="modal fade" tabindex="-1" user="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-top">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="topModalLabel">Confirmation</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body">
+				<h5>Are you sure to delete this data ?</h5>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" id='btnDelete'>Delete</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+	var idd = '';
+	var a_user_id_wilayah = '{{user_id_wilayah}}'
+
+	var fSelectedIdWilayah = '{{user_id_wilayah}}'
+	var tblBatasdesa = $("#table-data-batas-desa")
+	// let aa= 0
+	function getSelectedIdWilayah(getNewValue = true) {
+		if (getNewValue) {
+			let selectorFilter = ["filter_desa", "filter_kecamatan", "filter_kabkota", "filter_provinsi"]
+			let i = 0
+			fSelectedIdWilayah = null
+			while (fSelectedIdWilayah == null) {
+				fSelectedIdWilayah = $("#" + selectorFilter[i]).val()
+				// console.log(fSelectedIdWilayah, "#" + selectorFilter[i])
+				i++
+				if (i > selectorFilter.length) {
+					fSelectedIdWilayah = ""
+				}
+
+			}
+			// console.log(aa++)
+			if (fSelectedIdWilayah.length == 13) {
+				$("#btnInsert").attr("disabled", false)
+			} else {
+				$("#btnInsert").attr("disabled", true)
+			}
+		}
+		
+		if (fSelectedIdWilayah.length != 0) {
+			generateDataTableDokumen()
+		}
+	}
+
+	function initcom() {
+
+
+		$('#example23').on('click', '.btnViewForm', function () {
+			//console.log($(this).attr('dataid'));
+			//execForm("/admin/user/form?id="+$(this).attr('dataid')+"&type=2");
+			/*$.get("transaction/dokumendesa/dokumen?id="+$(this).attr('dataid'), function(data, status){
+		
+				console.log(escape(data));
+				var htmlText = '<embed width=100% height=100%'
+				 + ' type="application/pdf"'
+				 + ' src="data:application/pdf;base64,'
+				 + escape(data)
+				 + '"></embed>';
+				$('#areaView').html(htmlText);
+			  });
+			  */
+			/*
+			$.ajax({
+				url:"transaction/dokumendesa/dokumen?id="+$(this).attr('dataid'),
+			  //  dataType:"binary",
+				  type: "GET",
+				success:function(data){
+				  console.log(data); //ArrayBuffer
+				  //console.log(new Blob([data])) // Blob
+				},
+				  error: function(jqXHR, textStatus, errorThrown) {
+					 console.log(textStatus, errorThrown);
+				  }
+			  })
+			  */
+			var win = window.open("transaction/dokumendesa/dokumen?id=" + $(this).attr('dataid'), '_blank');
+			if (win) {
+				//Browser has allowed it to be opened
+				win.focus();
+			} else {
+				//Browser has blocked it
+				alert('Please allow popups for this website');
+			}
+		});
+
+		$('#example23').on('click', '.btnEditForm', function () {
+			//console.log($(this).attr('dataid'));
+			execForm("/admin/user/form?id=" + $(this).attr('dataid') + "&type=2");
+		});
+
+		$('#example23').on('click', '.btnDeleteForm', function () {
+			idd = $(this).attr('dataid');
+			//console.log(idd);
+		});
+
+	}
+	function generateDataTableDokumen() {
+		generateDataTable('#example23', "transaction/dokumendesa/data?id_wilayah="+fSelectedIdWilayah, [
+			{ "data": "nama" },
+			{ "data": "description" }
+			, { "data": "tgl" }
+
+
+			, { "data": "btn", "width": "50px", "orderable": false }
+		], initcom)
+
+	}
+
+	// console.log(a_user_id_wilayah);
+
+	$(document).ready(function () {
+		
+        $(".tp-enabled").tooltip('enable')
+		if(a_user_id_wilayah.length ==13)$("#btnInsert").attr("disabled", false);
+		$('#btnInsert').bind('click', function () {
+			execForm("/transaction/dokumendesa/form?id_wilayah="+fSelectedIdWilayah);
+
+		})
+		$('#btnDelete').bind('click', function () {
+			//alert(idd);
+			$('#top-modal').modal('toggle');
+			execData('transaction/dokumendesa/crud', {
+				'type': 3,
+				'id': idd
+			})
+
+		});
+
+
+		generateDropdownProvinsi({
+			selector: "#filter_provinsi", initialValue: a_user_id_wilayah.substr(0, LEN_ID_PROVINSI), onChangeEvent: (val) => {
+				generateDropdownKabKota({ selector: "#filter_kabkota", parentValue: val,onComplete:()=>{getSelectedIdWilayah()}  })
+			}
+		})
+		//console.log(a_user_id_wilayah.substr(0, 5),a_user_id_wilayah.substr(0, 8))
+		generateDropdownKabKota({
+			selector: "#filter_kabkota", initialValue: a_user_id_wilayah.substr(0, 5), onChangeEvent: (val) => {
+				generateDropdownKecamatan({ selector: "#filter_kecamatan", parentValue: val,onComplete:()=>{getSelectedIdWilayah()}  })
+			}
+		})
+		generateDropdownKecamatan({
+			selector: "#filter_kecamatan", initialValue: a_user_id_wilayah.substr(0, 8), onChangeEvent: (val) => {
+				generateDropdownDesa({ selector: "#filter_desa", parentValue: val,onComplete:()=>{getSelectedIdWilayah()} })
+			}
+		})
+		generateDropdownDesa({
+			selector: "#filter_desa", initialValue: a_user_id_wilayah.substr(0, 13), onChangeEvent: (val) => {
+				// generateDropdownKecamatan({selector:"#filter_kecamatan",parentValue:val})
+				getSelectedIdWilayah()
+			}
+		})
+		// getSelectedIdWilayah(false)
+		generateDataTableDokumen()
+
+	});
+
+
+
+
+</script>

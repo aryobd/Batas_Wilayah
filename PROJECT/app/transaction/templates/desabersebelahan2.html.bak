@@ -1,0 +1,945 @@
+<link rel="stylesheet" href="static/leaflet/leaflet.css">
+<link rel="stylesheet" href="static/leaflet/plugin/leaflet-controllayerstree.css">
+<style>
+	#map-show {
+		width: 100%;
+		height: 50vh;
+	}
+
+	#map {
+		width: 100%;
+		height: 100%;
+	}
+</style>
+<div class="col-12">
+	<div class="card">
+		<div class="card-header">
+			<h4>Daftar Desa Bersebalahan</h4>
+		</div>
+		<div class="card-body">
+			<div>
+				<div class="form-group row s-filter">
+					<label for="password_active" class="col-sm-2 col-form-label">Provinsi</label>
+					<div class="col-sm-8">
+						<select id="filter_provinsi" class="form-control">
+
+							<option value="" selected disabled>--Pilih Provinsi--</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row s-filter">
+					<label for="password_baru" class="col-sm-2 col-form-label">Kabupaten/Kota</label>
+					<div class="col-sm-8">
+						<select id="filter_kabkota" class="form-control">
+							<option value="" selected disabled>--Pilih Kabupaten/Kota--</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row s-filter">
+					<label for="password_konfirmasi" class="col-sm-2 col-form-label">Kecamatan</label>
+					<div class="col-sm-8">
+						<select id="filter_kecamatan" class="form-control">
+							<option value="" selected disabled>--Pilih Kecamatan--</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row s-filter">
+					<label for="password_konfirmasi" class="col-sm-2 col-form-label">Desa</label>
+					<div class="col-sm-8">
+						<select id="filter_desa" class="form-control">
+							<option value="" selected disabled>--Pilih Desa--</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="mt-4">
+				<div class="my-container container-warning" style="display: none;">
+					<h2 class="text-center">Harap Pilih Wilayah Administrasi Sampai Tingkat Desa</h2>
+				</div>
+				<div class="my-container container-data" style="display: none;">
+					<div class="mb-4 d-flex flex-row-reverse mt-4">
+						<div class="d-flex flex-column">
+							<button onclick="showModalTambahDsBrsblhn()"
+								class="btn btn-primary btn-sm pull-right tp-enabled" data-toggle="tooltip"
+								data-placement="left" title="Tambah Desa Bersebelahan Baru "><i
+									class="mdi mdi-plus"></i>Tambah Desa Bersebelahan</button>
+						</div>
+					</div>
+					<div id="plc-table-data" class="result">
+						<table>
+							<tr>
+								<td>Pengajuan</td>
+								<td>:</td>
+								<td style="width: 20px;text-align: right;"><strong id="num-pengajuan"></strong></td>
+							</tr>
+							<tr>
+								<td>Permintaan</td>
+								<td>:</td>
+								<td style="width: 20px;text-align: right;"><strong id="num-permintaan"></strong></td>
+							</tr>
+							<tr>
+								<td>Terkonfirmasi</td>
+								<td>:</td>
+								<td style="width: 20px;text-align: right;"><strong id="num-terkonfirmasi"></strong></td>
+							</tr>
+						</table>
+						<span class="badge badge-warning w-100 result">Anda Memiliki <strong
+								id="num-permintaan-unconfirm"></strong> Permintaan Menunggu Konfirmasi</span>
+						<table id="table-data" class="table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Nama Desa</th>
+									<th>Nama Kecamatan</th>
+									<th>Tipe</th>
+									<th>Status</th>
+									<th>Aksi</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+					<div id="plc-err" class="result">
+						<p>Belum Ada Data </p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div id="modal-tambah" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-top">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="topModalLabel">Tambah Desa Bersebelahan</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					<div>Pilih Kecamatan</div>
+					<select id="tambah_kecamatan" class="form-control">
+						<option value="">--Pilih Kecamatan--</option>
+					</select>
+					<div>Pilih Desa</div>
+					<select id="tambah_desa" class="form-control">
+						<option value="" selected disabled>--Pilih Desa/Kelurahan--</option>
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
+					<button type="button" class="btn btn-success" id="btninsert">Tambahkan</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<div id="top-modal-c" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-top">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="topModalLabel">Konfirmasi</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					<h5>Apakah anda yakin akan mengonfirmasi permintaan tersebut ?</h5>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
+					<button type="button" class="btn btn-success" onclick="submitAdd()">Ya</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<div id="top-modal-c-reject" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-top">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="topModalLabel">Konfirmasi</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					<h5>Apakah anda yakin akan menolak permintaan tersebut ?</h5>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
+					<button type="button" class="btn btn-danger" onclick="submitReject()">Ya</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<div id="top-modal-c-delete" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-top">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="topModalLabel">Konfirmasi</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					<h5>Apakah anda yakin akan menghapus pengajuan tersebut ?</h5>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
+					<button type="button" class="btn btn-danger" onclick="submitDelete()">Ya</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<div id="modal-peta" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Peta <span id="id-peta" style="font-size: 12pt;"
+							class="badge badge-dark"></span> </h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					<div id="map-loading" style="display: none;">
+
+
+						<div class="d-flex justify-content-center">
+							<div class="spinner-border" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+						</div>
+					</div>
+					<div id="map-show" style="display:none">
+						
+						<div id="map"></div>
+					</div>
+					<div class="form-check mt-3 pl-0" >
+							<input class="form-check-input" type="checkbox" value="" id="showPointCb" onchange="toogleShowPoint(this)" checked>
+							<label class="form-check-label" for="showPointCb">
+								Tampilkan Titik Pada Peta
+							</label>
+						</div>
+					<div id="map-error" class="text-center" style="height: 40px;">
+						<p class="text-danger">Desa tersebut belum memiliki peta untuk ditampilkan</p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+</div>
+<script src="static/leaflet/leaflet.js"></script>
+<script src="static/leaflet/plugin/leaflet-controllayerstree.js"></script>
+
+
+<!-- https://gist.github.com/zross/11258095/ -->
+<script src="static/leaflet/esri-leaflet.js"></script>
+
+
+
+
+<script>
+	$(".result").hide()
+	var dataTable
+	var idd = '';
+	var a_user_id_wilayah = '{{user_id_wilayah}}';
+
+	var fSelectedIdWilayah = '{{user_id_wilayah}}';
+	var selectedIdAdd = "";
+	// jika login akun desa
+	var isAccountDesa = fSelectedIdWilayah.length == LEN_ID_DESA;
+	// let aa= 0
+	var tblPengajuan = $("#plc-table-data").html();
+
+	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, ' +
+			'AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+	});
+
+	var Esri_DarkGreyCanvas = L.tileLayer(
+		"http://{s}.sm.mapstack.stamen.com/" +
+		"(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/" +
+		"{z}/{x}/{y}.png",
+		{
+			attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, ' +
+				'NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+		}
+	);
+
+	var Apimaxbox = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/light-v9',
+		tileSize: 512,
+		zoomOffset: -1
+	});
+	var layer_rbi = L.tileLayer('http://portal.ina-sdi.or.id/arcgis/rest/services/IGD/RupabumiIndonesia/MapServer/tile/{z}/{y}/{x}', {
+		maxZoom: 18,
+		attribution: ''
+
+	});
+
+
+	var layer_rbibaru = L.tileLayer('http://basemap.big.go.id/geoserver/gwc/service/tms/1.0.0/basemap_rbi:basemap@EPSG:3857@png/{z}/{x}/{-y}.png', {
+		maxZoom: 18,
+		attribution: ''
+
+	});
+
+
+
+	var layer_rbiesri = L.esri.tiledMapLayer({
+		url: 'https://portal.ina-sdi.or.id/arcgis/rest/services/RBI/Basemap/MapServer',
+		opacity: 1
+	})
+
+	/* var layer_indikatif = L.esri.tiledMapLayer({
+		url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KabKota_50K/MapServer',
+		opacity: 1
+	})
+	*/
+	var layer_indikatif = L.esri.dynamicMapLayer({
+		url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
+		opacity: 1
+	})
+
+
+
+	var layer_rbivector = L.tileLayer({
+		url: 'https://kspservices.big.go.id/satupeta/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer',
+		opacity: 1
+	})
+
+
+
+
+	var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	});
+
+	var layersTree = [
+		{
+			label: 'Indonesia',
+			children: [
+				{ label: 'RBI BIG', layer: layer_rbi },
+				{ label: 'RBI BIG - OS', layer: layer_rbibaru },
+				{ label: 'RBI BIG - Esri', layer: layer_rbiesri },
+
+			]
+		}, {
+			label: "Dunia",
+			children: [{ label: 'Satellite ESRI', layer: Esri_WorldImagery },
+			{ label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
+			{ label: 'Mapbox', layer: Apimaxbox },
+			{ label: 'OpenStreetMap_Mapnik', layer: OpenStreetMap_Mapnik },]
+		}]
+
+	var map;
+
+	function showModalTambahDsBrsblhn() {
+		selectedIdAdd = "";
+
+		$("#tambah_kecamatan").off("change");
+		$("#tambah_desa").off("change");
+		$("#tambah_desa").html('<option value="" selected disabled>--Pilih Desa/Kelurahan--</option>');
+
+		generateDropdownKecamatan({
+			selector: "#tambah_kecamatan",
+			parentValue: fSelectedIdWilayah.substr(0, LEN_ID_KABKOTA),
+			// initialValue: fSelectedIdWilayah.substr(0, LEN_ID_KECAMATAN), 
+			onChangeEvent: (val) => {
+				console.log(val)
+				generateDropdownDesa({
+					selector: "#tambah_desa",
+					parentValue: val,
+					onChangeEvent: (val) => {
+						selectedIdAdd = val;
+
+					},
+					deactivatefilter: true,
+				})
+			},
+			onComplete: () => {
+				// getSelectedIdWilayah()
+
+				$('#modal-tambah').modal('show')
+			},
+			deactivatefilter: true
+		})
+
+	}
+
+	function getSelectedIdWilayah(getNewValue = true) {
+		if (getNewValue) {
+			let selectorFilter = ["filter_desa", "filter_kecamatan", "filter_kabkota", "filter_provinsi"]
+			let i = 0
+			fSelectedIdWilayah = null
+			while (fSelectedIdWilayah == null) {
+				fSelectedIdWilayah = $("#" + selectorFilter[i]).val()
+				// console.log(fSelectedIdWilayah, "#" + selectorFilter[i])
+				i++
+				if (i > selectorFilter.length) {
+					fSelectedIdWilayah = ""
+				}
+
+			}
+			// console.log(aa++)
+
+		}
+		if (!isAccountDesa) {
+			toogleTampilan();
+			if (fSelectedIdWilayah.length == LEN_ID_DESA) {
+				$("#btninsert").attr("disabled", false)
+			} else {
+				$("#btninsert").attr("disabled", true)
+			}
+		}
+		if (fSelectedIdWilayah.length == LEN_ID_DESA) {
+			getDataDesaBersebelahan()
+			generateDDdesa()
+		}
+		checkRoleButton()
+	}
+
+
+	function getDataDesaBersebelahan() {
+
+		$(".result").hide()
+		let url = "/transaction/desabersebelahan/data?id_wilayah=" + fSelectedIdWilayah
+		$.ajax({
+			url: url,
+			success: function (res) {
+				// console.log(res)
+				if (res.status) {
+					let data = res.data;
+					let { list, id_desa_asal } = data
+					// console.log(data)
+
+					if (list.length > 0) {
+						let objTbl = $("#table-data")
+
+						for (let index = 0; index < list.length; index++) {
+							list[index] = { rownumber: index + 1, ...list[index] }
+
+						}
+						if (typeof dataTable != 'undefined') {
+							dataTable.destroy()
+						}
+						dataTable = objTbl.DataTable({
+							data: list,
+							language: {
+								url: "./static/dataTables.lang.id.json"
+							},
+							responsive: true,
+							"order": [[1, 'asc']],
+							"columnDefs": [
+								{
+									data: null,
+									"searchable": false,
+									"orderable": false,
+									"targets": 0
+								},
+								{
+									"targets": 1,
+									"data": 'nama_desa_tujuan',
+								},
+								{
+									"targets": 2,
+									"data": 'nama_kecamatan_tujuan',
+								}, {
+									"targets": 3,
+									"data": 'tipe',
+									render: function (t) {
+										if (t == 'pengajuan') {
+											return '<span class="badge badge-primary">Pengajuan</span>'
+										} else {
+											return '<span class="badge badge-secondary">Permintaan</span>'
+										}
+									}
+								}, {
+									"targets": 4,
+									"data": 'status',
+									render: function (s) {
+										let a = '<span class="badge badge-info">Menunggu Konfirmasi</span>'
+										switch (s) {
+											case 'ditolak':
+												a = '<span class="badge badge-danger">Ditolak</span>'
+												break;
+											case 'terkonfirmasi':
+												a = '<span class="badge badge-success">Terkonfirmasi</span>'
+												break;
+
+											default:
+
+												break;
+										}
+										return a
+									}
+								}, {
+									"targets": 5,
+									data: null,
+									render: function (r) {
+										let { tipe, status, id, id_desa_tujuan } = r
+										let btn = '<btn class="btn btn-info btnBatasDesa mr-2" iddesa="' + id_desa_tujuan + '">Lihat Peta</btn>';
+										// console.log(r)
+										if (tipe == 'permintaan') {
+											if (status == 'menunggu konfirmasi') {
+												btn += '<btn class="btn btn-primary confirmBtn mr-2" iddesa="' + id_desa_tujuan + '">Konfirmasi</btn>';
+												btn += '<btn class="btn btn-danger btnReject" iddesa="' + id_desa_tujuan + '">Tolak</btn>';
+
+											}
+										} else if (tipe == "pengajuan") {
+											if (status == 'menunggu konfirmasi' || a_user_id_wilayah.length <= LEN_ID_KABKOTA) {
+												btn += '<btn class="btn btn-danger btnDelete" iddesa="' + id_desa_tujuan + '">Hapus</btn>';
+
+											}
+										}
+										return btn
+									}
+								}
+							],
+							initComplete: function () {
+								$("#plc-table-data table").bind('click', '.btnBatasDesa', function (e) {
+									let btn = $(e.target);
+									if (btn.hasClass('btnBatasDesa')) {
+										let idDesa = btn.attr('iddesa');
+										// console.log(idDesa)
+										if (idDesa != undefined) showBatasDesa(idDesa)
+									}
+
+								});
+								$("#plc-table-data table").bind('click', '.confirmBtn', function (e) {
+									let btn = $(e.target);
+									if (btn.hasClass('confirmBtn')) {
+										selectedIdAdd = btn.attr("iddesa")
+										$("#top-modal-c").modal('show')
+									}
+								})
+								$("#plc-table-data table").bind('click', '.btnReject', function (e) {
+									let btn = $(e.target);
+									if (btn.hasClass('btnReject')) {
+										selectedIdAdd = btn.attr("iddesa")
+										$("#top-modal-c-reject").modal('show')
+									}
+								})
+								$("#plc-table-data table").bind('click', '.btnDelete', function (e) {
+									let btn = $(e.target);
+									if (btn.hasClass('btnDelete')) {
+										selectedIdAdd = btn.attr("iddesa")
+										$("#top-modal-c-delete").modal('show')
+									}
+								})
+							}
+						})
+						dataTable.on('order.dt search.dt', function () {
+							dataTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+								cell.innerHTML = i + 1;
+							});
+						}).draw();
+
+						// add filter datatable
+						// dataTable.columns().flatten().each(function (colIdx) {
+						// 	// Create the select list and search operation
+						// 	var select = $('<select />')
+						// 		.appendTo(
+						// 			dataTable.column(colIdx).footer()
+						// 		)
+						// 		.on('change', function () {
+						// 			dataTable
+						// 				.column(colIdx)
+						// 				.search($(this).val())
+						// 				.draw();
+						// 		});
+
+						// 	// Get the search data for the first column and add to the select list
+						// 	dataTable
+						// 		.column(colIdx)
+						// 		.cache('search')
+						// 		.sort()
+						// 		.unique()
+						// 		.each(function (d) {
+						// 			select.append($('<option value="' + d + '">' + d + '</option>'));
+						// 		});
+						// });
+
+						// hitung jumlah
+						let nPeng = 0, nPer = 0, nTer = 0, nPerUnconfirm = 0;
+
+						for (let i = 0; i < list.length; i++) {
+							if (list[i].tipe == 'pengajuan') nPeng++;
+							if (list[i].tipe == 'permintaan') {
+								nPer++
+								if (list[i].status.toLowerCase() == "menunggu konfirmasi") { nPerUnconfirm++ }
+							};
+							if (list[i].status == 'terkonfirmasi') nTer++;
+						}
+
+						$("#num-pengajuan").html(nPeng)
+						$("#num-permintaan").html(nPer)
+						$("#num-terkonfirmasi").html(nTer)
+						if (nPerUnconfirm != 0) {
+							$("#num-permintaan-unconfirm").html(nPerUnconfirm)
+							$("#num-permintaan-unconfirm").parent().show()
+						}
+
+						$("#plc-table-data").show()
+
+					} else {
+						$("#plc-err").show()
+					}
+
+				} else {
+					showNotificationParam('error', res.error)
+				}
+
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				showNotificationParam('error', textStatus)
+			}
+		})
+	}
+
+	// var map1Line = []; gak dipake
+	var map1Point = [];
+	// var map2Line = []; gak dipake
+	var map2Point = [];
+	async function showBatasDesa(idDesa) {
+		if (fSelectedIdWilayah.length < LEN_ID_DESA) fSelectedIdWilayah = a_user_id_wilayah;
+		$("#showPointCb").prop("checked",true);
+		$("#map-loading").show()
+		$("#id-peta").html('')
+		$("#map-show").hide()
+
+		$("#map-show").html('<div id="map"></div>')
+
+		$("#map-error").hide()
+		$("#modal-peta").modal('show')
+		// console.log(map)
+		if (typeof map != 'undefined') {
+			map.remove()
+		}
+		let data = await $.get("/master/petadesa1?id_desa=" + idDesa);
+		// console.log(data.data)
+		// return
+
+		// $("#map-show").show()
+		if (typeof data.data.features.length != 0) {
+			// $("#id-peta").html("#" + data.data.id)
+			$("#map-loading").hide()
+			$("#map-show").show()
+
+			map = L.map('map', {
+				layers: [OpenStreetMap_Mapnik],
+				pmIgnore: false,
+				maxZoom: 17,
+				fullscreenControl: true,
+				fullscreenControlOptions: {
+					position: 'topleft'
+				}
+			}).setView([-6.491857302, 106.848663298], 15);
+
+			let data2 = await $.get("/master/petadesa1?id_desa=" + fSelectedIdWilayah);
+
+			var overlayMaps = {
+				//"Indikatif": layer_indikatif
+				label: 'Indikatif',
+				selectAllCheckbox: true,
+				children: [
+					{ label: 'Indikatif', layer: layer_indikatif },
+
+				]
+			};
+
+
+			var ctr = L.control.layers.tree(layersTree, overlayMaps, {
+				//namedToggle: true,
+				selectorBack: false,
+				closedSymbol: '&#8862; &#x1f5c0;',
+				openedSymbol: '&#8863; &#x1f5c1;',
+				// collapseAll: 'Collapse all',
+				// expandAll: 'Expand all',
+				collapsed: true,
+			}).addTo(map)
+
+
+			setTimeout(() => {
+				map.invalidateSize()
+				// let datamap = JSON.parse(data.data)
+				let datamap = data.data;
+
+				// console.log(datamap)
+				let tmpTitik = [];
+
+				let datageo = L.geoJSON(datamap, {
+					onEachFeature: function (feature, layer) {
+						// console.log(feature)
+						if (feature.geometry.type.toLowerCase() == "point") {
+							tmpTitik.push(layer)
+						}
+					}
+				})
+
+				// console.log(tmpTitik)
+				map1Point = L.layerGroup(tmpTitik)
+					.addTo(map);
+
+				let arrayGroup = [datageo];
+				// console.log(data2)
+				if (typeof data2.data.length != 0) {
+					tmpTitik = [];
+
+					let datamap2 = data2.data;
+
+					let datageo2 = L.geoJSON(datamap2, {
+						style: function (feature) {
+							return { color: 'red' };
+						},
+						onEachFeature: function (feature, layer) {
+							// console.log(feature)
+							if (feature.geometry.type.toLowerCase() == "point") {
+								tmpTitik.push(layer)
+							}
+						}
+					})
+
+					map2Point = L.layerGroup(tmpTitik)
+						.addTo(map);
+
+
+					arrayGroup.push(datageo2)
+
+				}
+
+				let group = L.featureGroup(arrayGroup)
+					.addTo(map);
+
+
+				map.fitBounds(group.getBounds(), true)
+
+			}, 1000);
+
+
+		} else {
+			$("#map-loading").hide()
+			$("#map-error").show()
+		}
+
+	}
+	if (isAccountDesa) {
+		getDataDesaBersebelahan()
+	}
+
+	function toogleShowPoint(obj){
+		let v = $(obj).is(":checked")
+		if(v){
+			map1Point.addTo(map);
+			map2Point.addTo(map)
+		}else{
+			map1Point.remove();
+			map2Point.remove();
+		}
+	}
+
+	function generateDDdesa() {
+		selectedIdAdd = "";
+		if (fSelectedIdWilayah.length == LEN_ID_DESA) generateDropdownDesa({
+			selector: "#dd_desa", parentValue: fSelectedIdWilayah.substr(0, LEN_ID_KABKOTA), onChangeEvent: (val) => {
+				selectedIdAdd = val;
+
+			}, deactivatefilter: true, parentType: "kabkota", withParentName: true
+		});
+	}
+
+	function toogleTampilan() {
+		// console.log(fSelectedIdWilayah)
+		$(".my-container").hide();
+		if (fSelectedIdWilayah.length == LEN_ID_DESA) {
+			$(".container-data").show()
+		} else {
+			$(".container-warning").show()
+		}
+	}
+	function submitAdd() {
+		if (fSelectedIdWilayah.length < LEN_ID_DESA) fSelectedIdWilayah = a_user_id_wilayah;
+		let values = {
+			id_desa_asal: fSelectedIdWilayah,
+			id_desa_tujuan: selectedIdAdd
+		}
+		if (selectedIdAdd.length == 0) {
+			showNotificationParam("error", "Harap pilih desa tujuan")
+			return
+		}
+		$.ajax({
+			url: "/transaction/desabersebelahan/add",
+			type: "post",
+			data: JSON.stringify(values),
+			contentType: 'application/json',
+			success: function (res) {
+				// console.log(res)
+				let type = "success";
+				if (!res.result) type = "error";
+
+				showNotificationParam(type, res.error);
+				if (res.result) {
+					getDataDesaBersebelahan()
+					$(".modal").modal("hide")
+					$("#dd_desa").val("")
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				showNotificationParam('error', textStatus)
+			}
+		})
+
+	}
+	function submitDelete() {
+		if (fSelectedIdWilayah.length < LEN_ID_DESA) fSelectedIdWilayah = a_user_id_wilayah;
+		let values = {
+			id_desa_asal: fSelectedIdWilayah,
+			id_desa_tujuan: selectedIdAdd
+		}
+		if (selectedIdAdd.length == 0) {
+			showNotificationParam("error", "Harap pilih desa tujuan")
+			return
+		}
+		$.ajax({
+			url: "/transaction/desabersebelahan/delete",
+			type: "post",
+			data: JSON.stringify(values),
+			contentType: 'application/json',
+			success: function (res) {
+				// console.log(res)
+				let type = "success";
+				if (!res.result) type = "error";
+
+				showNotificationParam(type, res.error);
+				if (res.result) {
+					getDataDesaBersebelahan()
+					$(".modal").modal("hide")
+					$("#dd_desa").val("")
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				showNotificationParam('error', textStatus)
+			}
+		})
+
+	}
+	function submitReject() {
+		if (fSelectedIdWilayah.length < LEN_ID_DESA) fSelectedIdWilayah = a_user_id_wilayah;
+		let values = {
+			id_desa_asal: selectedIdAdd,
+			id_desa_tujuan: fSelectedIdWilayah
+		}
+		if (selectedIdAdd.length == 0) {
+			showNotificationParam("error", "Harap pilih desa tujuan")
+			return
+		}
+		$.ajax({
+			url: "/transaction/desabersebelahan/reject",
+			type: "post",
+			data: JSON.stringify(values),
+			contentType: 'application/json',
+			success: function (res) {
+				// console.log(res)
+				let type = "success";
+				if (!res.result) type = "error";
+
+				showNotificationParam(type, res.error);
+				if (res.result) {
+					getDataDesaBersebelahan()
+					$(".modal").modal("hide")
+					$("#dd_desa").val("")
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				showNotificationParam('error', textStatus)
+			}
+		})
+
+	}
+	$(document).ready(function () {
+
+		$(".tp-enabled").tooltip('enable')
+		if (a_user_id_wilayah.length == LEN_ID_DESA) $("#btninsert").attr("disabled", false);
+
+		$('#btnDelete').bind('click', function () {
+			//alert(idd);
+			$('#top-modal').modal('toggle');
+			execData('transaction/dokumendesa/crud', {
+				'type': 3,
+				'id': idd
+			})
+
+		});
+
+		$("#tbl-permintaan").on('click', '.confirmBtn', function () {
+			// console.log(this)
+			selectedIdAdd = $(this).attr("iddesa")
+			$("#top-modal-c").modal('show')
+			// console.log(selectedIdAdd)
+		})
+		$("#tbl-permintaan").on('click', '.btnDelete', function () {
+			// console.log(this)
+			selectedIdAdd = $(this).attr("iddesa")
+			$("#top-modal-c-reject").modal('show')
+			// console.log(selectedIdAdd)
+		})
+		$("#tbl-pengajuan").on('click', '.btnDelete', function () {
+			// console.log(this)
+			selectedIdAdd = $(this).attr("iddesa")
+			$("#top-modal-c-delete").modal('show')
+			// console.log(selectedIdAdd)
+		})
+
+		$("#btninsert").on("click", function () {
+			submitAdd()
+		})
+
+
+
+
+		generateDropdownProvinsi({
+			selector: "#filter_provinsi", initialValue: a_user_id_wilayah.substr(0, LEN_ID_PROVINSI), onChangeEvent: (val) => {
+				generateDropdownKabKota({
+					selector: "#filter_kabkota", parentValue: val, onComplete: () => {
+						getSelectedIdWilayah()
+					}
+				})
+			}
+		})
+		generateDropdownKabKota({
+			selector: "#filter_kabkota", initialValue: a_user_id_wilayah.substr(0, LEN_ID_KABKOTA), onChangeEvent: (val) => {
+				generateDropdownKecamatan({
+					selector: "#filter_kecamatan", parentValue: val, onComplete: () => {
+						getSelectedIdWilayah()
+					}
+				})
+			}
+		})
+		generateDropdownKecamatan({
+			selector: "#filter_kecamatan", initialValue: a_user_id_wilayah.substr(0, LEN_ID_KECAMATAN), onChangeEvent: (val) => {
+				generateDropdownDesa({ selector: "#filter_desa", parentValue: val })
+			}, onComplete: () => {
+				getSelectedIdWilayah()
+			}
+		})
+		generateDropdownDesa({
+			selector: "#filter_desa", initialValue: a_user_id_wilayah.substr(0, LEN_ID_DESA), onChangeEvent: (val) => {
+				// generateDropdownKecamatan({selector:"#filter_kecamatan",parentValue:val})
+				toogleTampilan()
+				getSelectedIdWilayah()
+			}
+		})
+		// getSelectedIdWilayah(false)
+		// console.log(fSelectedIdWilayah)
+		toogleTampilan()
+		generateDDdesa()
+
+
+
+	});
+
+
+
+
+</script>

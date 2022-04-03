@@ -1,0 +1,141 @@
+<div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Daftar</h4>
+                                <div class="dt-buttons">
+								
+								<a class="dt-button buttons-copy buttons-html5" id="btnInsert" tabindex="0" aria-controls="example23" href="#"><span>Tambah</span></a>
+								</div>
+                                <div class="table-responsive mt-4">
+                                 
+									 <table id="example23"
+                                        class="display nowrap table table-hover table-striped table-bordered"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>DESA</th>
+                                                <th>NAMA</th>
+												<th>KETERANGAN</th>
+																					
+                                                <th></th>
+                                                
+                                            </tr>
+                                        </thead>
+                                      
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                      
+                    </div>
+<div id="areaView">
+
+</div>
+					
+								
+<!-- Top modal content -->
+                                <div id="top-modal" class="modal fade" tabindex="-1" user="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-top">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="topModalLabel">Confirmation</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">×</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>Yakin akan menghapus data ?</h5>
+                                               
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light"
+                                                    data-dismiss="modal">Keluar</button>
+                                                <button type="button" class="btn btn-primary" id='btnDelete'>Hapus</button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+
+<script>
+	var idd = '';
+	
+
+	$(document).ready(function() {
+		$('#btnInsert').bind('click', function(){
+								execForm("/transaction/uploadpeta/form");
+							
+		})
+    
+		
+		
+		generateDataTable('#example23',"transaction/uploadpeta/data",[
+				{ "data": "nama_desa" },
+				{ "data": "nama" },
+				{ "data": "keterangan" }		
+				
+				,{ "data": "btn","width":"50px","orderable": false}	
+			],initcom)
+		
+		
+		$('#btnDelete').bind('click', function(){
+			//alert(idd);
+			$('#top-modal').modal('toggle');
+			execData('transaction/uploadpeta/crud',{
+									'type': 3,
+									'id':idd								
+								})
+			
+		});
+		
+		
+		
+		$('#example23').on('click', '.btnViewForm1', function() {
+			
+				var win = window.open("transaction/download/dokumen?id="+$(this).attr('dataid'), '_blank');
+				if (win) {
+					//Browser has allowed it to be opened
+					win.focus();
+				} else {
+					//Browser has blocked it
+					alert('Please allow popups for this website');
+				}
+				
+			//console.log($(this).attr('dataid'));
+			//execForm("/transaction/verification/form?id="+$(this).attr('dataid')+"&type=3");
+		});
+		
+		$('#example23').on('click', '.btnViewForm', function() {
+			/*
+				var win = window.open("transaction/upload/dokumen?id="+$(this).attr('dataid'), '_blank');
+				if (win) {
+					//Browser has allowed it to be opened
+					win.focus();
+				} else {
+					//Browser has blocked it
+					alert('Please allow popups for this website');
+				}
+				*/
+			//console.log($(this).attr('dataid'));
+			execForm("/transaction/uploadpeta/form?id="+$(this).attr('dataid')+"&type=3");
+		});
+		
+		$('#example23').on('click', '.btnEditForm', function() {
+			//console.log($(this).attr('dataid'));
+			execForm("/transaction/uploadpeta/form?id="+$(this).attr('dataid')+"&type=2");
+		});
+		
+		$('#example23').on('click', '.btnDeleteForm', function() {
+			idd = $(this).attr('dataid');
+			//console.log(idd);
+		});
+		
+    });
+	
+	
+	function initcom( settings, json){
+	
+				
+				
+				
+			}
+	
+  </script>

@@ -1,0 +1,107 @@
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Daftar Pengguna</h4>
+            <div class="dt-buttons">
+
+                <a class="dt-button buttons-copy buttons-html5" id="btnInsert" tabindex="0"
+                    aria-controls="example23"><span>Tambah Pengguna</span></a>
+            </div>
+
+            <div class="table-responsive mt-4">
+                <table id="example23" class="display nowrap table table-hover table-striped table-bordered"
+                    cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>USERNAME</th>
+                            <th>FULLNAME</th>
+                            <th>ROLE</th>
+                            <th>ACTIVE</th>
+
+                            <th></th>
+
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Top modal content -->
+<div id="top-modal" class="modal fade" tabindex="-1" user="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-top">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="topModalLabel">Konfirmasi</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <h5>Apakah anda yakin akan menghapus data ini ?</h5>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
+                <button type="button" class="btn btn-primary" id='btnDelete'>Ya</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    var idd = '';
+
+
+    $(document).ready(function () {
+        $('#btnInsert').bind('click', function () {
+            execForm("/admin/user/form?type=1");
+
+        })
+
+
+
+        generateDataTable('#example23', "admin/user/data", [
+            { "data": "username" },
+            { "data": "fullname" }
+            , { "data": "role" }
+            , { "data": "active" }
+
+            , { "data": "btn", "width": "50px", "orderable": false }
+        ], initcom)
+
+
+        $('#btnDelete').bind('click', function () {
+            //alert(idd);
+            $('#top-modal').modal('toggle');
+            execData('admin/user/crud', {
+                'type': 3,
+                'id': idd
+            })
+
+        });
+
+
+        $('#example23').on('click', '.btnEditForm', function () {
+            //console.log($(this).attr('dataid'));
+            execForm("/admin/user/form?id=" + $(this).attr('dataid') + "&type=2");
+        });
+
+        $('#example23').on('click', '.btnDeleteForm', function () {
+            idd = $(this).attr('dataid');
+            //console.log(idd);
+        });
+
+    });
+
+
+    function initcom(settings, json) {
+
+
+
+
+    }
+
+</script>
