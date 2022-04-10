@@ -91,6 +91,7 @@
         input:-webkit-autofill:active {
             -webkit-box-shadow: 0 0 0 30px white inset !important;
         }
+		
     </style>
 
 </head>
@@ -104,7 +105,7 @@
                 </div>
                 <div class="my-4 pt-4 text-center">
                     <h3 class="mb-1 text-white">Login</h3>
-                    <p class="mb-4 text-white">Sistem Informasi Batas Desa</p>
+                    <p class="mb-4 text-white">Aplikasi Pemetaan Partisipatif Penegasan <br /> Batas Desa / Kelurahan</p>
                 </div>
                 <form id="login-form" action="/" method="post">
                     <div class="form-group first">
@@ -135,6 +136,15 @@
                                     <span class="fa fa-eye-slash "></span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+					<div class="form-group last">
+                        <div class="input-group mb-4">
+							
+                            <span class="input-group-text mb-1   rounded-left" id="lblCaptcha" onclick="loadCaptcha()" style="cursor:pointer;">{{rchar}}</span> 
+                            <input type="text" name="txtChatcha" id="txtChatcha" value=""  class="form-control rounded-right" 
+                                placeholder="Masukan Chaptcha" style="border-width: 1px 0px; text-align: center;">
+							
                         </div>
                     </div>
                     <input type="submit" value="LOGIN" class="btn btn-block bg-white text-primary">
@@ -172,6 +182,11 @@
 
         }
 
+		loadCaptcha = function(){
+			$.get("/captcha", function(datas, status){
+				$('#lblCaptcha').html(datas.data)
+			})
+		}
 
 
     </script>

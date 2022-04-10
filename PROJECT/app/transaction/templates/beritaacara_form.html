@@ -59,8 +59,8 @@
 						<tr><td colspan=2>Demikian Berita Acara ini dibuat untuk digunakan sebagaimana mestinya. </td></tr>
 						<tr><td colspan=2 style='text-align: center'>Yang bersepakat,</td></tr>
 						<tr>
-							<td style='text-align: center'>Kepala Desa	<br />{{nama_desa1}}	<br /><br /><br /><br /><br /><br /><span style=" text-decoration: underline;">{{txtKades1}}</span></td>	
-							<td style='text-align: center'>Kepala Desa	<br />{{nama_desa2}}	<br /><br /><br /><br /><br /><br /><span style=" text-decoration: underline;">{{txtKades2}}</span></td>
+							<td style='text-align: center'>{{namaJabDesa1}}	<br />{{nama_desa1}}	<br /><br /><br /><br /><br /><br /><span style=" text-decoration: underline;">{{txtKades1}}</span></td>	
+							<td style='text-align: center'>{{namaJabDesa2}}	<br />{{nama_desa2}}	<br /><br /><br /><br /><br /><br /><span style=" text-decoration: underline;">{{txtKades2}}</span></td>
 						</tr>
 						<tr><td colspan=2 style='text-align: center'>Mengetahui,</td></tr>
 						<tr>
@@ -388,7 +388,7 @@ var charGenerateNo = ""
 	
 	
 	
-		  $.get("transaction/settitikkartometri/geojson?id1="+klaimidDesa1+"&id2="+klaimidDesa2, function(data, status){
+		  $.get("transaction/settitikkartometri/geojson?id1="+idDesa1+"&id2="+idDesa2, function(data, status){
 			bicycleRental = data.data
 			center = data.center
 			klaimidDesa1Nama =  data.nama

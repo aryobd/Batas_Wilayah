@@ -74,7 +74,7 @@ def dokumendesa_form():
     elif (len(id_wilayah_selected) == len(a_user_id_wilayah)):
         id_wilayah_selected = a_user_id_wilayah
 
-    if(len(id_wilayah_selected) == 10):
+    if(len(id_wilayah_selected) >= 13):
         nama_wilayah = getWilayahById(id_wilayah_selected)['fullname_wilayah']
         return jsonify(data=render_template('dokumendesa_form.html', nama_wilayah=nama_wilayah, id_desa=id_wilayah_selected))
     else:
@@ -540,8 +540,8 @@ def klaimbatasdesa_setmainmap():
         c.execute("SELECT * from taswil.t_klaim_batas_desa WHERE id_klaim_batas_desa = %s and id_desa=%s", [id,idWilayah])
         isExist = (len(c.fetchall()) > 0)
         if (isExist) :
-            c.execute("UPDATE taswil.t_klaim_batas_desa set ismainmap =false where id_desa =%s",[idWilayah])
-            c.execute("UPDATE taswil.t_klaim_batas_desa set ismainmap =true, modifiedby=%s,modifiedat = now() where id_klaim_batas_desa = %s and id_desa =%s",[getUserName(),id, idWilayah  ])
+            #c.execute("UPDATE taswil.t_klaim_batas_desa set ismainmap =false where id_desa =%s",[idWilayah])
+            c.execute("UPDATE taswil.t_klaim_batas_desa set ismainmap = not ismainmap, modifiedby=%s,modifiedat = now() where id_klaim_batas_desa = %s and id_desa =%s",[getUserName(),id, idWilayah  ])
             con.commit()
         else :
             result = False
@@ -572,28 +572,39 @@ def klaimbatasdesa_editor():
 	data = False
 	header = "Terjadi kesalahan memuat halaman"
 
-	if (len(id_wilayah_selected) == 10):
+	if (len(id_wilayah_selected) >= 13):
         # print()
 		id_button = "btnInsert"
 		class_button = ""
 		nama_wilayah = getWilayahById(id_wilayah_selected)['fullname_wilayah']
-		geodata = ""
+		geodata = "''"
 		
 		if (len(a_id_klaim_batas_desa) != 0):
-			c.execute("SELECT  ST_AsGeoJSON(geom) FROM taswil.t_klaim_batas_desa WHERE id_desa= %s and id_klaim_batas_desa=%s ", [
+			c.execute("SELECT  ST_AsGeoJSON(b.geom),b.description FROM taswil.t_klaim_batas_desa a join taswil.t_klaim_batas_desa_detil b on a.id_klaim_batas_desa = b.id_klaim_batas_desa WHERE id_desa= %s and a.id_klaim_batas_desa=%s ", [
                       id_wilayah_selected, a_id_klaim_batas_desa])
 			data = c.fetchall()
+			i = 0
+			test1 = []
+			for  es in data:	
+				i = i+1;
+				aaa = json.loads(es[0])
+				obj = {'type' : 'Feature','properties':es[1],'geometry' :aaa }
+				test1.append(obj)				
+			datas = {'type': 'FeatureCollection','crs': {'type': 'name','properties': {'name': 'EPSG:4326'}},'features' : test1}
 			if(len(data) == 1):
-                # print(data[0][0])
-				geodata = "=" + data[0][0]
+				print(data[0][0])
+			#geodata = "=" + str(data[0])
+			
+			geodata = (datas['features'])
+			#print(test1)
 
 		result = render_template("gambarbatasdesa.html",
                                  nama_wilayah=nama_wilayah,
                                  id_wilayah=id_wilayah_selected,
                                  id_button=id_button,
                                  class_button=class_button,
-                                 a_id_klaim_batas_desa=a_id_klaim_batas_desa,
-                                 geodata=Markup(geodata))
+                                 a_id_klaim_batas_desa=a_id_klaim_batas_desa,                                 
+								 geodata=Markup(geodata))
 		header = "Editor Batas Desa"
 		
 	return jsonify(data=result, header=header)
@@ -602,58 +613,71 @@ def klaimbatasdesa_editor():
 @mod.route('/klaimbatasdesa/upload', methods=["POST"])
 @check_session
 def klaimbatasdesa_upload():
-    con = connect_db()
-    c = con.cursor()
-
-    id_wilayah = request.json["id_wilayah"]
-    feature = request.json["geom"]
-    print(feature["geometry"])
-    geom = json.dumps(feature["geometry"])
-    id_klaim_batas_desa = request.json['id_klaim_batas_desa']
-
-    # print(type(geom))
-    result = True
-    header = "Berhasil menyimpan"
-    insert_id = ""
-
-    username = getUserName()
-    try:
-        # print(id_wilayah, id_klaim_batas_desa, geom)
-        if(id_klaim_batas_desa == ""):
-            insert_id = str(uuid.uuid4())
-            params = [insert_id, id_wilayah,
-                      username, username, geom]
-            c.execute("""
-            INSERT INTO taswil.t_klaim_batas_desa
-            (id_klaim_batas_desa,id_desa,createdby,modifiedby,geom)
-            VALUES (%s,  %s, %s,%s,ST_GeomFromGeoJSON(%s))
-            """, params)
+	con = connect_db()
+	c = con.cursor()
+	
+	id_wilayah = request.json["id_wilayah"]
+	feature = request.json["geom"]
+	#print(feature["geometry"])
+	#geom = json.dumps(feature["geometry"])
+	id_klaim_batas_desa = request.json['id_klaim_batas_desa']
+	
+	# print(type(geom))
+	result = True
+	header = "Berhasil menyimpan"
+	insert_id = ""
+	
+	username = getUserName()
+	try:
+		#print(id_wilayah, id_klaim_batas_desa, feature)
+		if(id_klaim_batas_desa == ""):
+			insert_id = str(uuid.uuid4())
+			params = [insert_id, id_wilayah,
+                      username, username]
+            #c.execute("""
+            #INSERT INTO taswil.t_klaim_batas_desa
+            #(id_klaim_batas_desa,id_desa,createdby,modifiedby,geom)
+            #VALUES (%s,  %s, %s,%s,ST_GeomFromGeoJSON(%s))
+            #""", params)
             
-            con.commit()
-        else:
-            insert_id = id_klaim_batas_desa
-            c.execute(
-                "SELECT * FROM taswil.t_klaim_batas_desa WHERE id_desa= %s and id_klaim_batas_desa=%s ", [id_wilayah, insert_id])
-            exist = c.fetchall()
-            if (len(exist) > 0):
-                params = [username, geom, insert_id]
+			c.execute("""
+            INSERT INTO taswil.t_klaim_batas_desa
+            (id_klaim_batas_desa,id_desa,createdby,modifiedby)
+            VALUES (%s,  %s, %s,%s)
+            """, params)
+			
+			for features in feature["features"]:
+				paramss = [insert_id, str(features["geometry"]),str(features["properties"])]
+				print(str(features["geometry"]))
+				
+				c.execute('INSERT INTO taswil.t_klaim_batas_desa_detil (id_klaim_batas_desa,geom,description) values (%s,  ST_Force2D(ST_GeomFromGeoJSON(%s)),%s) ',paramss)
+				
+			
+			con.commit()
+		else:
+			insert_id = id_klaim_batas_desa
+			c.execute(
+				"SELECT * FROM taswil.t_klaim_batas_desa WHERE id_desa= %s and id_klaim_batas_desa=%s ", [id_wilayah, insert_id])
+			exist = c.fetchall()
+			if (len(exist) > 0):
+				params = [username, feature, insert_id]
 
-                c.execute(
-                    "UPDATE taswil.t_klaim_batas_desa SET modifiedby = %s, modifiedat = now(), geom = ST_GeomFromGeoJSON(%s) WHERE id_klaim_batas_desa = %s", params)
-                con.commit()
-                result = True
-                header = "Data berhasil diperbaharui"
-            else:
-                result = False
-                header = "Terjadi kesalahan, data tidak ditemukan"
-            print("update")
-    except Error as er:
-        result = False
-        header = str(er)
+				c.execute(
+					"UPDATE taswil.t_klaim_batas_desa SET modifiedby = %s, modifiedat = now(), geom = ST_GeomFromGeoJSON(%s) WHERE id_klaim_batas_desa = %s", params)
+				con.commit()
+				result = True
+				header = "Data berhasil diperbaharui"
+			else:
+				result = False
+				header = "Terjadi kesalahan, data tidak ditemukan"
+			print("update")
+	except Error as er:
+		result = False
+		header = str(er)
 
     # print(c.query)
-    con.close()
-    return jsonify(result=result, error=header, insert_id=insert_id, id_wilayah=id_wilayah)
+	con.close()
+	return jsonify(result=result, error=header, insert_id=insert_id, id_wilayah=id_wilayah)
 
 
 @mod.route('/klaimbatasdesa/data')
@@ -693,12 +717,15 @@ def klaimbatasdesadata_index():
             uploadat=row[5],
             modifiedby=row[4],
             modifiedat=row[6],
-            btn='<div id="dt-buttons" class="dt-buttons">' +
+            btn=('<div id="dt-buttons" class="dt-buttons">' +
             '<a class="btn btn-primary btnEditForm mr-1" nm-desa="'+row[7]+'" dataid="' + (row[0]) + '" dataidwilayah="' + (row[1]) + '" onclick="setMainMap(this)"><span class="text-white">Jadikan Peta Utama</span></a>' +
             '<a class="btn btn-info btnEditForm mr-1" dataid="' + (row[0]) + '" dataidwilayah="' + (row[1]) + '" tabindex="0"  onclick="viewData(this)"><span>Edit/Lihat</span></a>' +
             '<a class="btn btn-danger btnDeleteForm" dataid="' + (row[0]) + '" tabindex="0"  data-toggle="modal" data-target="#top-modal"><span>Hapus</span></a> ' +
-
-            '</div>'
+            '</div>')  if row[2]==False else ('<div id="dt-buttons" class="dt-buttons">' +
+            '<a class="btn btn-primary btnEditForm mr-1" nm-desa="'+row[7]+'" dataid="' + (row[0]) + '" dataidwilayah="' + (row[1]) + '" onclick="setMainMap(this)"><span class="text-white">Batalkan jadi Peta Utama</span></a>' +
+            '<a class="btn btn-info btnEditForm mr-1" dataid="' + (row[0]) + '" dataidwilayah="' + (row[1]) + '" tabindex="0"  onclick="viewData(this)"><span>Edit/Lihat</span></a>' +
+            '<a class="btn btn-danger btnDeleteForm" dataid="' + (row[0]) + '" tabindex="0"  data-toggle="modal" data-target="#top-modal"><span>Hapus</span></a> ' +
+            '</div>')
         ) for row in cur.fetchall()
     ]
     jmldata = len(es)
@@ -769,9 +796,13 @@ def desabersebelahan_data():
                 		else desa_1 
                 	end as id_desa_tujuan,
                 	case 
-                		when desa_1 = %s then concat(c.nama,', ',e.nama )
-		                else concat(b.nama,', ',d.nama)
+                		when desa_1 = %s then c.nama
+		                else b.nama
                 	end as nama_desa_tujuan,
+                    case 
+                		when desa_1 = %s then e.nama 
+		                else d.nama
+                	end as nama_kecamatan_tujuan,
                 	case 
                 		when isrejected = true then 'ditolak' 
                 		when (konfirm_desa_1 =true AND konfirm_desa_2 =true) then 'terkonfirmasi'
@@ -788,8 +819,9 @@ def desabersebelahan_data():
                 	id_desa_bersebelahan like %s
 
         """
-        c.execute(query,[idWil,idWil,idWil,"%id."+idWil+'%'])
-        data= [dict(tipe=r[0],id_desa_tujuan=r[1],nama_desa_tujuan=r[2],status=r[3],id=r[4]) for r in c.fetchall()]
+        c.execute(query,[idWil,idWil,idWil,idWil,"%id."+idWil+'%'])
+        # print(c.fetchall())
+        data= [dict(tipe=r[0],id_desa_tujuan=r[1],nama_desa_tujuan=r[2],nama_kecamatan_tujuan=r[3],status=r[4],id=r[5]) for r in c.fetchall()]
         result['list']=data
         result['id_desa_asal'] = idWil
     except Error as er :
@@ -802,58 +834,64 @@ def desabersebelahan_data():
 @mod.route("/desabersebelahan/add", methods=["POST"])
 @check_session
 def desabersebelahan_add():
-    con = connect_db()
-    c = con.cursor()
+	con = connect_db()
+	c = con.cursor()
+	
+	id_desa_asal = noneToStringNull(request.json["id_desa_asal"])
+	id_desa_tujuan = noneToStringNull(request.json["id_desa_tujuan"])
+	username = getUserName()
+	
+	idInsert = generateIdDesaBersebelahan(id_desa_asal, id_desa_tujuan)
+	print(idInsert)
+	result = True
+	error = "Berhasil menambahkan data"
+	try:
+		# print()
+		c.execute("SELECT requestby FROM taswil.t_desa_bersebelahan_2 WHERE id_desa_bersebelahan =%s",
+				[idInsert])
+		tmpData = c.fetchall()
+		isExist = len(tmpData) > 0
+		
+		desa_1 = id_desa_asal
+		desa_2 = id_desa_tujuan
+		
+		c_1 = True
+		c_2=False
+		print('1')
+		print(desa_1)
+		print(desa_2)
+		if(desa_2<desa_1):
+			desa_1 = id_desa_tujuan
+			desa_2 = id_desa_asal
+			c_1=False
+			c_2=True
+			print('2')
 
-    id_desa_asal = noneToStringNull(request.json["id_desa_asal"])
-    id_desa_tujuan = noneToStringNull(request.json["id_desa_tujuan"])
-    username = getUserName()
+		if (isExist == False):
+			c.execute('INSERT INTO taswil.t_desa_bersebelahan_2 (id_desa_bersebelahan,desa_1,desa_2,konfirm_desa_1,konfirm_desa_2,requestby,createdby,modifiedby) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',
+			[idInsert,desa_1,desa_2,c_1,c_2,id_desa_asal,username,username])
+			print('3')
+			print(c.query)
+			con.commit()
+		else:
+			# print(tmpData[0][0])
+			print('4')
+			if(tmpData[0][0]!= id_desa_asal):
+				print('5')
+				c.execute('UPDATE taswil.t_desa_bersebelahan_2 SET konfirm_desa_2 = true,konfirm_desa_1=true, isrejected=false, modifiedby=%s,modifiedat=now() WHERE id_desa_bersebelahan=%s',
+				[username,idInsert])
+				con.commit()
+			else:
+				print('6')
+				result = False
+				error = "Anda sudah menambahkan desa tersebut"
 
-    idInsert = generateIdDesaBersebelahan(id_desa_asal, id_desa_tujuan)
+	except Error as er:
+		result = False
+		error = str(er)
 
-    result = True
-    error = "Berhasil menambahkan data"
-    try:
-        # print()
-        c.execute("SELECT requestby FROM taswil.t_desa_bersebelahan_2 WHERE id_desa_bersebelahan =%s",
-                  [idInsert])
-        tmpData = c.fetchall()
-        isExist = len(tmpData) > 0
-
-        desa_1 = id_desa_asal
-        desa_2 = id_desa_tujuan
-
-        c_1 = True
-        c_2=False
-
-        if(desa_2<desa_1):
-            desa_1 = id_desa_tujuan
-            desa_2 = id_desa_asal
-            c_1=False
-            c_2=True
-
-        if (isExist == False):
-            c.execute('INSERT INTO taswil.t_desa_bersebelahan_2 (id_desa_bersebelahan,desa_1,desa_2,konfirm_desa_1,konfirm_desa_2,requestby,createdby,modifiedby) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',
-            [idInsert,desa_1,desa_2,c_1,c_2,id_desa_asal,username,username])
-            print(c.query)
-            con.commit()
-        else:
-            # print(tmpData[0][0])
-            if(tmpData[0][0]!= id_desa_asal):
-                
-                c.execute('UPDATE taswil.t_desa_bersebelahan_2 SET konfirm_desa_2 = true,konfirm_desa_1=true, isrejected=false, modifiedby=%s,modifiedat=now() WHERE id_desa_bersebelahan=%s',
-                [username,idInsert])
-                con.commit()
-            else:
-                result = False
-                error = "Anda sudah menambahkan desa tersebut"
-
-    except Error as er:
-        result = False
-        error = str(er)
-
-    con.close()
-    return jsonify(result=result, error=error)
+	con.close()
+	return jsonify(result=result, error=error)
 
 @mod.route("/desabersebelahan/reject", methods=["POST"])
 @check_session
@@ -925,10 +963,60 @@ def desabersebelahan_delete():
     con.close()
     return jsonify(result=result, error=error)
 
-    con.close()
-    return jsonify(result=result, error=error)
+
 
 
 def generateIdDesaBersebelahan(desa1,desa2):
     a =['id.'+desa1,'id.'+desa2]
     return ''.join(sorted(a))
+
+
+
+############ PETA DESA ##############
+@mod.route("/petadesa")
+@check_session
+def petadesa_index():
+    return jsonify(
+        data=render_template('petadesa.html',a_user_id_wilayah=session['id_wilayah']),        
+        header='Peta Batas Desa'
+		
+    )
+	
+
+@mod.route('/petadesa/geojson')
+@check_session
+def petadesa_geojson():
+	
+	id = request.args.get('id')
+	con  = connect_db()
+	cur = con.cursor() 	
+	cur.execute("SELECT ST_AsGeoJSON(a.geom)  geom,ST_X(ST_Centroid(a.geom)),ST_y(ST_Centroid(a.geom)) ,0 issimpul,'' nomor,keterangan,'' longlat,0 xm,0 ym FROM TASWIL.T_SUBSEGMEN A 	JOIN TASWIL.T_DESA_BERSEBELAHAN_2 B ON A.ID_DESA_BERSEBELAHAN = B.ID_DESA_BERSEBELAHAN 	WHERE DESA_1 = %s or DESA_2 = %s union select ST_AsGeoJSON(a.geom) geom,ST_X(ST_Centroid(a.geom)),ST_y(ST_Centroid(a.geom)), issimpul,no nomor,keterangan,ST_AsLatLonText(a.geom) longlat,ST_X(ST_Transform(a.geoM, get_utmzone(a.geoM))) xm,ST_Y(ST_Transform(a.geoM, get_utmzone(a.geoM))) ym from TASWIL.T_titikkartometri a JOIN TASWIL.T_DESA_BERSEBELAHAN_2 B ON A.ID_DESA_BERSEBELAHAN = B.ID_DESA_BERSEBELAHAN 	WHERE DESA_1 = %s or DESA_2 = %s",[id,id,id,id])
+	test1 = []
+	i = 0;
+	center = ""
+	nama = ""
+	for  es in cur.fetchall():	
+		i = i+1;
+		aaa = json.loads(es[0])		
+		if es[4] == "":
+			obj = {'type' : 'Feature','id':es[0],'properties':{'x':es[1],'y':es[2],'description':es[5]},'geometry' :aaa }
+		else:
+			longlat = str(es[6])
+			longlat = longlat.replace("E","BT").replace("W","BB").replace("S","LS").replace("N","LT")
+			alonglat = longlat.split(" ")
+			print(alonglat)
+			x1 = str(es[7])
+			x1a = x1.split(".")
+			x1b = x1a[0]+"."+str(x1a[1])[0:2]
+			x2 = str(es[8])
+			x2a = x2.split(".")
+			x2b = x2a[0]+"."+str(x2a[1])[0:2]			
+			obj = {'type' : 'Feature','id':es[0],'properties':{'x':es[1],'y':es[2],'simpul':es[3],'no':es[4],'description':es[5],'lintang':str(alonglat[0]),'bujur':str(alonglat[1]),'x(m)':str(x1b),'y(m)':str(x2b)},'geometry' :aaa }
+		test1.append(obj)
+		
+	cur.close()
+	con.close()
+	test = {'type': 'FeatureCollection','crs': {'type': 'name','properties': {'name': 'EPSG:4326'}},'features' : test1}
+	return jsonify(
+       data = test
+    )

@@ -45,10 +45,10 @@
 					<table class="table"style="width:100%;border-collapse: collapse; text-align: justify;  text-justify: inter-word;">
 						<thead>
 							<tr>
-								<th  rowspan=2  style='text-align: center;border: 1px solid black;'>NO</th><th rowspan=2  style='text-align: center;border: 1px solid black;'>TITIK KARTOMETRIK</th><th colspan=2  style='text-align: center;border: 1px solid black;'>KOORDINAT GEOGRAFIS</th><th  colspan=2  style='text-align: center;border: 1px solid black;'>KOORDINAT UTM</th>
+								<th  rowspan=2  style='text-align: center;border: 1px solid black;'>NO</th><th rowspan=2  style='text-align: center;border: 1px solid black;'>TITIK KARTOMETRIK</th><th colspan=2  style='text-align: center;border: 1px solid black;'>KOORDINAT GEOGRAFIS</th><th  colspan=3  style='text-align: center;border: 1px solid black;'>KOORDINAT UTM</th>
 							</tr>
 							<tr>
-								<th style='text-align: center;border: 1px solid black;'>LINTANG</th><th style='text-align: center;border: 1px solid black;'>BUJUR</th><th style='text-align: center;border: 1px solid black;'>x(m)</th><th style='text-align: ;border: 1px solid black;'>y(m)</th>
+								<th style='text-align: center;border: 1px solid black;'>LINTANG</th><th style='text-align: center;border: 1px solid black;'>BUJUR</th><th style='text-align: center;border: 1px solid black;'>x(m)</th><th style='text-align: ;border: 1px solid black;'>y(m)</th><th style='text-align: ;border: 1px solid black;'>Zona</th>
 							</tr>
 						</thead>
 						<tbody>

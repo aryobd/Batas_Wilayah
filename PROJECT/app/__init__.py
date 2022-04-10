@@ -380,7 +380,7 @@ def getUserRole(username,withIsComplete=True):
 	session['id_level_group'] = username[0].get('id_level_group')
 	session['id_group'] = username[0].get('id_group')
 	session['name_group'] = username[0].get('name_group') 
-	session['id_wilayah'] = username[0].get('id_wilayah') 
+	session['id_wilayah'] = noneToStringNull(username[0].get('id_wilayah')) 
 	if (withIsComplete):
 		session['iscomplete'] = username[0].get('iscomplete') 	
 		session['fullname'] = username[0].get('fullname') 
@@ -523,7 +523,10 @@ def validJWT(encoded):
 
 @app.route('/logout', methods=['GET'])
 def logout():
-	resp = make_response(render_template('login.html'))
+
+	lablecaptcha = randomCharacter(5)
+	session['captcha'] = lablecaptcha
+	resp = make_response(render_template('login.html',rchar=lablecaptcha))
 	resp.set_cookie('key', '', expires=0)
 	resp.delete_cookie('key')
 	#decodejwt = request.cookies.get('key')			
@@ -571,40 +574,48 @@ def cuser():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-	
+	lablecaptcha = randomCharacter(5)
+			
 	if request.method == 'POST':
 		#print(encodeBase64('password'))
 		userForm = request.form.get('txtUsername')
 		passwordForm = request.form.get('txtPassword')
+		chaptchaForm = request.form.get('txtChatcha')
 		try:
-			isValidUser = validateUserPass(userForm,passwordForm)		
-			if  len(isValidUser) > 0:		
-				#return render_template('test.html', movies=movies, name=name)
-				#resp = make_response(render_template(...))
-				#resp.set_cookie('username', 'the username')
-				payload = {
-					'username': isValidUser,
-					'password': passwordForm
-				}
-				encodedjwt  = jwt.encode(payload, SECRET_KEY)
-				pHTML = getUserRole(isValidUser)	
-				print(isValidUser)				
-				#print(pHTML)
-				#print(isValidUser[0].get('id'))
-				#print(isValidUser[0].get('id'))
-				# profille = getOneValueByQuery("SELECT COALESCE('Nama : '||a.fullname,'')|| COALESCE(', '||test.nama,'')|| COALESCE(', Role : '||b.name_group,'') || ' <script>var id_kabkota_desa = '''||test.id||'''</script>' namaa FROM TASWIL.A_USER A 	LEFT JOIN TASWIL.A_group B ON A.ID_group = B.ID_group 	LEFT JOIN 	( 		select 'Kecamatan '||bb.nama nama,aa.ID_USER ,aa.id_kabkota id from taswil.a_user_moderator AA 		join taswil.a_user cc on aa.id_user = cc.id_user   	JOIN taswil.m_kabkota bb on aa.id_kabkota = bb.id_kabkota 			where cc.username = '"+isValidUser[0].get('id')+"' 		union 		select 'Desa '||bb.nama nama,aa.ID_USER,aa.id_desa id from taswil.a_user_desa AA 	join taswil.a_user cc on aa.id_user = cc.id_user   		JOIN taswil.m_desa bb on aa.id_desa = bb.id_desa 			where cc.username = '"+isValidUser[0].get('id')+"' ) test on A.ID_USER = TEST.ID_USER 	WHERE A.username = '"+isValidUser[0].get('id')+"'")
-				#print("Dfsdfsdf " + str(profille))
-				profille = getNamaProfil()
-				a_id_wilayah=noneToStringNull(session['id_wilayah'])
+			isValidUser = validateUserPass(userForm,passwordForm)
+			if session['captcha'] == chaptchaForm:
+				if  len(isValidUser) > 0:		
+					#return render_template('test.html', movies=movies, name=name)
+					#resp = make_response(render_template(...))
+					#resp.set_cookie('username', 'the username')
+					payload = {
+						'username': isValidUser,
+						'password': passwordForm
+					}
+					encodedjwt  = jwt.encode(payload, SECRET_KEY)
+					pHTML = getUserRole(isValidUser)	
+					print(isValidUser)				
+					#print(pHTML)
+					#print(isValidUser[0].get('id'))
+					#print(isValidUser[0].get('id'))
+					# profille = getOneValueByQuery("SELECT COALESCE('Nama : '||a.fullname,'')|| COALESCE(', '||test.nama,'')|| COALESCE(', Role : '||b.name_group,'') || ' <script>var id_kabkota_desa = '''||test.id||'''</script>' namaa FROM TASWIL.A_USER A 	LEFT JOIN TASWIL.A_group B ON A.ID_group = B.ID_group 	LEFT JOIN 	( 		select 'Kecamatan '||bb.nama nama,aa.ID_USER ,aa.id_kabkota id from taswil.a_user_moderator AA 		join taswil.a_user cc on aa.id_user = cc.id_user   	JOIN taswil.m_kabkota bb on aa.id_kabkota = bb.id_kabkota 			where cc.username = '"+isValidUser[0].get('id')+"' 		union 		select 'Desa '||bb.nama nama,aa.ID_USER,aa.id_desa id from taswil.a_user_desa AA 	join taswil.a_user cc on aa.id_user = cc.id_user   		JOIN taswil.m_desa bb on aa.id_desa = bb.id_desa 			where cc.username = '"+isValidUser[0].get('id')+"' ) test on A.ID_USER = TEST.ID_USER 	WHERE A.username = '"+isValidUser[0].get('id')+"'")
+					#print("Dfsdfsdf " + str(profille))
+					profille = getNamaProfil()
+					a_id_wilayah=noneToStringNull(session['id_wilayah'])
 
 
-				resp = make_response(render_template('index.html',menu_html=Markup(pHTML),profille=Markup(profille),dd_change_user=Markup(getDropdownChangeUser()),home_alert=Markup(getHomeAlert()),a_id_wilayah=a_id_wilayah))
-				resp.set_cookie('key',encodedjwt)
-				return resp
+					resp = make_response(render_template('index.html',menu_html=Markup(pHTML),profille=Markup(profille),dd_change_user=Markup(getDropdownChangeUser()),home_alert=Markup(getHomeAlert()),a_id_wilayah=a_id_wilayah))
+					resp.set_cookie('key',encodedjwt)
+					return resp
+				else:
+					session['captcha'] = lablecaptcha
+					return render_template('login.html',error="User and Password is not valid",rchar=lablecaptcha)
 			else:
-				return render_template('login.html',error="User and Password is not valid")			
+				session['captcha'] = lablecaptcha
+				return render_template('login.html',error="Chaptcha error",rchar=lablecaptcha)
 		except Error  as e:
-			return render_template('login.html',error="Error connection")
+			session['captcha'] = lablecaptcha
+			return render_template('login.html',error="Error connection",rchar=lablecaptcha)
 		
 	else:
 		# print(app.config['FLASK_ENV'])
@@ -625,7 +636,9 @@ def index():
 			pHTML = getUserRole(isValidUser,False)			
 			return render_template('index.html',menu_html=Markup(pHTML),profille=Markup(profille), dd_change_user=Markup(getDropdownChangeUser()),			home_alert=Markup(getHomeAlert()),	a_id_wilayah=a_id_wilayah)
 		else:
-			return render_template('login.html',error="")
+			lablecaptcha = randomCharacter(5)
+			session['captcha'] = lablecaptcha
+			return render_template('login.html',error="",rchar=lablecaptcha)
 			
 def getDropdownChangeUser():
 	con  = connect_db()
@@ -674,6 +687,23 @@ def getHomeAlert():
 def session_get():
 	print(session)
 	return session["username"]
+	
+
+
+
+@app.route('/captcha')
+#@check_session
+def api_captcha():
+	
+	lablecaptcha = randomCharacter(5)
+	session['captcha'] = lablecaptcha
+	
+	return jsonify(
+       data = lablecaptcha
+    )
+	
+	#return ""
+
 
 from app.admin.routes import mod
 from app.master.routes import mod

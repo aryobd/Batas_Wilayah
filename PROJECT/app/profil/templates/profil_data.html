@@ -45,14 +45,14 @@
         </div>
       </div>
       <div class="form-group row el-desa">
-        <label for="p-nm_kepala_desa" class="col-sm-2 col-form-label">Nama Kepala Desa</label>
+        <label for="p-nm_kepala_desa" class="col-sm-2 col-form-label">Nama <span id="nama-jab-desa"></span></label>
         <div class="col-sm-10">
           <input id="p-nm_kepala_desa" name="p-nm_kepala_desa" class="form-control" type="text"
             value="{{a_nm_kepala_desa}}">
         </div>
       </div>
       <div class="form-group row el-desa">
-        <label for="p-nm_kepala_camat" class="col-sm-2 col-form-label">Nama Kepala Kecamatan</label>
+        <label for="p-nm_kepala_camat" class="col-sm-2 col-form-label">Nama Camat</label>
         <div class="col-sm-10">
           <input id="p-nm_kepala_camat" name="p-nm_kepala_camat" class="form-control" type="text"
             value="{{a_nm_kepala_camat}}">
@@ -66,9 +66,18 @@
 </div>
 <script>
   var userIdWilayah = "{{session['id_wilayah']}}"
+  let idWilArr = userIdWilayah.split("");
+  // console.log(idWilArr)
+  var namaJab = "";
   // console.log(userIdWilayah)
-  if (userIdWilayah.length != 10) {
+  if (userIdWilayah.length != LEN_ID_DESA) {
+    // set nama jab desa
+
     $(".el-desa").hide()
+  } else {
+    namaJab = (idWilArr[9] == 1) ? "Lurah" : "Kepala Desa";
+
+    $("#nama-jab-desa").html(namaJab)
   }
   submitFormP = function () {
     var params = {
@@ -92,12 +101,12 @@
     } if (params.user_fullname.length == 0) {
       errMsg.push("Harap isi alamat")
     }
-    if (userIdWilayah.length == 10) {
+    if (userIdWilayah.length == LEN_ID_DESA) {
       if (params.user_nm_kepala_desa.length == 0) {
-        errMsg.push("Harap isi nama kepala desa")
+        errMsg.push("Harap isi nama " +namaJab)
       }
       if (params.user_nm_kepala_camat.length == 0) {
-        errMsg.push("Harap isi nama kepala kecamatan")
+        errMsg.push("Harap isi nama camat")
       }
     }
     if (errMsg.length == 0) {

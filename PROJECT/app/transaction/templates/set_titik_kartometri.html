@@ -120,7 +120,7 @@
 
         }
         // console.log(aa++)
-        if (fSelectedIdWilayah.length == 10) {
+        if (fSelectedIdWilayah.length == LEN_ID_DESA) {
             $("#btnInsert").attr("disabled", false)
         } else {
             $("#btnInsert").attr("disabled", true)
@@ -141,7 +141,7 @@
         // console.log(initialValue, lenIdWil)
         // console.log(initialValue)
         // let lenIdWil = 
-        if (initialValue.length == 10) {
+        if (initialValue.length == LEN_ID_DESA) {
             $("#btnInsert").attr("disabled", false)
             fSelectedIdWilayah = initialValue;
             generateTableDaftarPeta()

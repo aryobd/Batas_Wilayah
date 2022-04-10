@@ -41,7 +41,7 @@ def desa_dropdownlist():
 		if len(deactivateFilter) ==0:
 			if(filterWil != ""):
 				# print("null")
-				strQuery+= " and a.id_desa like '"+filterWil[:10]+"%'"
+				strQuery+= " and a.id_desa like '"+filterWil[:13]+"%'"
 
 		strQuery += " ORDER BY a.nama asc"
 
@@ -72,16 +72,19 @@ def kecamatan_dropdownlist():
 		strQuery = "select b.id_kecamatan,(d.nama||' - '||c.nama||' - '||b.nama) ket from taswil.m_kecamatan b join taswil.m_kabkota c on b.id_kabkota = c.id_kabkota join taswil.m_provinsi d on c.id_provinsi = d.id_provinsi 	where lower(b.id_kecamatan) like lower('%"+search+"%') or lower(d.nama||' - '||c.nama||' - '||b.nama) like lower('%"+search+"%')"
 	elif type =="2":
 		filterWil = noneToStringNull(session['id_wilayah'])
+		deactivateFilter = noneToStringNull(request.args.get("deactivatefilter"))
+
 		strQuery = "select b.id_kecamatan,b.nama from taswil.m_kecamatan b join taswil.m_kabkota c on b.id_kabkota = c.id_kabkota join taswil.m_provinsi d on c.id_provinsi = d.id_provinsi where lower(b.nama) like lower('%"+search+"%') "
 		if id_provinsi !="":
 			strQuery += " and d.id_provinsi='"+id_provinsi+"'"
 		
 		if id_kabkota != "":
 			strQuery += " and c.id_kabkota='"+id_kabkota+"'"
-
-		if(filterWil != ""):
+	
+		if len(deactivateFilter) ==0:
+			if(filterWil != ""):
 			# print("null")
-			strQuery+= " and b.id_kecamatan like '"+filterWil[:7]+"%'"
+				strQuery+= " and b.id_kecamatan like '"+filterWil[:8]+"%'"
 
 		strQuery += " ORDER BY b.nama asc"
 
@@ -118,7 +121,7 @@ def kabkota_dropdownlist():
 
 		if(filterWil != ""):
 			# print("null")
-			strQuery+= " and id_kabkota like '"+filterWil[:4]+"%'"
+			strQuery+= " and id_kabkota like '"+filterWil[:5]+"%'"
 
 		strQuery += " ORDER BY c.nama asc"
 
@@ -171,7 +174,7 @@ def provinsi_dropdownlist():
 
 
 @mod.route('/petadesa')
-# @check_session
+@check_session
 def petadesa_index():
 	con  = connect_db()
 	cur = con.cursor() 
@@ -185,9 +188,9 @@ def petadesa_index():
 		resultType = "geojson"
 		# print("tidak ada")
 
-	strQuery = "SELECT id_klaim_batas_desa, ST_ASGEOJSON(geom) as geom,to_char(modifiedat, 'YYYY-MM-DD HH24:MI:SS') as lastupdate,ismainmap FROM t_klaim_batas_desa WHERE id_desa=%s and ismainmap=true order by modifiedat"
+	strQuery = "SELECT id_klaim_batas_desa, ST_ASGEOJSON(geom) as geom,to_char(modifiedat, 'YYYY-MM-DD HH24:MI:SS') as lastupdate,ismainmap,b.nama FROM t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa and a.id_desa=%s and ismainmap=true order by modifiedat"
 	if(resultType == 'kml'):
-		strQuery = "SELECT id_klaim_batas_desa, ST_ASGEOJSON(geom) as geom,to_char(modifiedat, 'YYYY-MM-DD HH24:MI:SS') as lastupdate, ismainmap FROM t_klaim_batas_desa WHERE id_desa=%s ismainmap=true order by modifiedat"
+		strQuery = "SELECT id_klaim_batas_desa, ST_ASGEOJSON(geom) as geom,to_char(modifiedat, 'YYYY-MM-DD HH24:MI:SS') as lastupdate, ismainmap,b.nama FROM t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa and id_desa=%s and ismainmap=true order by modifiedat"
 
 	# print(resultType in allowedType,resultType)
 	try:
@@ -202,7 +205,7 @@ def petadesa_index():
 		
 		if(len(dt) >0):
 			row =dt[0]
-			result = dict(id=row[0],map=row[1],lastupdate=row[2],ismainmap=row[3],type=resultType)
+			result = dict(id=row[0],map=row[1],lastupdate=row[2],ismainmap=row[3],nama=row[4],type=resultType)
 
 		
 	except Error as er:

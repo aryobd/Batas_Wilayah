@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="static/leaflet/leaflet.css">
     <link rel="stylesheet" href="static/leaflet/plugin/leaflet-controllayerstree.css">
  <link rel="stylesheet" href="static/leaflet/plugin/leaflet-fullscreen.min.css">
+ 
 <style>
     input.leaflet-control-layers-selector {
         opacity: 1 !important;
@@ -11,7 +12,9 @@
         left: 2px;
         margin-right: 4px;
     }
-	
+	#mapGambarBatasDesa{
+        z-index: 1;
+    }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <div class="col-lg-12">
@@ -66,7 +69,7 @@
 			<div style="width: 100%">
 				<table  id="listTitikKartometri"  class="table">	
 					<thead>
-						<tr><th colspan=2>List Titik Kartometri</th></tr>
+						<tr><th colspan=2>List Titik Kartometrik</th></tr>
 						<tr><th>Titik</th><th>No</th><th>Keterangan</th><th>Urutan</th></tr>
 					</thead>
 					<tbody>
@@ -128,14 +131,14 @@
         <div class="modal-dialog " style="max-width: 1000px">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="topModalLabel">Form Titik Kartometri</h4>
+                    <h4 class="modal-title" id="topModalLabel">Form Titik Kartometrik</h4>
                     
                 </div>
                 <div class="modal-body">
                     
                     <strong class="text-danger">* Tombol kembali akan menhapus titik sebelumnya</strong>
 					<div class="form-group row s-filter">
-						<label for="password_konfirmasi" class="col-sm-2 col-form-label">Titik Kartometri (geojson)</label>
+						<label for="password_konfirmasi" class="col-sm-2 col-form-label">Titik Kartometrik (geojson)</label>
 						<div class="col-sm-8" id="txtTitikkartometri" class="form-control">	
 						</div>	
 
@@ -242,14 +245,22 @@ var map
 	 var klaimidDesa1 = "{{klaimidDesa1}}";
 	 
 	 var klaimidDesa2 = "{{klaimidDesa2}}";
-
+	var id_desa_bersebelahan = "{{id_desa_bersebelahan}}";
     // feature leaflet dara data json
     var datageo
 
-    var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, ' +
+     var Esri_WorldImagery1 = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom : 21
+	,attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, ' +
             'AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
+
+	 var Esri_WorldImagery = L.esri.tiledMapLayer({
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+	   
+       , minZoom: 1
+	,maxZoom: 19
+    })
 
     var Esri_DarkGreyCanvas = L.tileLayer(
         "http://{s}.sm.mapstack.stamen.com/" +
@@ -271,6 +282,11 @@ var map
     });
    
    
+ var layer_rbi = L.tileLayer('http://portal.ina-sdi.or.id/arcgis/rest/services/IGD/RupabumiIndonesia/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: ''
+
+    });
 
 
     var layer_rbiesri = L.esri.tiledMapLayer({
@@ -279,11 +295,39 @@ var map
     })
 	
 	
-	var layer_indikatif = L.esri.dynamicMapLayer({
+	 var layer_indikatif2 = L.esri.dynamicMapLayer({
         url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
         opacity: 1
-    })
-
+		,layers : 0
+	})
+	 var layer_indikatif = L.esri.featureLayer({
+		  url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer/0'
+		  //,fields : ['NAMOBJ']
+		  ,onEachFeature: function (feature, layer) {
+					var label = L.marker(layer.getBounds().getCenter(), {
+					  icon: L.divIcon({
+						className: 'label',
+						//html: '<div style="font-size: 15px;font-weight:bold"><b>'+feature.properties.NAMOBJ+'</b></div>',
+						html: '<div style="color:black">'+feature.properties.NAMOBJ+'</div>',
+						//html: feature.properties.NAMOBJ,
+						iconSize: [200, 40]
+					  })
+					})
+					//console.log(label)
+					//return label
+					//layer.addLayer(label)
+					label.addTo(map)
+				}
+			,style: function (feature) {
+					return {weight: 2,
+					  dashArray: '5, 10',
+					  lineCap: 'square', // Optional, just to avoid round borders.
+					  color: 'black'
+					 }
+				},
+		  
+		})//.addTo(map);
+		//console.log(query)
 	
 
 
@@ -294,25 +338,30 @@ var map
 
     var layersTree = [
         {
-            label: 'Base Map',
+            label: 'Indonesia',
             children: [
-
+                { label: 'RBI BIG', layer: layer_rbi },
+               // { label: 'RBI BIG - OS', layer: layer_rbibaru },
                 { label: 'RBI BIG - Esri', layer: layer_rbiesri },
-				{ label: 'Satellite ESRI', layer: Esri_WorldImagery },
-				{ label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
-				{ label: 'Mapbox', layer: Apimaxbox },
-					{ label: 'OpenStreetMap_Mapnik', layer: OpenStreetMap_Mapnik },
+
             ]
+        }, {
+            label: "Dunia",
+            children: [ { label: 'OpenStreetMap', layer: OpenStreetMap_Mapnik },
+			{ label: 'Satellite ESRI', layer: Esri_WorldImagery }
+            //{ label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
+           // { label: 'Mapbox', layer: Apimaxbox },
+           ,]
         }]
 
     map = L.map('mapGambarBatasDesa', {
-        layers: [OpenStreetMap_Mapnik],
+        layers: [layer_rbiesri],
         //pmIgnore: false,
-       // maxZoom: 17,
-       // fullscreenControl: true,
-       // fullscreenControlOptions: {
-      //      position: 'topleft'
-      //  }
+        maxZoom: 21,
+       fullscreenControl: true,
+       fullscreenControlOptions: {
+           position: 'topleft'
+       }
     }).setView([-6.491857302, 106.848663298], 15);
 	
 	
@@ -406,13 +455,13 @@ var charGenerateNoTemplate = ""
 		
 		sortArrayListDesa = []
 		
-		sortArrayListDesa.push(idDesa1.substring(4,6)+'.'+idDesa1.substring(6,10))
-		sortArrayListDesa.push(idDesa2.substring(4,6)+'.'+idDesa2.substring(6,10))
+		sortArrayListDesa.push(idDesa1)
+		sortArrayListDesa.push(idDesa2)
 		
 		sortArrayListDesa.sort()
 		
 		
-		charGenerateNoTemplate = "TK " + idDesa1.substring(0,2) + "." + idDesa1.substring(2,4) + '.'
+		charGenerateNoTemplate = "TK " 
 		
 		//charGenerateNo = "TK " + idDesa1.substring(0,2) + "." + idDesa1.substring(2,4) + '.'+idDesa1.substring(4,6)+'.'+idDesa1.substring(6,10)+'-'+idDesa2.substring(4,6)+'.'+idDesa2.substring(6,10)
 		charGenerateNo = charGenerateNoTemplate
@@ -473,7 +522,7 @@ tambahListDesa = function(){
 		} else {
 			arrayIddesatitikkartometri.push($("#filter_desa").val())
 			var aaa = $("#filter_desa").val()
-			aaa = charGenerateNo +"-"+aaa.substring(4,6)+"."+aaa.substring(6,10)
+			aaa = charGenerateNo 
 			$('#txtNo').html(aaa+"-000")
 			$('#txtDesa').append("<br />"+$("#filter_desa option:selected").text())
 			
@@ -506,6 +555,7 @@ function onMapClick1(e) {
 
 				style: function (feature) {
 					//return feature.properties && feature.properties.style;
+					
 				},
 			
 
@@ -550,8 +600,8 @@ function onMapClick1(e) {
 						aa += "<tr><td colspan=2>TITIK SIMPUL</td></tr>"
 						a1 += "<td>TITIK SIMPUL</td>"
 					} else {
-						aa += "<tr><td colspan=2>TITIK KARTOMETRI</td></tr>"
-						a1 += "<td>TITIK KARTOMETRI</td>"
+						aa += "<tr><td colspan=2>TITIK KARTOMETRIK</td></tr>"
+						a1 += "<td>TITIK KARTOMETRIK</td>"
 					}
 					if (feature.properties && feature.properties.no) {
 						aa += "<tr><td>No</td><td>"+feature.properties.no+"</td></tr>"
@@ -575,6 +625,14 @@ function onMapClick1(e) {
 					aa += "</table>"
 					layer.bindPopup(aa,{ 'maxWidth': '1000'});
 					layer.bringToFront()
+					
+					var label = L.marker(layer.getLatLng(), {
+					  icon: L.divIcon({
+						className: 'label',
+						html: '<div style="font-size: 15px;font-weight:bold"><b>'+feature.properties.urut+'</b></div>',
+						//iconSize: [100, 40]
+					  })
+					}).addTo(map);
 					
 					arrayLayerTitikKartometri[index1] = layer
 					if (feature.properties && feature.properties.simpul == 1) {
@@ -607,14 +665,18 @@ function onMapClick1(e) {
 	
 	
 	
-		  $.get("transaction/settitikkartometri/geojson?id1="+klaimidDesa1+"&id2="+klaimidDesa2, function(data, status){
+		  $.get("transaction/settitikkartometri/geojson?id1="+idDesa1+"&id2="+idDesa2, function(data, status){
 			bicycleRental = data.data
 			center = data.center
 			klaimidDesa1Nama =  data.nama
 			var testststs = L.geoJson(bicycleRental, {
 
 				style: function (feature) {
-					//return feature.properties && feature.properties.style;
+					//return feature.properties && feature.properties.style;\
+					if (feature.properties.type == 1){
+						return {color: "#ff007f"}
+					}
+					return {color: "#583470"}
 				},
 			
 
@@ -622,24 +684,67 @@ function onMapClick1(e) {
 		
 				pointToLayer: function (feature, latlng) {
 					
-					return L.circleMarker(latlng, {
-						radius: 3,
+					
+					const myCustomColour = '#583470'
+
+					const markerHtmlStyles = `
+					  background-color: ${myCustomColour};
+					  width: 1.5rem;
+					  height: 1.5rem;
+					  display: block;
+					  left: -1.5rem;
+					  top: -1.5rem;
+					  position: relative;
+					  border-radius: 3rem 3rem 0;
+					  transform: rotate(45deg);
+					  border: 1px solid #FFFFFF`
+
+					const icon = L.divIcon({
+					  className: "my-custom-pin",
+					  iconAnchor: [0, 24],
+					  labelAnchor: [-6, 0],
+					  popupAnchor: [0, -36],
+					  html: `<span style="${markerHtmlStyles}" />`
+					})
+					
+					if (feature.properties.type == 1){
+						return L.circleMarker(latlng, {
+							radius: 5,
+							//fillColor: "#ff007f",
+							fillColor: "red",
+							color: "#000",
+							weight: 1,
+							opacity: 1,
+							fillOpacity: 0.8
+						});
+					}
+					/*return L.marker(latlng, {
+						radius: 7,
 						fillColor: "#ff7800",
 						color: "#000",
 						weight: 1,
 						opacity: 1,
 						fillOpacity: 0.8
-					});
+					});*/
+					return L.marker(latlng,{icon: icon});
 				}
 				,onEachFeature: function(feature, layer) {
 					
-					var label = L.marker(layer.getBounds().getCenter(), {
+					/*var label = L.marker(layer.getBounds().getCenter(), {
 					  icon: L.divIcon({
 						className: 'label',
 						html: feature.properties.nama,
 						iconSize: [100, 40]
 					  })
 					}).addTo(map);
+					*/
+					aa = "<table>"
+					aa += "<tr><td colspan=2><b>"+feature.properties.nama+"</b></td></tr>"
+					aa += "<tr><td>Geom</td><td>"+JSON.stringify(feature.geometry)+"</td>"
+					aa += "<tr><td>Keterangan</td><td>"+JSON.stringify(feature.properties.description)+"</td>"
+					
+					aa += "</table>"
+					layer.bindPopup(aa);
 					if ($('#txtDesa').html() != "")
 						$('#txtDesa').append("<br />"+feature.properties.nama)
 					else 

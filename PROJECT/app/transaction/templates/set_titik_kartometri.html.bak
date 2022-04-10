@@ -154,7 +154,7 @@
         $(".s-filter").hide()
         switch (lenIdWil) {
             case 0:
-            case 2:
+            case LEN_ID_PROVINSI:
                 $("#filter_provinsi").parent().parent().show()
                 generateDropdownProvinsi({
                     selector: "#filter_provinsi", initialValue: initialValue.substring(0, 2), onChangeEvent: function (val) {
@@ -162,7 +162,7 @@
                         generateDropdownKabKota({ selector: "#filter_kabkota", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
                     }
                 })
-            case 4:
+            case LEN_ID_KABKOTA:
                 $("#filter_kabkota").parent().parent().show()
                 generateDropdownKabKota({
                     selector: "#filter_kabkota", initialValue: initialValue.substring(0, 4), onChangeEvent: function (val) {
@@ -170,7 +170,7 @@
                         generateDropdownKecamatan({ selector: "#filter_kecamatan", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
                     }, initChild: true,
                 })
-            case 7:
+            case LEN_ID_KECAMATAN:
                 $("#filter_kecamatan").parent().parent().show()
                 generateDropdownKecamatan({
                     selector: "#filter_kecamatan", initialValue: initialValue.substring(0, 7), onChangeEvent: function (val) {
@@ -178,7 +178,7 @@
                         generateDropdownDesa({ selector: "#filter_desa", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
                     }, initChild: true
                 })
-            case 10:
+            case LEN_ID_DESA:
                 $("#filter_desa").parent().parent().show()
                 generateDropdownDesa({ selector: "#filter_desa", initialValue: initialValue.substring(0, 10), onChangeEvent: () => { getSelectedIdWilayah() } })
 

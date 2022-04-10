@@ -239,7 +239,7 @@
 	var fSelectedIdWilayah = '{{user_id_wilayah}}';
 	var selectedIdAdd = "";
 	// jika login akun desa
-	var isAccountDesa = fSelectedIdWilayah.length == 10;
+	var isAccountDesa = fSelectedIdWilayah.length == LEN_ID_DESA;
 	// let aa= 0
 	var tblPengajuan = $("#tbl-pengajuan").html();
 	var tblPermintaan = $("#tbl-permintaan").html();
@@ -351,13 +351,13 @@
 		}
 		if (!isAccountDesa) {
 			toogleTampilan();
-			if (fSelectedIdWilayah.length == 10) {
+			if (fSelectedIdWilayah.length == LEN_ID_DESA) {
 				$("#btninsert").attr("disabled", false)
 			} else {
 				$("#btninsert").attr("disabled", true)
 			}
 		}
-		if (fSelectedIdWilayah.length == 10) {
+		if (fSelectedIdWilayah.length == LEN_ID_DESA) {
 			getDataDesaBersebelahan()
 			generateDDdesa()
 		}
@@ -541,8 +541,8 @@
 
 	function generateDDdesa() {
 		selectedIdAdd = "";
-		if (fSelectedIdWilayah.length == 10) generateDropdownDesa({
-			selector: "#dd_desa", parentValue: fSelectedIdWilayah.substr(0, 4), onChangeEvent: (val) => {
+		if (fSelectedIdWilayah.length == LEN_ID_DESA) generateDropdownDesa({
+			selector: "#dd_desa", parentValue: fSelectedIdWilayah.substr(0, LEN_ID_KABKOTA), onChangeEvent: (val) => {
 				selectedIdAdd = val;
 
 			}, deactivatefilter: true, parentType: "kabkota", withParentName: true
@@ -552,7 +552,7 @@
 	function toogleTampilan() {
 		// console.log(fSelectedIdWilayah)
 		$(".my-container").hide();
-		if (fSelectedIdWilayah.length == 10) {
+		if (fSelectedIdWilayah.length == LEN_ID_DESA) {
 			$(".container-data").show()
 		} else {
 			$(".container-warning").show()
@@ -660,7 +660,7 @@
 	$(document).ready(function () {
 
 		$(".tp-enabled").tooltip('enable')
-		if (a_user_id_wilayah.length == 10) $("#btninsert").attr("disabled", false);
+		if (a_user_id_wilayah.length == LEN_ID_DESA) $("#btninsert").attr("disabled", false);
 
 		$('#btnDelete').bind('click', function () {
 			//alert(idd);
@@ -699,7 +699,7 @@
 
 
 		generateDropdownProvinsi({
-			selector: "#filter_provinsi", initialValue: a_user_id_wilayah.substr(0, 2), onChangeEvent: (val) => {
+			selector: "#filter_provinsi", initialValue: a_user_id_wilayah.substr(0, LEN_ID_PROVINSI), onChangeEvent: (val) => {
 				generateDropdownKabKota({
 					selector: "#filter_kabkota", parentValue: val, onComplete: () => {
 						getSelectedIdWilayah()
@@ -708,7 +708,7 @@
 			}
 		})
 		generateDropdownKabKota({
-			selector: "#filter_kabkota", initialValue: a_user_id_wilayah.substr(0, 4), onChangeEvent: (val) => {
+			selector: "#filter_kabkota", initialValue: a_user_id_wilayah.substr(0, LEN_ID_KABKOTA), onChangeEvent: (val) => {
 				generateDropdownKecamatan({
 					selector: "#filter_kecamatan", parentValue: val, onComplete: () => {
 						getSelectedIdWilayah()
@@ -717,14 +717,14 @@
 			}
 		})
 		generateDropdownKecamatan({
-			selector: "#filter_kecamatan", initialValue: a_user_id_wilayah.substr(0, 7), onChangeEvent: (val) => {
+			selector: "#filter_kecamatan", initialValue: a_user_id_wilayah.substr(0, LEN_ID_KECAMATAN), onChangeEvent: (val) => {
 				generateDropdownDesa({ selector: "#filter_desa", parentValue: val })
 			}, onComplete: () => {
 				getSelectedIdWilayah()
 			}
 		})
 		generateDropdownDesa({
-			selector: "#filter_desa", initialValue: a_user_id_wilayah.substr(0, 10), onChangeEvent: (val) => {
+			selector: "#filter_desa", initialValue: a_user_id_wilayah.substr(0, LEN_ID_DESA), onChangeEvent: (val) => {
 				// generateDropdownKecamatan({selector:"#filter_kecamatan",parentValue:val})
 				toogleTampilan()
 				getSelectedIdWilayah()

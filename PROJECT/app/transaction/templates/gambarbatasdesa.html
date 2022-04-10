@@ -4,16 +4,43 @@
 <link rel="stylesheet" href="static/leaflet/plugin/leaflet-geoman.css">
 <link rel="stylesheet" href="static/leaflet/plugin/leaflet-fullscreen.min.css">
 <link rel="stylesheet" href="static/leaflet/plugin/leaflet-controllayerstree.css">
+<link rel="stylesheet" href="static/leaflet/plugin/Leaflet.PolylineMeasure.css">
+
+<link rel="stylesheet" href="static/leaflet/plugin/esri-leaflet-geocoder.css">
 
 
 
 <link rel="stylesheet" type="text/css" href="static/dataTables.bootstrap4.css">
 <style>
+  .stroke-text  {
+  color: black;
+  font-size: 13pt;
+  -webkit-text-fill-color: #FFD60A; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 0.7px;
+  -webkit-text-stroke-color: black;
+}
+    @supports (-webkit-text-stroke: 1px white) {
+  .stroke-text {
+    font-size: 13pt;
+    -webkit-text-stroke: 0.7px white ;
+    -webkit-text-fill-color: #FFD60A;
+  }
+}
     input.leaflet-control-layers-selector {
         opacity: 1 !important;
         position: static !important;
         left: 2px;
         margin-right: 4px;
+    }
+    #mapGambarBatasDesa{
+        z-index: 1;
+    }
+    .table-popup{
+        font-size: 9px;
+    }
+    .table-popup td{
+        word-wrap: break-word;
+        width: 30px;
     }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,6 +64,18 @@
                     <td>
                         <table>
                             <tr>
+                                <td>
+                                    <button id="btn-showinfo" class="btn btn-info  tp-enabled mr-2 d-inline" data-toggle="tooltip"
+                                    data-placement="top" title="Tampilkan Informasi Layer : OFF"
+                                    onclick="showInfoMode()"><i class="mdi mdi-information"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info  tp-enabled mr-2 d-inline" data-toggle="tooltip"
+                                    data-placement="top" title="Cari Lokasi Saya"
+                                    onclick="locateMe()"><i class="mdi mdi-crosshairs-gps"></i>
+                                    </button>
+                                </td>
                                 <td>
 
                                     <button class="btn btn-info  tp-enabled mr-2 d-inline" data-toggle="tooltip"
@@ -63,6 +102,12 @@
 
         </div>
         <div class="card-body">
+          <div id="loadingpencarian" class="mb-2">
+            <div class="spinner-grow text-primary" style="height: 1rem;width: 1rem;" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            Mencari lokasi ID DESA <strong id="idpencarian"></strong>
+          </div>
             <div id="mapGambarBatasDesa" style="width: 100%;height: 60vh;"></div>
 
         </div>
@@ -123,30 +168,48 @@
 
 <script src="static/leaflet/plugin/leaflet-omnivore.min.js"></script>
 <script src="static/leaflet/plugin/leaflet-controllayerstree.js"></script>
+<script src="static/leaflet/plugin/Leaflet.PolylineMeasure.js"></script>
 
 
 <!-- https://gist.github.com/zross/11258095/ -->
 <script src="static/leaflet/esri-leaflet.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/3.6.0/geosearch.min.css"
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/3.6.0/geosearch.min.css"
     integrity="sha512-aXlinnCE2X7IVkXBPdOg1fEwQ6VjRO73q6B9Nm/g3qDGWdOlbcmnR8kbOPQpIdMNZ+UKUA90dL3dxprm8HD+ZQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/3.6.0/bundle.min.js"
     integrity="sha512-KZpqcnEvMcuWWSz93xYb7/uXVs9Ak8LKqWoBa+Gyzd6kHwYp9rgo5U4N974Ty5dh2cjQGbxHwoyoPTRj8c51rA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    
+<script src="static/leaflet/plugin/esri-leaflet-geocoder.js"></script>
 
 
 <script>
+
+
     var editorDesaIdWilayah = "{{id_wilayah}}";
     var editorIdBatasDesa = "{{a_id_klaim_batas_desa}}";
-
+    $("#idpencarian").html(editorDesaIdWilayah)
+    var isShowInfoMode=false;
     // feature leaflet dara data json
     var datageo
 
-    var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, ' +
+    var Esri_WorldImagery1 = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom : 21
+	,attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, ' +
             'AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
+
+	 var Esri_WorldImagery = L.esri.tiledMapLayer({
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+	   
+       , minZoom: 1
+	,maxZoom: 19
+    })
+	
+	
+
+
 
     var Esri_DarkGreyCanvas = L.tileLayer(
         "http://{s}.sm.mapstack.stamen.com/" +
@@ -185,24 +248,86 @@
         url: 'https://portal.ina-sdi.or.id/arcgis/rest/services/RBI/Basemap/MapServer',
         opacity: 1
     })
-
-    /* var layer_indikatif = L.esri.tiledMapLayer({
-        url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KabKota_50K/MapServer',
-        opacity: 1
-    })
-    */
-    var layer_indikatif = L.esri.dynamicMapLayer({
+/*
+     var layer_indikatif = L.esri.tiledMapLayer({
         url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
         opacity: 1
     })
+    */
+    var layer_indikatif2 = L.esri.dynamicMapLayer({
+        url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
+        opacity: 1
+		,layers : 0
+	})
+	 var layer_indikatif = L.esri.featureLayer({
+		  url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer/0'
+		  //,fields : ['NAMOBJ']
+		  ,onEachFeature: function (feature, layer) {
+					var label = L.marker(layer.getBounds().getCenter(), {
+					  icon: L.divIcon({
+						className: 'label',
+						//html: '<div style="font-size: 15px;font-weight:bold"><b>'+feature.properties.NAMOBJ+'</b></div>',
+						html: '<div class="stroke-text">'+feature.properties.NAMOBJ+'</div>',
+						//html: feature.properties.NAMOBJ,
+						iconSize: [200, 40]
+					  })
+					})
+					//console.log(label)
+					//return label
+					//layer.addLayer(label)
+					label.addTo(map)
 
+                    let properties = feature.properties;
+                    let ctn = '<div> <strong>Properties</strong><br/><table class="table-popup">';
+                    
+                    Object.keys(properties).forEach(k=>{
+                        ctn += '<tr>'+'<td>'+k+'</td>'+'<td>:</td>'+'<td>'+properties[k]+'</td>'+'</tr>'
+                    })
+
+
+                    ctn+= '</table></div>';
+                    
+                    let popup = L.popup({autoPan:false})
+                        .setContent(ctn)
+                    
+                    layer.bindPopup(popup);
+
+                    
+                    layer.on('click',function(e){
+                        // console.log(e,feature)
+                        // layer.();
+                        if(isShowInfoMode){
+                            layer.openPopup();
+                        }else{
+                            layer.closePopup();
+                        }
+                        // e.stopPropagation();
+                        // e.preventDefault();
+
+                    })
+                    // console.log(layer)
+                    // $(layer.getContainer()).addClass("indikatif-overlay");
+				}
+			,style: function (feature) {
+				
+					return {weight: 1,
+					  dashArray: '5, 10',
+					  dashOffset: "2",
+					  lineCap: 'square', // Optional, just to avoid round borders.
+					  color : '#FFD60A'
+					  ,fillColor : "white"
+					 }
+				},
+		  
+		})//.addTo(map);
+		//console.log(query)
 
 
     var layer_rbivector = L.tileLayer({
         url: 'https://kspservices.big.go.id/satupeta/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer',
         opacity: 1
+		
     })
-
 
 
 
@@ -211,70 +336,543 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
+    // create imagery layer 
+    var list_service_imagery = [
+    {
+      "name": "IMAGERY/CTSRT_2015_ACEH1",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_ACEH2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_ALOR",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_AMBON",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_BALI",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_BANGKA",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_BANTAENG",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_BELITUNG",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_BOLAANG_MONGONDOW_TIMUR",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_BULI",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_DKI_BANTEN",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_GORONTALO",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_JAMBI",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_JAWA_BARAT",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_JAWA_TENGAH2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_JAWA_TENGAH3",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_JAWA_TENGAH",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_JAWA_TIMUR",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_KALIMANTAN_SELATAN",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_KALIMANTAN_TIMUR",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_KALIMANTAN_UTARA",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_KALIMANTAN",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_KEDIRI",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_KUPANG_TIMOR",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_MALUKU",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_ROTENDAO",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SULAWESI_BARAT",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SULAWESI_SELATAN",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SULAWESI_TENGAH",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SULAWESI_TENGGARA",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SUMATERA_SELATAN1",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SUMATERA_SELATAN2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SUMATERABARAT",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_SUMBAR",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2015_TOBA",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2017_JAWA_TIMUR",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2017_KALIMANTAN_BARAT",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2017_LAMPUNG",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2018_NUSA_TENGGARA_BARAT",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2018_SULAWESI",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2018_SULAWESIUTARA",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2018_SUMATERA",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2019_KEPULAUAN_RIAU",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2019_KUALATANJUNG",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2019_SUMUT1",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2019_SUMUT2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_JAMBI",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_KALIMANTAN_BARAT1",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_KALIMANTAN_BARAT2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_KALIMANTAN_TIMUR1",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_KALIMANTAN_TIMUR2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_KALIMANTANTENGAH1",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_KALIMANTANTENGAH2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_RIAU",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_SUMATERA_SELATAN1",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/CTSRT_2020_SUMATERA_SELATAN2",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_19811982_JawaNusaTenggara",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_1981_Kalimantan",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_1982_Kalimantan",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_1988_Meulaboh",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_1993_Bali",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_1993_Jawa",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_1994_Bodetabek",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_1995_SungaiKahayan",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2011_KotaMedan",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2011_KotaPekanbaru",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2011_Padang",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2011_Papua",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2012_Bitung",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2012_KotaGorontalo",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2012_KotaParepare",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2012_Manado",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2012_Tomohon",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2013_KabBandungUtara",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2013_Kendari",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2013_Palangkaraya",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2014_KabBandungSelatan",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2014_KabBogor",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2014_KotaBogor",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2014_Pantura",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2015_KotaJayapura",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2016_Mandalika",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2016_SeiMangkei",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2017_KabNunukan",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2017_KotaBatulicin",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2017_KotaKetapang",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2017_KotaSorong",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2017_KualaTanjung",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2017_TanjungKelayang",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2018_GalangBatang",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2018_KabDonggala",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2018_KabGunungMas",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2018_KabKatingan",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2018_KabParigiMoutong",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2018_Palangkaraya",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2019_Dumai",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2019_Kupang",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2019_Paser_KutaiBarat",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2019_Prabumulih_Lubuklinggau",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2019_Tebingtinggi",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2020_Bulik",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2020_Kikim",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2020_Seputihbanyak",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2020_Siabu",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2020_Solok",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2020_Tebingtinggi",
+      "type": "ImageServer"
+    },
+    {
+      "name": "IMAGERY/FU_2020_Tidengpale",
+      "type": "ImageServer"
+    }
+  ]
+
+    var imagery_overlay = {};
+
+    imagery_overlay.label = "Imagery BIG";
+    var imageryChildern = [];
+    var baserUlrGeoImagery = "https://geoservices.big.go.id/raster/rest/services/"
+    for(let i=0;i<list_service_imagery.length;i++){
+        let cLayer = L.esri.imageMapLayer({
+               url: baserUlrGeoImagery + list_service_imagery[i].name+"/ImageServer",
+               attribution: ''
+             })
+        let cLabel = list_service_imagery[i].name.split("/")[1];
+        imageryChildern.push({label:cLabel,layer:cLayer})
+    
+    }
+    imagery_overlay.children = imageryChildern;
+
+    
     var layersTree = [
         {
             label: 'Indonesia',
             children: [
                 { label: 'RBI BIG', layer: layer_rbi },
-                { label: 'RBI BIG - OS', layer: layer_rbibaru },
+               // { label: 'RBI BIG - OS', layer: layer_rbibaru },
                 { label: 'RBI BIG - Esri', layer: layer_rbiesri },
 
             ]
         }, {
             label: "Dunia",
-            children: [{ label: 'Satellite ESRI', layer: Esri_WorldImagery },
-            { label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
-            { label: 'Mapbox', layer: Apimaxbox },
-            { label: 'OpenStreetMap_Mapnik', layer: OpenStreetMap_Mapnik },]
+            children: [ { label: 'OpenStreetMap', layer: OpenStreetMap_Mapnik },
+			{ label: 'Satellite ESRI', layer: Esri_WorldImagery }
+            //{ label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
+           // { label: 'Mapbox', layer: Apimaxbox },
+           ,]
         }]
 
     var map = L.map('mapGambarBatasDesa', {
-        layers: [OpenStreetMap_Mapnik],
+        layers: [layer_rbiesri,layer_indikatif],
         pmIgnore: false,
-        maxZoom: 17,
+        maxZoom: 21,
         fullscreenControl: true,
         fullscreenControlOptions: {
             position: 'topleft'
         }
     }).setView([-6.491857302, 106.848663298], 15);
 
-
-
-
-    $(document).ready(function () {
-        (async () => {
-            let myInt = setInterval(() => {
-                //    console.log(GeoSearch)
-                if (typeof GeoSearch != "undefined") {
-                    var search = new GeoSearch.GeoSearchControl({
-                        showMarker: false, // optional: true|false  - default true
-                        showPopup: true,
-                        style: 'bar',
-                        searchLabel: 'Cari Alamat', autoComplete: true,
-                        autoCompleteDelay: 500,
-                        provider: new GeoSearch.AlgoliaProvider(),
-                    });
-
-                    map.addControl(search)
-                    clearInterval(myInt)
-                }
-            }, 1000);
-        })()
-
-
+    map.on('locationfound',function(res){
+    // console.log(res)
+    map.flyTo(res.latlng,18)
+    
     });
+    map.on('locationerror',function(err){
+    // console.log(res)
+    if(err.code == 1){
+        showNotificationParam("error","Harap izinkan akses lokasi")
+    }else{
+        showNotificationParam("error","Terjadi kesalahan saat mencari lokasi anda")
+    }
+    
+    })
+    
+    function showInfoMode(){
+        isShowInfoMode = !isShowInfoMode;
+        let btn =$("#btn-showinfo");
+        btn.removeClass('btn-info');
+        btn.removeClass('btn-success');
+        btn.tooltip('hide')
+        
+        let cursor = "default";
+        let classBtnInfo = "btn-info"
+        let tooltiptext = "Tampilkan Informasi Layer : OFF"; 
 
-    map.on('geosearch/showlocation', function (result) {
-        //console.log(result)
-    });
-    var overlayMaps = {
+        if(isShowInfoMode){
+            cursor = "help";
+            classBtnInfo = "btn-success"
+            tooltiptext = "Tampilkan Informasi Layer : ON";
+        }
+
+        btn.addClass(classBtnInfo);
+        btn.attr('title',tooltiptext)
+        btn.attr('data-original-title',tooltiptext)
+        btn.tooltip('show')
+        $("#map").css("cursor",cursor)
+        
+    }
+
+function locateMe(){
+    map.locate({
+        watch:false,
+        setView:true,
+        enableHighAccuracy:true,
+        maxZoom:18,
+    })
+}
+
+//  map.on('geosearch/showlocation', function (result) {
+//         //console.log(result)
+//     });
+    var overlayMaps = [{
         //"Indikatif": layer_indikatif
-        label: 'Indikatif',
+        label: 'Batas Desa/Kelurahan BIG',
         children: [
-            { label: 'Indikatif', layer: layer_indikatif },
+            { label: 'Batas Desa/Kelurahan BIG', layer: layer_indikatif,namedToggle:true },
 
         ]
-    };
+    },imagery_overlay];
 
 
 
@@ -288,17 +886,134 @@
         collapsed: true,
     }).addTo(map)
 
-    // OpenStreetMap_Mapnik.addTo(map)
+
+
+    // add measurement
+   var optionsMeasure = {
+            position: 'topleft',            // Position to show the control. Values: 'topright', 'topleft', 'bottomright', 'bottomleft'
+            unit: 'kilometres',             // Default unit the distances are displayed in. Values: 'kilometres', 'landmiles', 'nauticalmiles'
+            useSubunits: true,              // Use subunits (metres/feet) in tooltips if distances are less than 1 kilometre/landmile
+            clearMeasurementsOnStop: true,  // Clear all measurements when Measure Control is switched off
+            showBearings: false,            // Whether bearings are displayed within the tooltips
+            bearingTextIn: 'In',            // language dependend label for inbound bearings
+            bearingTextOut: 'Out',          // language dependend label for outbound bearings
+            tooltipTextFinish: 'Klik <b>untuk mengakhiri garis</b><br>',
+            tooltipTextDelete: 'Tekan tombol SHIFT dan klik titik <b>untuk menghapus</b>',
+            tooltipTextMove: 'Klik dan drag <b>untuk memindahkan titik</b><br>',
+            tooltipTextResume: '<br>Tekan CTRL <b>untuk melanjutkan garis</b>',
+            tooltipTextAdd: 'Tekan control dan klik <b>untuk menambah titik</b>',
+                                            // language dependend labels for point's tooltips
+            measureControlTitleOn: 'Nyalakan Mode Pengukuran',   // Title for the Measure Control going to be switched on
+            measureControlTitleOff: 'Matikan Mode Pengukuran', // Title for the Measure Control going to be switched off
+            measureControlLabel: '&#8614;', // Label of the Measure Control (Unicode symbols are possible)
+            measureControlClasses: [],      // Classes to apply to the Measure Control
+            showClearControl: true,        // Show a control to clear all the measurements
+            clearControlTitle: 'Hapus Pengukuran', // Title text to show on the Clear Control
+            clearControlLabel: '&times',    // Label of the Clear Control (Unicode symbols are possible)
+            clearControlClasses: [],        // Classes to apply to Clear Control
+            showUnitControl: true,         // Show a control to change the units of measurements
+            unitControlUnits: ["kilometres", "metres"],
+                                            // measurement units being cycled through by using the Unit Control
+            unitControlTitle: {             // Title texts to show on the Unit Control
+                text: 'Ubah Skala',
+                kilometres: 'Kilometer',
+                metres: 'meter'
+            },
+            unitControlLabel: {             // Unit symbols to show in the Unit Control and measurement labels
+                metres: 'm',
+                kilometres: 'km',
+                feet: 'ft',
+                landmiles: 'mi',
+                nauticalmiles: 'nm'
+            },
+        
+        };
+        //let polylineMeasure = L.control.polylineMeasure(optionsMeasure).addTo (map);
+		L.control.polylineMeasure(optionsMeasure).addTo (map);
+
+        // var gisBIG = L.esri.Geocoding.featureLayerProvider({
+        //             url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
+        //             searchFields: ['WADMKD', 'WADMKC','WADMKK','WADMPR'],
+        //             label: 'Cari Wilayah',
+        //             bufferRadius: 5000,
+        //             formatSuggestion: function (feature) {
+        //               return feature.properties.WADMKD + ', ' + feature.properties.WADMKC+', '+feature.properties.WADMKK+','+feature.properties.WADMPR;
+        //             }
+        //           });
+      var gisBIG =  L.esri.Geocoding.mapServiceProvider({
+        label: 'Indonesia',
+        url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
+         layers: [0],
+         searchFields: ['WADMKD','KDEPUM'],
+         formatSuggestion: function (dt) {
+          //  console.log(feature)
+          let properties = dt.properties;
+          let desa = properties["Nama wilayah administrasi Kelurahan atau Desa"];
+          let kec = properties["Nama wilayah administrasi Kecamatan atau Distrik"];
+          let kabkot = properties["Nama wilayah administrasi Kabupaten/ Kota"];
+            let prov = properties["Nama wilayah administrasi Provinsi"];
+
+                      return desa + ', ' + kec+', '+kabkot+','+prov;
+                    }
+      });
+      L.esri.Geocoding.geosearch({
+        position:"topright",
+        expanded:true,
+        placeholder:"Masukan nama atau kode wilayah",
+        title:"Hasil Pencarian",
+          providers: [ gisBIG]
+        }).addTo(map);
+
+        
+
+    $(document).ready(function () {
+     
+    
+        // L.control.layers(layer_indikatif).addTo(map)
+	
+        // (async () => {
+        //     let myInt = setInterval(() => {
+        //         //    console.log(GeoSearch)
+        //         if (typeof GeoSearch != "undefined") {
+        //             var search = new GeoSearch.GeoSearchControl({
+        //                 showMarker: false, // optional: true|false  - default true
+        //                 showPopup: true,
+        //                 style: 'bar',
+        //                 searchLabel: 'Cari Alamat', autoComplete: true,
+        //                 autoCompleteDelay: 500,
+        //                 provider: new GeoSearch.AlgoliaProvider(),
+        //             });
+
+        //             map.addControl(search)
+        //             clearInterval(myInt)
+        //         }
+        //     }, 1000);
+        // })()
+		/*
+		var query = L.esri.featureLayer({
+		  url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer/0'
+		  //,fields : ['NAMOBJ']
+		  
+		}).addTo(map);
+		console.log(query)
+		*/
+
+    });
 
 
     map.pm.setLang('id')
     map.pm.addControls({
         position: 'topleft',
-        drawPolyline: false,
-        drawMarker: false,
+        drawPolyline: true,
+        drawMarker: true,
+		drawPolygon: false,
         drawCircle: false,
         drawCircleMarker: false,
         drawRectangle: false,
+        dragMode:false,
+		editMode: false,
+        cutPolygon:false,
+		removalMode: false, 
         oneBlock: true
     });
 
@@ -415,18 +1130,84 @@
     // map.pm.disableDraw();
 
     if (editorIdBatasDesa.length == 36) {
-        let geodata  {{ geodata }}
-        // console.log(geodata)
+        //let geodata = JSON.parse({{ geodata }})
+		let geodata = {{ geodata }}
+		
         if (typeof geodata == "object") {
-            datageo = L.geoJSON(geodata, { pmIgnore: false }).addTo(map);
+			
+            datageo = L.geoJSON(geodata, { pmIgnore: false
+				,pointToLayer: function (feature, latlng) {
+					
+					
+					const myCustomColour = '#583470'
+
+					const markerHtmlStyles = `
+					  background-color: ${myCustomColour};
+					  width: 1.5rem;
+					  height: 1.5rem;
+					  display: block;
+					  left: -1.5rem;
+					  top: -1.5rem;
+					  position: relative;
+					  border-radius: 3rem 3rem 0;
+					  transform: rotate(45deg);
+					  border: 1px solid #FFFFFF`
+
+					const icon = L.divIcon({
+					  className: "my-custom-pin",
+					  iconAnchor: [0, 24],
+					  labelAnchor: [-6, 0],
+					  popupAnchor: [0, -36],
+					  html: `<span style="${markerHtmlStyles}" />`
+					})
+					
+					
+					return L.marker(latlng,{icon: icon});
+				}
+				,onEachFeature: function (feature, layer) {
+					
+					var index1 = feature.properties.index
+					layer.options.zIndex = 100;
+					aa = "<table>"
+					
+					if (feature.properties ) {
+						aa += "<tr><td>"+feature.properties+"</td></tr>"
+					
+					}
+					
+					
+					//aa += "<tr><td></td><td><input type='button' value='Mulai Buat Sub Segmen' data-x='"+feature.properties.cx+"'  data-y='"+feature.properties.cy+"' onclick='startsubsegmen(this)' /></td></tr>"
+					aa += "</table>"
+					layer.bindPopup(aa,{ 'maxWidth': '1000'});
+					
+					
+				},
+
+			}).addTo(map);
             // console.log(datageo.getBounds())
             map.fitBounds(datageo.getBounds())
             map.setZoom(16)
-        }
+        } 
+		
         $("#title-map>div").html("ID : " + editorIdBatasDesa)
         $("#title-map").show()
     }
-
+	/*else 
+		{
+			console.log(editorDesaIdWilayah);
+			var aa11 = L.esri.featureLayer({
+				  url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer/0'
+				  ,fields : ['KDEPUM']
+				 // ,where : "KDEPUM = '"+editorDesaIdWilayah+"'"
+				 ,where : "KDEPUM%3D'33.72.05.1002'"
+				 //,KDEPUM : "33.72.05.1002"
+				
+				  
+				}).addTo(map)
+			console.log(aa11);
+			//map.fitBounds(aa11.getBounds())
+		}
+*/
     getAllDrawDataAsGeoJson = function () {
         let data = map.pm.getGeomanDrawLayers(true).toGeoJSON()
         return data
@@ -458,12 +1239,13 @@
 			geom = dataGeojsonUpload.toGeoJSON()
 				
 		}
-		
-        if (geom.features.length == 1) {
+		//console.log(geom);
+      //  if (geom.features.length == 1) {
             let params = {
                 id_wilayah: editorDesaIdWilayah,
                 id_klaim_batas_desa: editorIdBatasDesa,
-                geom: geom.features[0]
+                //geom: geom.features[0]
+				geom: geom
             }
             execData("transaction/klaimbatasdesa/upload", params, (resp) => {
                 if (resp.result) {
@@ -473,17 +1255,33 @@
                     $("#modalCUpload").modal("hide")
                 }
             })
-        } else if (geom.features.length == 0) {
+       /* } else if (geom.features.length == 0) {
             showNotificationParam("error", "Harap gambar polygon pada peta editor")
         } else {
             showNotificationParam("error", "Terdapat lebih dari satu polygon pada editor")
 
         }
-
+*/
     }
 
     $(".tp-enabled").tooltip('enable')
     setTimeout(() => {
         map.invalidateSize()
+        var query = L.esri.query({
+          url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer/0'
+        });
+
+        query.where("KDEPUM='"+editorDesaIdWilayah +"'").bounds(function (error, latLngBounds, response) {
+          $("#loadingpencarian").remove()
+          if (error) {
+            showNotificationParam("error", "Tidak dapat menemukan lokasi KODE DESA "+ editorDesaIdWilayah)
+            console.log(error);
+            return;
+          }
+          showNotificationParam("success", "Lokasi ditemukan KODE DESA "+ editorDesaIdWilayah)
+
+          // console.log(error,latLngBounds,response)
+          map.fitBounds(latLngBounds);
+        });
     }, 500);
 </script>

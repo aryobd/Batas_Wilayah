@@ -291,7 +291,7 @@ def settitikkartometri_index():
 
     return jsonify(data=render_template('set_titik_kartometri.html',
                                         a_user_id_wilayah=a_user_id_wilayah),
-                   header='Set Titik Kartimetri')
+                   header='Set Titik Kartometrik')
 				   
 
 
@@ -331,7 +331,7 @@ def settitikkartometridata_index():
             tanggal_klaim2=row[4],
            
             btn='<div id="dt-buttons" class="dt-buttons">' +            
-            '<a class="btn btn-info btnEditForm mr-1" dataid="' + (row[0]) + '"  tabindex="0"  onclick="viewData(this)"><span>Set Titik Kartometri</span></a> ' +
+            '<a class="btn btn-info btnEditForm mr-1" dataid="' + (row[0]) + '"  tabindex="0"  onclick="viewData(this)"><span>Set Titik Kartometrik</span></a> ' +
 
             '</div>'
         ) for row in cur.fetchall()
@@ -808,6 +808,8 @@ def kesepakatan_form():
 	txtCamat1 = ""
 	txtKades2 = ""
 	txtCamat2 = ""
+	namaJabDsAsal = ""
+	namaJabDsTujuan= "" 
 	txtPbdes = ""
 	txtDataDasar = ""
 	con = connect_db()
@@ -831,6 +833,8 @@ def kesepakatan_form():
 		txtCamat1 = noneToStringNull(str(es[10]))
 		txtKades2 = noneToStringNull(str(es[11]))
 		txtCamat2 = noneToStringNull(str(es[12]))
+		namaJabDsAsal = getNamaJabDesa(id_desa_asal)
+		namaJabDsTujuan = getNamaJabDesa(id_desa_tujuan)
 		
 	
 	cur.execute("SELECT *,to_char(tgl_kesepakaran, 'YYYY-MM-DD') FROM TASWIL.T_KESEPAKATAN where id_desa_bersebelahan = %s",[id])
@@ -848,10 +852,14 @@ def kesepakatan_form():
 	con.close()
 	session['p1'] = id
 	print(txtTanggal)
-	return jsonify(data=render_template('kesepakatan_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan,kecamatan1=kecamatan_asal,kecamatan2=kecamatan_tujuan,desa_asal=desa_asal,desa_tujuan=desa_tujuan,txtTanggal=txtTanggal,txtLokasi=txtLokasi,txtKades1=txtKades1,txtCamat1=txtCamat1,txtKades2=txtKades2,txtCamat2=txtCamat2,txtPbdes=txtPbdes,txtDataDasar=txtDataDasar))
+	return jsonify(data=render_template('kesepakatan_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan,kecamatan1=kecamatan_asal,kecamatan2=kecamatan_tujuan,desa_asal=desa_asal,desa_tujuan=desa_tujuan,txtTanggal=txtTanggal,txtLokasi=txtLokasi,txtKades1=txtKades1,txtCamat1=txtCamat1,txtKades2=txtKades2,txtCamat2=txtCamat2,txtPbdes=txtPbdes,txtDataDasar=txtDataDasar,namaJabDsAsal=namaJabDsAsal,namaJabDsTujuan=namaJabDsTujuan))
 
 
-
+def getNamaJabDesa(idDesa):
+	if(idDesa[9] == "1"):
+		return "Lurah"
+	else :
+		return "Kepala Desa"
 	
 @mod.route('/kesepakatan/crud', methods=['POST', 'DELETE'])
 @check_session
@@ -1009,6 +1017,8 @@ def beritaacara_form():
 	id_kecamatan2 = ""
 	nama_desa1 = ""
 	nama_desa2 = ""
+	namaJabDesa1 = ""
+	namaJabDesa2 = ""
 	nama_kecamatan1 = ""
 	nama_kecamatan2 = ""
 	nama_kabupaten = ""
@@ -1035,10 +1045,13 @@ def beritaacara_form():
 	
 	if id_desa1 == "":
 		return jsonify(data=Markup(kosong))
+
+	namaJabDesa1 = getNamaJabDesa(id_desa1)
+	namaJabDesa2 = getNamaJabDesa(id_desa2)
 		
 	
 	HEADER	= "<tr><td style='text-align: center'>BERITA ACARA</td></tr>"
-	HEADER	+= "<tr><td style='text-align: center'>Delineasi Batas Desa Secara Kartometri</td></tr>"
+	HEADER	+= "<tr><td style='text-align: center'>Delineasi Batas Desa Secara Kartometrik</td></tr>"
 	if nama_kecamatan1 == nama_kecamatan2:
 		HEADER	+= "<tr><td style='text-align: center'>Dalam Satu Kecamatan di "+nama_kabupaten+"</td></tr>"
 	else:
@@ -1064,10 +1077,10 @@ def beritaacara_form():
 	for es in cur.fetchall():		
 		txtTanggal = noneToStringNull(str(es[0]))
 		txtLokasi = noneToStringNull(str(es[1]))
-		txtKades1 = noneToStringNull(str(es[7]))
-		txtCamat1 = noneToStringNull(str(es[8]))
-		txtKades2 = noneToStringNull(str(es[9]))
-		txtCamat2 = noneToStringNull(str(es[10]))
+		txtKades1 = noneToStringNull(str(es[8]))
+		txtCamat1 = noneToStringNull(str(es[9]))
+		txtKades2 = noneToStringNull(str(es[10]))
+		txtCamat2 = noneToStringNull(str(es[11]))
 		txtPbdes = noneToStringNull(str(es[2]))
 		txtDataDasar = noneToStringNull(str(es[3]))	
 		txtTahun = int(es[4])
@@ -1119,7 +1132,7 @@ def beritaacara_form():
 	if nama_kecamatan1 == nama_kecamatan2:
 		TEXT1	+= "Pada Hari ini, "+txtNamaHari+" tanggal "+terbilang(txtHari)+" bulan "+txtBulan+" tahun "+terbilang(txtTahun)+" telah dilaksanakan pelacakan garis batas Desa secara kartometrik dalam rangka penegasan batas antara Desa "+nama_desa1+" dan Desa "+nama_desa2+" Kecamatan "+nama_kecamatan1+" bertempat di "+txtLokasi+" Kabupaten "+nama_kabupaten+" dengan hasil kesepakatan sebagai berikut:"
 	else:
-		TEXT1	+= "Pada Hari ini, "+txtNamaHari+" tanggal "+terbilang(txtHari)+" bulan "+txtBulan+" tahun "+terbilang(txtTahun)+" telah dilaksanakan pelacakan garis batas Desa antar kecamatan  secara kartometrik dalam rangka penegasan batas antara Desa "+nama_desa1+" Kecamatan "+nama_kecamatan1+" dan Desa "+nama_desa2+" Kecamatan "+nama_kecamatan2+" bertempat di "+txtLokasi+" Kabupaten "+nama_kabupaten+" dengan hasil kesepakatan sebagai berikut:"
+		TEXT1	+= "Pada Hari ini, "+txtNamaHari+" tanggal "+terbilang(txtHari)+" bulan "+txtBulan+" tahun "+terbilang(txtTahun)+" telah dilaksanakan pelacakan garis batas Desa antar kecamatan secara kartometrik dalam rangka penegasan batas antara Desa "+nama_desa1+" Kecamatan "+nama_kecamatan1+" dan Desa "+nama_desa2+" Kecamatan "+nama_kecamatan2+" bertempat di "+txtLokasi+" Kabupaten "+nama_kabupaten+" dengan hasil kesepakatan sebagai berikut:"
 		
 	TEXT2 = "<tr><td>1.</td><td> Data dasar yang digunakan dalam kegiatan pelacakan batas Desa adalah sebagai berikut:</td></tr>"
 	TEXT2 += "<tr><td></td><td> "+txtDataDasar.replace('\n', '<br />').replace('\r', '<br />')+"</td></tr>"
@@ -1138,23 +1151,23 @@ def beritaacara_form():
 	TEXT3_detil = ""
 	for es in cur.fetchall():
 		if float(es[0]) <= 22.5:
-			arah = "Utara"
+			arah = "utara"
 		elif float(es[0]) >= 22.6 and float(es[0]) <= 67.5:
-			arah = "Timur Laut"
+			arah = "timur laut"
 		elif float(es[0]) >= 67.6 and float(es[0]) <= 112.5:
-			arah = "Timur"
+			arah = "timur"
 		elif float(es[0]) >= 112.6 and float(es[0]) <= 157.5:
-			arah = "Tenggara"
+			arah = "tenggara"
 		elif float(es[0]) >= 157.6 and float(es[0]) <= 202.5:
-			arah = "Selatan"
+			arah = "selatan"
 		elif float(es[0]) >= 202.6 and float(es[0]) <= 247.4:
-			arah = "Barat Daya"
+			arah = "barat daya"
 		elif float(es[0]) >= 247.6 and float(es[0]) <= 292.5:
-			arah = "Barat"
+			arah = "barat"
 		elif float(es[0]) >= 292.6 and float(es[0]) <= 337.5:
-			arah = "Barat Laut"
+			arah = "barat laut"
 		else:
-			arah = "Utara"
+			arah = "utara"
 		ketSegmen = noneToStringNull(str(es[1]))
 		no1 = noneToStringNull(str(es[2]))
 		ket1 = noneToStringNull(str(es[3]))
@@ -1163,18 +1176,71 @@ def beritaacara_form():
 		if inddex == 0:
 			TEXT3_detil += " Dimulai dari "+ket1+" yang terletak pada "+no1+" ke arah "+arah+" "+ketSegmen
 		else:
-			TEXT3_detil += " Hingga bertemu "+ket1+" yang terletak pada "+no1+" dilanjutkan ke arah "+arah+" "+ketSegmen
+			TEXT3_detil += " hingga bertemu "+ket1+" yang terletak pada "+no1+" dilanjutkan ke arah "+arah+" "+ketSegmen
 		inddex = inddex +1
 	
-	TEXT3_detil += " Hingga bertemu "+ket2+" yang terletak pada "+no2
+	TEXT3_detil += " hingga bertemu "+ket2+" yang terletak pada "+no2
 	TEXT3 += "<tr><td></td><td> <i>"+TEXT3_detil+"</i></td></tr>"
 	
 	
 	TEXT4 = ""
 	
-	cur.execute("Select  B.NO,b.urut,ST_X(b.geom),ST_Y(b.geom),ST_X(ST_Transform(b.geoM,32630)),ST_Y(ST_Transform(b.geoM,32630)),ST_AsLatLonText(b.geom) FROM TASWIL.T_SUBSEGMEN A LEFT JOIN TASWIL.T_TITIKKARTOMETRI B ON A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI 	LEFT JOIN TASWIL.T_TITIKKARTOMETRI C ON A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI where A.id_desa_bersebelahan = %s union Select c.NO,case when c.urut = 0 then 100 else c.urut end,ST_X(C.geom),ST_Y(C.geom),ST_X(ST_Transform(C.geoM,32630)),ST_Y(ST_Transform(C.geoM,32630)),ST_AsLatLonText(c.geom) FROM TASWIL.T_SUBSEGMEN A LEFT JOIN TASWIL.T_TITIKKARTOMETRI B ON A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI LEFT JOIN TASWIL.T_TITIKKARTOMETRI C ON A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI where A.id_desa_bersebelahan = %s order by urut",[id,id])
-	
-	
+	# cur.execute("Select  B.NO,b.urut,ST_X(b.geom),ST_Y(b.geom),ST_X(ST_Transform(b.geoM,32630)),ST_Y(ST_Transform(b.geoM,32630)),ST_AsLatLonText(b.geom) FROM TASWIL.T_SUBSEGMEN A LEFT JOIN TASWIL.T_TITIKKARTOMETRI B ON A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI 	LEFT JOIN TASWIL.T_TITIKKARTOMETRI C ON A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI where A.id_desa_bersebelahan = %s union Select c.NO,case when c.urut = 0 then 100 else c.urut end,ST_X(C.geom),ST_Y(C.geom),ST_X(ST_Transform(C.geoM,32630)),ST_Y(ST_Transform(C.geoM,32630)),ST_AsLatLonText(c.geom) FROM TASWIL.T_SUBSEGMEN A LEFT JOIN TASWIL.T_TITIKKARTOMETRI B ON A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI LEFT JOIN TASWIL.T_TITIKKARTOMETRI C ON A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI where A.id_desa_bersebelahan = %s order by urut",[id,id])
+	queryyy = """
+		select
+			B.NO,
+			b.urut,
+			ST_X(b.geom),
+			ST_Y(b.geom),
+			ST_X(ST_Transform(b.geoM, get_utmzone(b.geoM))),
+			ST_Y(ST_Transform(b.geoM, get_utmzone(b.geoM))),
+			ST_AsLatLonText(b.geom),
+			get_utmzone(c.geoM) as utmzone,
+			case 
+				when ST_Y(b.geom) > 0 then 'N'
+				when ST_Y(b.geom) = 0 then ''
+				else 'S'
+			end 
+				as utmcode
+		from
+			TASWIL.T_SUBSEGMEN A
+		left join TASWIL.T_TITIKKARTOMETRI B on
+			A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI
+		left join TASWIL.T_TITIKKARTOMETRI C on
+			A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI
+		where
+			A.id_desa_bersebelahan =%s
+		union
+		select
+			c.NO,
+			case
+				when c.urut = 0 then 100
+				else c.urut
+			end,
+			ST_X(C.geom),
+			ST_Y(C.geom),
+			ST_X(ST_Transform(C.geoM, get_utmzone(c.geoM))),
+			ST_Y(ST_Transform(C.geoM, get_utmzone(c.geoM))),
+			ST_AsLatLonText(c.geom),
+			get_utmzone(c.geoM) as utmzone,
+				case 
+				when ST_Y(b.geom) > 0 then 'N'
+				when ST_Y(b.geom) = 0 then ''
+				else 'S'
+			end 
+				as utmcode
+		from
+			TASWIL.T_SUBSEGMEN A
+		left join TASWIL.T_TITIKKARTOMETRI B on
+			A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI
+		left join TASWIL.T_TITIKKARTOMETRI C on
+			A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI
+		where
+			A.id_desa_bersebelahan = %s
+		order by
+			urut
+	"""	
+	cur.execute(queryyy,[id,id])
 	inddex = 1
 	for es in cur.fetchall():		
 		urutan = str(es[1])
@@ -1189,7 +1255,15 @@ def beritaacara_form():
 		x2 = str(es[5])
 		x2a = x2.split(".")
 		x2b = x2a[0]+"."+str(x2a[1])[0:2]
-		TEXT4 +="<tr><td style='border: 1px solid black;'>"+ str(inddex)+"</td><td style='border: 1px solid black;'>"+str(es[0])+"</td><td style='border: 1px solid black;'>"+str(alonglat[0])+"</td><td style='border: 1px solid black;'>"+str(alonglat[1])+"</td><td style='border: 1px solid black;'>"+str(x1b)+"</td><td style='border: 1px solid black;'>"+str(x2b)+"</td></tr>"
+		TEXT4 +="<tr>"
+		TEXT4 += "<td style='border: 1px solid black;'>"+ str(inddex)+"</td>"
+		TEXT4 += "<td style='border: 1px solid black;'>"+str(es[0])+"</td>"
+		TEXT4 += "<td style='border: 1px solid black;'>"+str(alonglat[0])+"</td>"
+		TEXT4 += "<td style='border: 1px solid black;'>"+str(alonglat[1])+"</td>"
+		TEXT4 += "<td style='border: 1px solid black;'>"+str(x1b)+"</td>"
+		TEXT4 += "<td style='border: 1px solid black;'>"+str(x2b)+"</td>"
+		TEXT4 += "<td style='border: 1px solid black;'>"+str(es[7])[-2:]+es[8]+"</td>"
+		TEXT4 += "</tr>"
 		inddex = inddex + 1
 	
 	

@@ -134,7 +134,7 @@
 
         }
         // console.log(aa++)
-        if (fSelectedIdWilayah.length == 10) {
+        if (fSelectedIdWilayah.length >= 13) {
             $("#btnInsert").attr("disabled", false)
         } else {
             $("#btnInsert").attr("disabled", true)
@@ -155,7 +155,7 @@
         // console.log(initialValue, lenIdWil)
         // console.log(initialValue)
         // let lenIdWil = 
-        if (initialValue.length == 10) {
+        if (initialValue.length >= 13) {
             $("#btnInsert").attr("disabled", false)
             fSelectedIdWilayah = initialValue;
             generateTableDaftarPeta()
@@ -179,7 +179,7 @@
             case LEN_ID_KABKOTA:
                 $("#filter_kabkota").parent().parent().show()
                 generateDropdownKabKota({
-                    selector: "#filter_kabkota", initialValue: initialValue.substring(0, 4), onChangeEvent: function (val) {
+                    selector: "#filter_kabkota", initialValue: initialValue.substring(0, 5), onChangeEvent: function (val) {
                         // getSelectedIdWilayah()
                         generateDropdownKecamatan({ selector: "#filter_kecamatan", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
                     }, initChild: true,
@@ -187,14 +187,14 @@
             case LEN_ID_KECAMATAN:
                 $("#filter_kecamatan").parent().parent().show()
                 generateDropdownKecamatan({
-                    selector: "#filter_kecamatan", initialValue: initialValue.substring(0, 7), onChangeEvent: function (val) {
+                    selector: "#filter_kecamatan", initialValue: initialValue.substring(0, 8), onChangeEvent: function (val) {
                         // getSelectedIdWilayah()
                         generateDropdownDesa({ selector: "#filter_desa", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
                     }, initChild: true
                 })
             case LEN_ID_DESA:
                 $("#filter_desa").parent().parent().show()
-                generateDropdownDesa({ selector: "#filter_desa", initialValue: initialValue.substring(0, 10), onChangeEvent: () => { getSelectedIdWilayah() } })
+                generateDropdownDesa({ selector: "#filter_desa", initialValue: initialValue.substring(0, 13), onChangeEvent: () => { getSelectedIdWilayah() } })
 
 
 
@@ -206,7 +206,7 @@
     }
 
     function tambahBatasDesa() {
-        if (fSelectedIdWilayah.length == 10) {
+        if (fSelectedIdWilayah.length >= 13) {
             execURL("/transaction/klaimbatasdesa/editor?id_wilayah=" + fSelectedIdWilayah);
         }
     }

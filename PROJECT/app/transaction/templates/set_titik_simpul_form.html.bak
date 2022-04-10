@@ -11,6 +11,9 @@
         left: 2px;
         margin-right: 4px;
     }
+    #mapGambarBatasDesa{
+        z-index: 1;
+    }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <div class="col-lg-12">
@@ -136,8 +139,9 @@
 								<option value="" selected disabled>--Pilih Desa--</option>
 							</select>
 						</div>
-						<div class="col-sm-1">
-							<i class="fas fa-plus" onclick="tambahListDesa()">Tambah</i>
+						<div class="col-sm-2">
+                            <button class="btn btn-block btn-success" onclick="tambahListDesa()"><i class="fas fa-plus mr-1" ></i>Tambah</button>
+							
 						</div>
 					</div>
                     <strong class="text-danger">* Tombol kembali akan menhapus titik sebelumnya</strong>
@@ -243,14 +247,25 @@ var map
 	 var klaimidDesa1 = "{{klaimidDesa1}}";
 	 
 	 var klaimidDesa2 = "{{klaimidDesa2}}";
+	 
+	 var id_desa_bersebelahan = "{{id_desa_bersebelahan}}";
 
     // feature leaflet dara data json
     var datageo
 
-    var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, ' +
+     var Esri_WorldImagery1 = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom : 21
+	,attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, ' +
             'AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
+
+	 var Esri_WorldImagery = L.esri.tiledMapLayer({
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+	   
+       , minZoom: 1
+	,maxZoom: 19
+    })
+	
 
     var Esri_DarkGreyCanvas = L.tileLayer(
         "http://{s}.sm.mapstack.stamen.com/" +
@@ -280,13 +295,45 @@ var map
     })
 	
 	
-	var layer_indikatif = L.esri.dynamicMapLayer({
+	 var layer_indikatif2 = L.esri.dynamicMapLayer({
         url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer',
         opacity: 1
-    })
-
+		,layers : 0
+	})
+	 var layer_indikatif = L.esri.featureLayer({
+		  url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KelDesa_10K/MapServer/0'
+		  //,fields : ['NAMOBJ']
+		  ,onEachFeature: function (feature, layer) {
+					var label = L.marker(layer.getBounds().getCenter(), {
+					  icon: L.divIcon({
+						className: 'label',
+						//html: '<div style="font-size: 15px;font-weight:bold"><b>'+feature.properties.NAMOBJ+'</b></div>',
+						html: '<div style="color:black">'+feature.properties.NAMOBJ+'</div>',
+						//html: feature.properties.NAMOBJ,
+						iconSize: [200, 40]
+					  })
+					})
+					//console.log(label)
+					//return label
+					//layer.addLayer(label)
+					label.addTo(map)
+				}
+			,style: function (feature) {
+					return {weight: 2,
+					  dashArray: '5, 10',
+					  lineCap: 'square', // Optional, just to avoid round borders.
+					  color: 'black'
+					 }
+				},
+		  
+		})//.addTo(map);
+		//console.log(query)
 	
+ var layer_rbi = L.tileLayer('http://portal.ina-sdi.or.id/arcgis/rest/services/IGD/RupabumiIndonesia/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: ''
 
+    });
 
     var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -295,25 +342,30 @@ var map
 
     var layersTree = [
         {
-            label: 'Base Map',
+            label: 'Indonesia',
             children: [
-
+                { label: 'RBI BIG', layer: layer_rbi },
+               // { label: 'RBI BIG - OS', layer: layer_rbibaru },
                 { label: 'RBI BIG - Esri', layer: layer_rbiesri },
-				{ label: 'Satellite ESRI', layer: Esri_WorldImagery },
-				{ label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
-				{ label: 'Mapbox', layer: Apimaxbox },
-					{ label: 'OpenStreetMap_Mapnik', layer: OpenStreetMap_Mapnik },
+
             ]
+        }, {
+            label: "Dunia",
+            children: [ { label: 'OpenStreetMap', layer: OpenStreetMap_Mapnik },
+			{ label: 'Satellite ESRI', layer: Esri_WorldImagery }
+            //{ label: 'Grey Canvas ESRI', layer: Esri_DarkGreyCanvas },
+           // { label: 'Mapbox', layer: Apimaxbox },
+           ,]
         }]
 
     map = L.map('mapGambarBatasDesa', {
-        layers: [OpenStreetMap_Mapnik],
+        layers: [layer_rbiesri],
         //pmIgnore: false,
-       // maxZoom: 17,
-       // fullscreenControl: true,
-       // fullscreenControlOptions: {
-      //      position: 'topleft'
-      //  }
+        maxZoom: 21,
+       fullscreenControl: true,
+       fullscreenControlOptions: {
+           position: 'topleft'
+       }
     }).setView([-6.491857302, 106.848663298], 15);
 	
 	
@@ -409,11 +461,13 @@ var charGenerateNoTemplate = ""
 		
 		sortArrayListDesa = []
 		
-		sortArrayListDesa.push(idDesa1.substring(4,6)+'.'+idDesa1.substring(6,10))
-		sortArrayListDesa.push(idDesa2.substring(4,6)+'.'+idDesa2.substring(6,10))
+		//sortArrayListDesa.push(idDesa1.substring(4,6)+'.'+idDesa1.substring(6,10))
+		sortArrayListDesa.push(idDesa1)
+		//sortArrayListDesa.push(idDesa2.substring(4,6)+'.'+idDesa2.substring(6,10))
+		sortArrayListDesa.push(idDesa2)
 		
 		sortArrayListDesa.sort()
-		charGenerateNoTemplate = "TK " + idDesa1.substring(0,2) + "." + idDesa1.substring(2,4) + '.'
+		charGenerateNoTemplate = "TK " 
 		charGenerateNo = charGenerateNoTemplate
 		for (var i = 0; i < sortArrayListDesa.length; i++) {
 			if (i==0)
@@ -469,16 +523,19 @@ closeFormtitik = function(){
 }
 
 tambahListDesa = function(){
+    console.log($("#filter_desa").val())
+    if( sortArrayListDesa ==null)sortArrayListDesa=[];
 	if ($("#filter_desa").val() != ""){
 	
 		if(jQuery.inArray($("#filter_desa").val(), arrayIddesatitikSimpul) != -1) {
-			//console.log('ada')
+			
+            showNotificationParam("info", "Desa tersebut sudah ditambahkan")
 		} else {
 			arrayIddesatitikSimpul.push($("#filter_desa").val())
 			
 			var aaa = $("#filter_desa").val()
 			
-			sortArrayListDesa.push(aaa.substring(4,6)+"."+aaa.substring(6,10))
+			sortArrayListDesa.push(aaa)
 			sortArrayListDesa.sort()
 			charGenerateNo = charGenerateNoTemplate
 			for (var i = 0; i < sortArrayListDesa.length; i++) {
@@ -511,17 +568,25 @@ function onMapClick1(e) {
 	var klaimidDesa1Nama = ""
 	var klaimidDesa2Nama = ""
 var ListDesaArray = []
+
+
+
+
 	loadGeojson = function(){	
 		$(".tp-enabled").tooltip('enable')
 		setTimeout(function(){ map.invalidateSize()}, 400);
-		$.get("transaction/settitikkartometri/geojson?id1="+klaimidDesa1+"&id2="+klaimidDesa2, function(data, status){
+		$.get("transaction/settitikkartometri/geojson?id1="+idDesa1+"&id2="+idDesa2, function(data, status){
 			bicycleRental = data.data
 			center = data.center
 			klaimidDesa1Nama =  data.nama
 			var testststs = L.geoJson(bicycleRental, {
 
 				style: function (feature) {
-					//return feature.properties && feature.properties.style;
+					//return feature.properties && feature.properties.style;\
+					if (feature.properties.type == 1){
+						return {color: "#ff007f"}
+					}
+					return {color: "#583470"}
 				},
 			
 
@@ -529,27 +594,70 @@ var ListDesaArray = []
 		
 				pointToLayer: function (feature, latlng) {
 					
-					return L.circleMarker(latlng, {
-						radius: 3,
+					
+					const myCustomColour = '#583470'
+
+					const markerHtmlStyles = `
+					  background-color: ${myCustomColour};
+					  width: 1.5rem;
+					  height: 1.5rem;
+					  display: block;
+					  left: -1.5rem;
+					  top: -1.5rem;
+					  position: relative;
+					  border-radius: 3rem 3rem 0;
+					  transform: rotate(45deg);
+					  border: 1px solid #FFFFFF`
+
+					const icon = L.divIcon({
+					  className: "my-custom-pin",
+					  iconAnchor: [0, 24],
+					  labelAnchor: [-6, 0],
+					  popupAnchor: [0, -36],
+					  html: `<span style="${markerHtmlStyles}" />`
+					})
+					
+					if (feature.properties.type == 1){
+						return L.circleMarker(latlng, {
+							radius: 5,
+							//fillColor: "#ff007f",
+							fillColor: "red",
+							color: "#000",
+							weight: 1,
+							opacity: 1,
+							fillOpacity: 0.8
+						});
+					}
+					/*return L.marker(latlng, {
+						radius: 7,
 						fillColor: "#ff7800",
 						color: "#000",
 						weight: 1,
 						opacity: 1,
 						fillOpacity: 0.8
-					});
+					});*/
+					return L.marker(latlng,{icon: icon});
 				}
 				,onEachFeature: function(feature, layer) {
 					ListDesaArray.push(feature.properties.nama)
-					var label = L.marker(layer.getBounds().getCenter(), {
+					/*var label = L.marker(layer.getBounds().getCenter(), {
 					  icon: L.divIcon({
 						className: 'label',
 						html: feature.properties.nama,
 						iconSize: [100, 40]
 					  })
 					}).addTo(map);
+					*/
+					aa = "<table>"
+					aa += "<tr><td colspan=2><b>"+feature.properties.nama+"</b></td></tr>"
+					aa += "<tr><td>Geom</td><td>"+JSON.stringify(feature.geometry)+"</td>"
+					aa += "<tr><td>Keterangan</td><td>"+JSON.stringify(feature.properties.description)+"</td>"
+					
+					aa += "</table>"
+					layer.bindPopup(aa);
 				  }
 				
-			})//.addTo(map);
+			})//addTo(map);
 			map.addLayer(testststs);
 			//console.log(testststs.getBounds())
 			

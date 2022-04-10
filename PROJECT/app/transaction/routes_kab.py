@@ -88,12 +88,11 @@ def settitiksimpuldata_index():
         filterQueryCond += " and b3.id_kabkota LIKE '" + sesIdWil + "%' "
 
     cur.execute(
-        convertSQLDataTable(
-            "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 ,b.id_klaim_batas_desa,c.id_klaim_batas_desa 	from taswil.t_desa_bersebelahan_2 a join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan 	join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota where a.isrejected = false and b.ismainmap = true and c.ismainmap = true and konfirm_desa_1 = true and konfirm_desa_2 = true "  + filterQueryCond))
-    # es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
-    # print( "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,createdby,modifiedby,createdat,modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
-    #         + filterQueryCond)
-
+        #convertSQLDataTable(
+        #    "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 ,b.id_klaim_batas_desa,c.id_klaim_batas_desa 	from taswil.t_desa_bersebelahan_2 a join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan 	join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota where a.isrejected = false and b.ismainmap = true and c.ismainmap = true and konfirm_desa_1 = true and konfirm_desa_2 = true "  + filterQueryCond))
+		convertSQLDataTable(
+            "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 from taswil.t_desa_bersebelahan_2 a left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa bb where bb.id_desa = a.desa_1 and bb.ismainmap = true order by createdat desc limit 1 ) b on true left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa cc    where cc.id_desa = a.desa_2 and cc.ismainmap = true order by createdat desc limit 1 ) c on true join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota where 1=1 and a.isrejected = false and b.ismainmap = true and c.ismainmap = true and konfirm_desa_1 = true and konfirm_desa_2 = true"  + filterQueryCond+" group by a.id_desa_bersebelahan, b1.nama ,b.createdat  ,b12.nama ,c.createdat  "))
+   
     es = [
         dict(
             id=row[0],
@@ -148,7 +147,7 @@ def settitiksimpul_form():
 	con.close()
 	session['p1'] = id
 	a_user_id_wilayah = noneToStringNull(session["id_wilayah"])
-	return jsonify(data=render_template('set_titik_simpul_form.html',id_wilayah=a_user_id_wilayah,klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan))
+	return jsonify(data=render_template('set_titik_simpul_form.html',id_wilayah=a_user_id_wilayah,klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan,id_desa_bersebelahan=id))
 
 
 @mod.route('/settitiksimpul/geojson')
@@ -160,7 +159,7 @@ def settitiksimpul_geojson():
 	con  = connect_db()
 	cur = con.cursor() 	
 	#cur.execute("SELECT id_toponim,namspe,foto1, CASE WHEN geometrytype(geom) = 'POINT'::text THEN 'Titik'::text WHEN geometrytype(geom) = 'LINESTRING'::text THEN 'Garis'::text WHEN geometrytype(geom) = 'POLYGON'::text THEN 'Area'::text ELSE NULL::text END AS jenis_toponim,st_asgeojson(geom) geometry FROM TASWIL.toponim ")
-	cur.execute("select  ST_AsGeoJSON(geom) wilayah_desa_asal,ST_AsText(ST_Centroid(geom)) center, b.nama from taswil.t_klaim_batas_desa a join taswil.m_Desa b on a.id_desa = b.id_Desa where id_klaim_batas_desa = %s or id_klaim_batas_desa = %s ",[id1,id2])
+	cur.execute("select  ST_AsGeoJSON(c.geom) wilayah_desa_asal,ST_AsText(ST_Centroid(c.geom)) center, b.nama ,c.description from taswil.t_klaim_batas_desa a join taswil.m_Desa b on a.id_desa = b.id_Desa join taswil.t_klaim_batas_desa_Detil c on a.id_klaim_batas_desa = c.id_klaim_batas_desa where a.ismainmap = true and (a.id_Desa = %s or a.id_Desa = %s)",[id1,id2])
 	test1 = []
 	i = 0;
 	center = ""
@@ -291,7 +290,7 @@ def settitikkartometri_index():
 
     return jsonify(data=render_template('set_titik_kartometri.html',
                                         a_user_id_wilayah=a_user_id_wilayah),
-                   header='Set Titik Kartimetri')
+                   header='Set Titik Kartometrik')
 				   
 
 
@@ -314,9 +313,8 @@ def settitikkartometridata_index():
     else:
         filterQueryCond += " and b3.id_kabkota LIKE '" + sesIdWil + "%' "
 
-    cur.execute(
-        convertSQLDataTable(
-            "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 ,b.id_klaim_batas_desa,c.id_klaim_batas_desa 	from taswil.t_desa_bersebelahan_2 a 	join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa 	join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa 	join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa 	join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan 	join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota 	where a.isrejected = false and b.ismainmap = true and c.ismainmap = true  and konfirm_desa_1 = true and konfirm_desa_2 = true "  + filterQueryCond))
+    cur.execute(convertSQLDataTable(
+        "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 from taswil.t_desa_bersebelahan_2 a left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa bb where bb.id_desa = a.desa_1 and bb.ismainmap = true order by createdat desc limit 1 ) b on true left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa cc    where cc.id_desa = a.desa_2 and cc.ismainmap = true order by createdat desc limit 1 ) c on true join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota where 1=1 and a.isrejected = false and b.ismainmap = true and c.ismainmap = true and konfirm_desa_1 = true and konfirm_desa_2 = true"  + filterQueryCond+" group by a.id_desa_bersebelahan, b1.nama ,b.createdat  ,b12.nama ,c.createdat  "))
     # es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
     # print( "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,createdby,modifiedby,createdat,modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
     #         + filterQueryCond)
@@ -331,7 +329,7 @@ def settitikkartometridata_index():
             tanggal_klaim2=row[4],
            
             btn='<div id="dt-buttons" class="dt-buttons">' +            
-            '<a class="btn btn-info btnEditForm mr-1" dataid="' + (row[0]) + '"  tabindex="0"  onclick="viewData(this)"><span>Set Titik Kartometri</span></a> ' +
+            '<a class="btn btn-info btnEditForm mr-1" dataid="' + (row[0]) + '"  tabindex="0"  onclick="viewData(this)"><span>Set Titik Kartometrik</span></a> ' +
 
             '</div>'
         ) for row in cur.fetchall()
@@ -374,7 +372,7 @@ def settitikkartometri_form():
 	cur.close()
 	con.close()
 	session['p1'] = id
-	return jsonify(data=render_template('set_titik_kartometri_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan))
+	return jsonify(data=render_template('set_titik_kartometri_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan,id_desa_bersebelahan=id))
 
 
 @mod.route('/settitikkartometri/geojson')
@@ -385,8 +383,7 @@ def settitikkartometri_geojson():
 	
 	con  = connect_db()
 	cur = con.cursor() 	
-	#cur.execute("SELECT id_toponim,namspe,foto1, CASE WHEN geometrytype(geom) = 'POINT'::text THEN 'Titik'::text WHEN geometrytype(geom) = 'LINESTRING'::text THEN 'Garis'::text WHEN geometrytype(geom) = 'POLYGON'::text THEN 'Area'::text ELSE NULL::text END AS jenis_toponim,st_asgeojson(geom) geometry FROM TASWIL.toponim ")
-	cur.execute("select  ST_AsGeoJSON(geom) wilayah_desa_asal,ST_AsText(ST_Centroid(geom)) center, b.nama from taswil.t_klaim_batas_desa a join taswil.m_Desa b on a.id_desa = b.id_Desa where id_klaim_batas_desa = %s or id_klaim_batas_desa = %s ",[id1,id2])
+	cur.execute("select  ST_AsGeoJSON(c.geom) wilayah_desa_asal,ST_AsText(ST_Centroid(c.geom)) center, b.nama ,c.description,a.id_Desa from taswil.t_klaim_batas_desa a join taswil.m_Desa b on a.id_desa = b.id_Desa join taswil.t_klaim_batas_desa_Detil c on a.id_klaim_batas_desa = c.id_klaim_batas_desa where a.ismainmap = true and (a.id_Desa = %s or a.id_Desa = %s)",[id1,id2])
 	test1 = []
 	i = 0;
 	center = ""
@@ -394,7 +391,12 @@ def settitikkartometri_geojson():
 	for  es in cur.fetchall():	
 		i = i+1;
 		aaa = json.loads(es[0])
-		obj = {'type' : 'Feature','id':'A'+str(i),'properties':{'nama':es[2]},'geometry' :aaa }
+		#aa1 = json.loads(es[3].replace("'","\""))
+		aa1 = es[3].replace("'","\"")
+		tipe11 = 2
+		if es[4] == id1:
+			tipe11 = 1
+		obj = {'type' : 'Feature','id':'A'+str(i),'properties':{'nama':es[2],'type':tipe11,'description':aa1},'geometry' :aaa }
 		test1.append(obj)
 		center = es[1]
 		nama = es[2]
@@ -543,7 +545,7 @@ def setsubsegmendata_index():
 
     cur.execute(
         convertSQLDataTable(
-            "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 ,b.id_klaim_batas_desa,c.id_klaim_batas_desa 	from taswil.t_desa_bersebelahan_2 a 	join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa 	join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa 	join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa 	join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan 	join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota 	where a.isrejected = false and b.ismainmap = true and c.ismainmap = true   and konfirm_desa_1 = true and konfirm_desa_2 = true "  + filterQueryCond))
+            "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 from taswil.t_desa_bersebelahan_2 a left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa bb where bb.id_desa = a.desa_1 and bb.ismainmap = true order by createdat desc limit 1 ) b on true left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa cc    where cc.id_desa = a.desa_2 and cc.ismainmap = true order by createdat desc limit 1 ) c on true join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota where 1=1 and a.isrejected = false and b.ismainmap = true and c.ismainmap = true and konfirm_desa_1 = true and konfirm_desa_2 = true"  + filterQueryCond+" group by a.id_desa_bersebelahan, b1.nama ,b.createdat  ,b12.nama ,c.createdat  "))
     # es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
     # print( "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,createdby,modifiedby,createdat,modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
     #         + filterQueryCond)
@@ -602,7 +604,7 @@ def setsubsegmen_form():
 	con.close()
 	session['p1'] = id
 	
-	return jsonify(data=render_template('set_sub_segmen_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan))
+	return jsonify(data=render_template('set_sub_segmen_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan,id_desa_bersebelahan=id))
 
 
 @mod.route('/setsubsegmen/geojson1')
@@ -760,9 +762,8 @@ def kesepakatandata_index():
     else:
         filterQueryCond += " and b3.id_kabkota LIKE '" + sesIdWil + "%' "
 
-    cur.execute(
-        convertSQLDataTable(
-            "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 ,b.id_klaim_batas_desa,c.id_klaim_batas_desa 	from taswil.t_desa_bersebelahan_2 a 	join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa 	join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa 	join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa 	join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan 	join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota 	where a.isrejected = false and b.ismainmap = true and c.ismainmap = true   and konfirm_desa_1 = true and konfirm_desa_2 = true "  + filterQueryCond))
+    cur.execute(convertSQLDataTable(
+        "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 from taswil.t_desa_bersebelahan_2 a left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa bb where bb.id_desa = a.desa_1 and bb.ismainmap = true order by createdat desc limit 1 ) b on true left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa cc    where cc.id_desa = a.desa_2 and cc.ismainmap = true order by createdat desc limit 1 ) c on true join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota where 1=1 and a.isrejected = false and b.ismainmap = true and c.ismainmap = true and konfirm_desa_1 = true and konfirm_desa_2 = true"  + filterQueryCond+" group by a.id_desa_bersebelahan, b1.nama ,b.createdat  ,b12.nama ,c.createdat  "))
     # es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
     # print( "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,createdby,modifiedby,createdat,modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
     #         + filterQueryCond)
@@ -808,12 +809,14 @@ def kesepakatan_form():
 	txtCamat1 = ""
 	txtKades2 = ""
 	txtCamat2 = ""
+	namaJabDsAsal = ""
+	namaJabDsTujuan= "" 
 	txtPbdes = ""
 	txtDataDasar = ""
 	con = connect_db()
 	cur = con.cursor()
 	cur.execute(
-		"select a.id_desa_bersebelahan, b1.nama desa_asal ,b12.nama desa_tujuan , b.id_klaim_batas_desa klaim_batas_desa1, c.id_klaim_batas_desa klaim_batas_desa2,a.desa_1,a.desa_2 ,b2.nama kecamatan_awal,b22.nama kecamatan_akhir,q1.nm_kepala_desa kades1, q1.nm_kepala_Camat camat1,q2.nm_kepala_desa kades2, q1.nm_kepala_Camat camat2	from taswil.t_desa_bersebelahan_2 a 	join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa 	join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa 	join taswil.m_desa b1 on a.desa_1 = b1.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b22 on b12.id_kecamatan = b22.id_kecamatan join taswil.a_user q1 on b1.id_desa = q1.id_wilayah join taswil.a_user q2 on b12.id_desa = q2.id_wilayah where a.id_desa_bersebelahan = %s",
+		"select a.id_desa_bersebelahan, b1.nama desa_asal ,b12.nama desa_tujuan , b.id_klaim_batas_desa klaim_batas_desa1, c.id_klaim_batas_desa klaim_batas_desa2,a.desa_1,a.desa_2 ,b2.nama kecamatan_awal,b22.nama kecamatan_akhir,q1.nm_kepala_desa kades1, q1.nm_kepala_Camat camat1,q2.nm_kepala_desa kades2, q2.nm_kepala_Camat camat2	from taswil.t_desa_bersebelahan_2 a 	join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa 	join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa 	join taswil.m_desa b1 on a.desa_1 = b1.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b22 on b12.id_kecamatan = b22.id_kecamatan join taswil.a_user q1 on b1.id_desa = q1.id_wilayah join taswil.a_user q2 on b12.id_desa = q2.id_wilayah where a.id_desa_bersebelahan = %s",
 		[id])
 	a_role_disabled = 'disabled'
 	# es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
@@ -831,6 +834,8 @@ def kesepakatan_form():
 		txtCamat1 = noneToStringNull(str(es[10]))
 		txtKades2 = noneToStringNull(str(es[11]))
 		txtCamat2 = noneToStringNull(str(es[12]))
+		namaJabDsAsal = getNamaJabDesa(id_desa_asal)
+		namaJabDsTujuan = getNamaJabDesa(id_desa_tujuan)
 		
 	
 	cur.execute("SELECT *,to_char(tgl_kesepakaran, 'YYYY-MM-DD') FROM TASWIL.T_KESEPAKATAN where id_desa_bersebelahan = %s",[id])
@@ -848,10 +853,14 @@ def kesepakatan_form():
 	con.close()
 	session['p1'] = id
 	print(txtTanggal)
-	return jsonify(data=render_template('kesepakatan_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan,kecamatan1=kecamatan_asal,kecamatan2=kecamatan_tujuan,desa_asal=desa_asal,desa_tujuan=desa_tujuan,txtTanggal=txtTanggal,txtLokasi=txtLokasi,txtKades1=txtKades1,txtCamat1=txtCamat1,txtKades2=txtKades2,txtCamat2=txtCamat2,txtPbdes=txtPbdes,txtDataDasar=txtDataDasar))
+	return jsonify(data=render_template('kesepakatan_form.html',klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,desa1 = id_desa_asal,desa2=id_desa_tujuan,kecamatan1=kecamatan_asal,kecamatan2=kecamatan_tujuan,desa_asal=desa_asal,desa_tujuan=desa_tujuan,txtTanggal=txtTanggal,txtLokasi=txtLokasi,txtKades1=txtKades1,txtCamat1=txtCamat1,txtKades2=txtKades2,txtCamat2=txtCamat2,txtPbdes=txtPbdes,txtDataDasar=txtDataDasar,namaJabDsAsal=namaJabDsAsal,namaJabDsTujuan=namaJabDsTujuan,id_desa_bersebelahan=id))
 
 
-
+def getNamaJabDesa(idDesa):
+	if(idDesa[9] == "1"):
+		return "Lurah"
+	else :
+		return "Kepala Desa"
 	
 @mod.route('/kesepakatan/crud', methods=['POST', 'DELETE'])
 @check_session
@@ -961,9 +970,8 @@ def beritaacaradata_index():
     else:
         filterQueryCond += " and b3.id_kabkota LIKE '" + sesIdWil + "%' "
 
-    cur.execute(
-        convertSQLDataTable(
-            "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 ,b.id_klaim_batas_desa,c.id_klaim_batas_desa 	from taswil.t_desa_bersebelahan_2 a 	join taswil.t_klaim_batas_desa b on a.desa_1 = b.id_desa 	join taswil.t_klaim_batas_desa c on a.desa_2 = c.id_desa 	join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa 	join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan 	join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota 	where a.isrejected = false and b.ismainmap = true and c.ismainmap = true    and konfirm_desa_1 = true and konfirm_desa_2 = true "  + filterQueryCond))
+    cur.execute(convertSQLDataTable(
+        "select  a.id_desa_bersebelahan, b1.nama desa_asal,b.createdat tanggal_klaim1 ,b12.nama desa_tujuan,c.createdat tanggal_klaim2 from taswil.t_desa_bersebelahan_2 a left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa bb where bb.id_desa = a.desa_1 and bb.ismainmap = true order by createdat desc limit 1 ) b on true left join lateral (select createdat,id_Desa,ismainmap from taswil.t_klaim_batas_desa cc    where cc.id_desa = a.desa_2 and cc.ismainmap = true order by createdat desc limit 1 ) c on true join taswil.m_desa b1 on a.desa_1 = b1.id_Desa 	join taswil.m_desa b12 on a.desa_2 = b12.id_Desa join taswil.m_kecamatan b2 on b1.id_kecamatan = b2.id_kecamatan join taswil.m_kabkota b3 on b2.id_kabkota = b3.id_kabkota where 1=1 and a.isrejected = false and b.ismainmap = true and c.ismainmap = true and konfirm_desa_1 = true and konfirm_desa_2 = true"  + filterQueryCond+" group by a.id_desa_bersebelahan, b1.nama ,b.createdat  ,b12.nama ,c.createdat  "))
     # es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
     # print( "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,createdby,modifiedby,createdat,modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
     #         + filterQueryCond)
@@ -1009,6 +1017,8 @@ def beritaacara_form():
 	id_kecamatan2 = ""
 	nama_desa1 = ""
 	nama_desa2 = ""
+	namaJabDesa1 = ""
+	namaJabDesa2 = ""
 	nama_kecamatan1 = ""
 	nama_kecamatan2 = ""
 	nama_kabupaten = ""
@@ -1035,10 +1045,13 @@ def beritaacara_form():
 	
 	if id_desa1 == "":
 		return jsonify(data=Markup(kosong))
+
+	namaJabDesa1 = getNamaJabDesa(id_desa1)
+	namaJabDesa2 = getNamaJabDesa(id_desa2)
 		
 	
 	HEADER	= "<tr><td style='text-align: center'>BERITA ACARA</td></tr>"
-	HEADER	+= "<tr><td style='text-align: center'>Delineasi Batas Desa Secara Kartometri</td></tr>"
+	HEADER	+= "<tr><td style='text-align: center'>Delineasi Batas Desa Secara Kartometrik</td></tr>"
 	if nama_kecamatan1 == nama_kecamatan2:
 		HEADER	+= "<tr><td style='text-align: center'>Dalam Satu Kecamatan di "+nama_kabupaten+"</td></tr>"
 	else:
@@ -1119,12 +1132,12 @@ def beritaacara_form():
 	if nama_kecamatan1 == nama_kecamatan2:
 		TEXT1	+= "Pada Hari ini, "+txtNamaHari+" tanggal "+terbilang(txtHari)+" bulan "+txtBulan+" tahun "+terbilang(txtTahun)+" telah dilaksanakan pelacakan garis batas Desa secara kartometrik dalam rangka penegasan batas antara Desa "+nama_desa1+" dan Desa "+nama_desa2+" Kecamatan "+nama_kecamatan1+" bertempat di "+txtLokasi+" Kabupaten "+nama_kabupaten+" dengan hasil kesepakatan sebagai berikut:"
 	else:
-		TEXT1	+= "Pada Hari ini, "+txtNamaHari+" tanggal "+terbilang(txtHari)+" bulan "+txtBulan+" tahun "+terbilang(txtTahun)+" telah dilaksanakan pelacakan garis batas Desa antar kecamatan  secara kartometrik dalam rangka penegasan batas antara Desa "+nama_desa1+" Kecamatan "+nama_kecamatan1+" dan Desa "+nama_desa2+" Kecamatan "+nama_kecamatan2+" bertempat di "+txtLokasi+" Kabupaten "+nama_kabupaten+" dengan hasil kesepakatan sebagai berikut:"
+		TEXT1	+= "Pada Hari ini, "+txtNamaHari+" tanggal "+terbilang(txtHari)+" bulan "+txtBulan+" tahun "+terbilang(txtTahun)+" telah dilaksanakan pelacakan garis batas Desa antar kecamatan secara kartometrik dalam rangka penegasan batas antara Desa "+nama_desa1+" Kecamatan "+nama_kecamatan1+" dan Desa "+nama_desa2+" Kecamatan "+nama_kecamatan2+" bertempat di "+txtLokasi+" Kabupaten "+nama_kabupaten+" dengan hasil kesepakatan sebagai berikut:"
 		
 	TEXT2 = "<tr><td>1.</td><td> Data dasar yang digunakan dalam kegiatan pelacakan batas Desa adalah sebagai berikut:</td></tr>"
 	TEXT2 += "<tr><td></td><td> "+txtDataDasar.replace('\n', '<br />').replace('\r', '<br />')+"</td></tr>"
 	
-	cur.execute("Select degrees(ST_Azimuth(B.GEOM, C.GEOM)),A.KETERANGAN, B.NO,B.KETERANGAN, C.NO,C.KETERANGAN FROM TASWIL.T_SUBSEGMEN A LEFT JOIN TASWIL.T_TITIKKARTOMETRI B ON A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI 	LEFT JOIN TASWIL.T_TITIKKARTOMETRI C ON A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI where A.id_desa_bersebelahan = %s ORDER BY B.URUT", [id])
+	cur.execute("Select degrees(ST_Azimuth(B.GEOM, C.GEOM)),A.KETERANGAN, B.NO,B.KETERANGAN, C.NO,C.KETERANGAN,D.NAMA,C.ISSIMPUL FROM TASWIL.T_SUBSEGMEN A LEFT JOIN TASWIL.T_TITIKKARTOMETRI B ON A.ID_TITIKKARTOMETRI_dARI = B.ID_TITIKKARTOMETRI 	LEFT JOIN TASWIL.T_TITIKKARTOMETRI C ON A.ID_TITIKKARTOMETRI_KE = C.ID_TITIKKARTOMETRI LEFT JOIN LATERAL ( 	select string_agg(BB.NAMA, ', ') NAMA from TASWIL.T_TITIKKARTOMETRI_desa AA JOIN taswil.m_Desa BB on AA.ID_DESA = BB.ID_DESA WHERE AA.ID_TITIKKARTOMETRI = B.ID_TITIKKARTOMETRI ) D ON TRUE where A.id_desa_bersebelahan = %s ORDER BY B.URUT", [id])
 	a_role_disabled = 'disabled'
 	# es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
 	arah = ""
@@ -1136,37 +1149,43 @@ def beritaacara_form():
 	TEXT3 = "<tr><td>2.</td><td> Deskripsi Segmen Batas :</td></tr>"
 	inddex = 0
 	TEXT3_detil = ""
+	simpul_teakhir = "1"
+	desk_desa = ""
 	for es in cur.fetchall():
 		if float(es[0]) <= 22.5:
-			arah = "Utara"
+			arah = "utara"
 		elif float(es[0]) >= 22.6 and float(es[0]) <= 67.5:
-			arah = "Timur Laut"
+			arah = "timur laut"
 		elif float(es[0]) >= 67.6 and float(es[0]) <= 112.5:
-			arah = "Timur"
+			arah = "timur"
 		elif float(es[0]) >= 112.6 and float(es[0]) <= 157.5:
-			arah = "Tenggara"
+			arah = "tenggara"
 		elif float(es[0]) >= 157.6 and float(es[0]) <= 202.5:
-			arah = "Selatan"
+			arah = "selatan"
 		elif float(es[0]) >= 202.6 and float(es[0]) <= 247.4:
-			arah = "Barat Daya"
+			arah = "barat daya"
 		elif float(es[0]) >= 247.6 and float(es[0]) <= 292.5:
-			arah = "Barat"
+			arah = "barat"
 		elif float(es[0]) >= 292.6 and float(es[0]) <= 337.5:
-			arah = "Barat Laut"
+			arah = "barat laut"
 		else:
-			arah = "Utara"
+			arah = "utara"
 		ketSegmen = noneToStringNull(str(es[1]))
 		no1 = noneToStringNull(str(es[2]))
 		ket1 = noneToStringNull(str(es[3]))
 		no2 = noneToStringNull(str(es[4]))
 		ket2 = noneToStringNull(str(es[5]))
+		simpul_teakhir = noneToStringNull(str(es[7]))
+		desk_desa = noneToStringNull(str(es[6]))
 		if inddex == 0:
-			TEXT3_detil += " Dimulai dari "+ket1+" yang terletak pada "+no1+" ke arah "+arah+" "+ketSegmen
+			TEXT3_detil += " Dimulai dari simpul batas antara desa / kelurahan "+desk_desa+" ("+ket1+") yang terletak pada "+no1+" ke arah "+arah+" "+ketSegmen
 		else:
-			TEXT3_detil += " Hingga bertemu "+ket1+" yang terletak pada "+no1+" dilanjutkan ke arah "+arah+" "+ketSegmen
+			TEXT3_detil += " hingga bertemu "+ket1+" yang terletak pada "+no1+" dilanjutkan ke arah "+arah+" "+ketSegmen
 		inddex = inddex +1
-	
-	TEXT3_detil += " Hingga bertemu "+ket2+" yang terletak pada "+no2
+	if simpul_teakhir == "2":
+		TEXT3_detil += " hingga bertemu simpul batas anatar desa / kelurahan  "+desk_desa+" ("+ket2+") yang terletak pada "+no2
+	else:
+		TEXT3_detil += " hingga bertemu "+ket2+" yang terletak pada "+no2
 	TEXT3 += "<tr><td></td><td> <i>"+TEXT3_detil+"</i></td></tr>"
 	
 	
@@ -1257,7 +1276,7 @@ def beritaacara_form():
 	cur.close()
 	con.close()
 	session['p1'] = id
-	return jsonify(data=render_template('beritaacara_form.html',txtKades1=txtKades1,txtCamat1=txtCamat1,txtKades2=txtKades2,txtCamat2=txtCamat2,txtPbdes=txtPbdes,desa1=id_desa1,desa2=id_desa2,klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,TEXT4=Markup(TEXT4),TEXT3=Markup(TEXT3),TEXT2=Markup(TEXT2),TEXT1=Markup(TEXT1),HEADER=Markup(HEADER),nama_desa1=nama_desa1,nama_desa2=nama_desa2,nama_kecamatan1=nama_kecamatan1,nama_kecamatan2=nama_kecamatan2,nama_kabupaten=nama_kabupaten))
+	return jsonify(data=render_template('beritaacara_form.html',txtKades1=txtKades1,txtCamat1=txtCamat1,txtKades2=txtKades2,txtCamat2=txtCamat2,txtPbdes=txtPbdes,desa1=id_desa1,desa2=id_desa2,klaimidDesa1=klaim_batas_desa1,klaimidDesa2=klaim_batas_desa2,TEXT4=Markup(TEXT4),TEXT3=Markup(TEXT3),TEXT2=Markup(TEXT2),TEXT1=Markup(TEXT1),HEADER=Markup(HEADER),nama_desa1=nama_desa1,nama_desa2=nama_desa2,nama_kecamatan1=nama_kecamatan1,nama_kecamatan2=nama_kecamatan2,nama_kabupaten=nama_kabupaten,namaJabDesa1=namaJabDesa1,namaJabDesa2=namaJabDesa2))
 
 
 

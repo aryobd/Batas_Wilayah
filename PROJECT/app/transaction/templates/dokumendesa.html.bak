@@ -117,7 +117,7 @@
 
 			}
 			// console.log(aa++)
-			if (fSelectedIdWilayah.length == 10) {
+			if (fSelectedIdWilayah.length == 13) {
 				$("#btnInsert").attr("disabled", false)
 			} else {
 				$("#btnInsert").attr("disabled", true)
@@ -198,7 +198,7 @@
 	$(document).ready(function () {
 		
         $(".tp-enabled").tooltip('enable')
-		if(a_user_id_wilayah.length ==10)$("#btnInsert").attr("disabled", false);
+		if(a_user_id_wilayah.length ==13)$("#btnInsert").attr("disabled", false);
 		$('#btnInsert').bind('click', function () {
 			execForm("/transaction/dokumendesa/form?id_wilayah="+fSelectedIdWilayah);
 
@@ -219,18 +219,19 @@
 				generateDropdownKabKota({ selector: "#filter_kabkota", parentValue: val,onComplete:()=>{getSelectedIdWilayah()}  })
 			}
 		})
+		//console.log(a_user_id_wilayah.substr(0, 5),a_user_id_wilayah.substr(0, 8))
 		generateDropdownKabKota({
-			selector: "#filter_kabkota", initialValue: a_user_id_wilayah.substr(0, 4), onChangeEvent: (val) => {
+			selector: "#filter_kabkota", initialValue: a_user_id_wilayah.substr(0, 5), onChangeEvent: (val) => {
 				generateDropdownKecamatan({ selector: "#filter_kecamatan", parentValue: val,onComplete:()=>{getSelectedIdWilayah()}  })
 			}
 		})
 		generateDropdownKecamatan({
-			selector: "#filter_kecamatan", initialValue: a_user_id_wilayah.substr(0, 7), onChangeEvent: (val) => {
+			selector: "#filter_kecamatan", initialValue: a_user_id_wilayah.substr(0, 8), onChangeEvent: (val) => {
 				generateDropdownDesa({ selector: "#filter_desa", parentValue: val,onComplete:()=>{getSelectedIdWilayah()} })
 			}
 		})
 		generateDropdownDesa({
-			selector: "#filter_desa", initialValue: a_user_id_wilayah.substr(0, 10), onChangeEvent: (val) => {
+			selector: "#filter_desa", initialValue: a_user_id_wilayah.substr(0, 13), onChangeEvent: (val) => {
 				// generateDropdownKecamatan({selector:"#filter_kecamatan",parentValue:val})
 				getSelectedIdWilayah()
 			}

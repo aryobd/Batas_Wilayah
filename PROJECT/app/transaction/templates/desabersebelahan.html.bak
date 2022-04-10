@@ -406,12 +406,7 @@
 							// console.log(idDesa)
 							showBatasDesa(idDesa)
 						})
-						$("#tbl-pengajuan").on('click', '.btnDelete', function () {
-							// console.log(this)
-							selectedIdAdd = $(this).attr("iddesa")
-							$("#top-modal-c-delete").modal('show')
-							// console.log(selectedIdAdd)
-						})
+
 					} else {
 						$("#tbl-pengajuan").html('<h4 class="mt-4">Belum ada data</h4>')
 					}
@@ -450,24 +445,13 @@
 						}
 
 						$("#tbl-permintaan table>tbody").html(htmlTable)
-						$("#tbl-permintaan table tr td").on('click', '.btnBatasDesa', function (e) {
-							
+						$("#tbl-permintaan table").bind('click', '.btnBatasDesa', function (e) {
+							// console.log(e.target)
 							let idDesa = $(e.target).attr('iddesa');
 							// console.log(idDesa)
 							showBatasDesa(idDesa)
 						})
-						$("#tbl-permintaan table tr td").on('click', '.confirmBtn', function () {
-									// console.log(this)
-									selectedIdAdd = $(this).attr("iddesa")
-									$("#top-modal-c").modal('show')
-									// console.log(selectedIdAdd)
-								})
-						$("#tbl-permintaan").on('click', '.btnDelete', function () {
-									// console.log(this)
-									selectedIdAdd = $(this).attr("iddesa")
-									$("#top-modal-c-reject").modal('show')
-									// console.log(selectedIdAdd)
-						})
+
 					} else {
 						$("#permintaan-badge").hide()
 						$("#tbl-permintaan").html('<h4 class="mt-4">Belum ada data</h4>')
@@ -484,7 +468,6 @@
 		})
 	}
 
-	
 
 	async function showBatasDesa(idDesa) {
 		$("#map-loading").show()
@@ -689,8 +672,24 @@
 
 		});
 
-		
-		
+		$("#tbl-permintaan").on('click', '.confirmBtn', function () {
+			// console.log(this)
+			selectedIdAdd = $(this).attr("iddesa")
+			$("#top-modal-c").modal('show')
+			// console.log(selectedIdAdd)
+		})
+		$("#tbl-permintaan").on('click', '.btnDelete', function () {
+			// console.log(this)
+			selectedIdAdd = $(this).attr("iddesa")
+			$("#top-modal-c-reject").modal('show')
+			// console.log(selectedIdAdd)
+		})
+		$("#tbl-pengajuan").on('click', '.btnDelete', function () {
+			// console.log(this)
+			selectedIdAdd = $(this).attr("iddesa")
+			$("#top-modal-c-delete").modal('show')
+			// console.log(selectedIdAdd)
+		})
 
 		$("#btninsert").on("click", function () {
 			submitAdd()
