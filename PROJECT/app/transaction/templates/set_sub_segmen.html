@@ -30,6 +30,18 @@
                
             </div>
             <div>
+				<!--
+                <div class="mb-4 d-flex flex-row-reverse">
+                    <div class="d-flex flex-column">
+                        <button onclick="tambahBatasDesa()" id="btnInsert" class="btn btn-primary pull-right tp-enabled"
+                            data-toggle="tooltip" data-placement="left" title="Tambah Batas Desa Baru" disabled><i
+                                class="mdi mdi-plus"></i>Tambah Batas
+                            Desa</button>
+                        <small style="max-width: 210;">* <strong>Pilih</strong> filter sampai <strong>level
+                                desa</strong> untuk mengaktifkan tombol</small>
+                    </div>
+                </div>
+				-->
                 <table id="table-data-batas-desa" class="table">
                     <thead>
                         <tr>
@@ -108,7 +120,7 @@
 
         }
         // console.log(aa++)
-        if (fSelectedIdWilayah.length == LEN_ID_DESA) {
+        if (fSelectedIdWilayah.length == 10) {
             $("#btnInsert").attr("disabled", false)
         } else {
             $("#btnInsert").attr("disabled", true)
@@ -117,7 +129,6 @@
             generateTableDaftarPeta()
         }
     }
-
     function setMainMap(obj){
         // console.log(obj)
         idd = $(obj).attr('dataid');
@@ -130,7 +141,7 @@
         // console.log(initialValue, lenIdWil)
         // console.log(initialValue)
         // let lenIdWil = 
-        if (initialValue.length == LEN_ID_DESA) {
+        if (initialValue.length == 10) {
             $("#btnInsert").attr("disabled", false)
             fSelectedIdWilayah = initialValue;
             generateTableDaftarPeta()

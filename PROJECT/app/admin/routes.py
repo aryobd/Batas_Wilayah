@@ -760,42 +760,36 @@ def user_moderator_submit():
 def generate_username_by_id_wilayah():
 	id_group = request.args.get("id_group")
 	id_wilayah = noneToStringNull(request.args.get("id_wilayah"))
-	 
+	
 	conn = connect_db()
 	c = conn.cursor() 
 	c.execute("SELECT b.length_id_wilayah FROM taswil.a_group a, taswil.a_level_group b where id_group = %s and isdelete <> '1' and a.id_level_group=b.id_level",[noneToStringNull(id_group)])
 
 	exist = [dict(len=row[0]) for row in c.fetchall()]
-	 
+
 	if(len(exist) <1):
 		return jsonify(error=True, err_msg="Harap pilih id group" )
-	 
+	
 	if exist[0]['len'] != 0 :
-		#print(len(id_wilayah),exist[0]['len']
-		#if(len(id_wilayah) != exist[0]['len'] or id_wilayah.isnumeric() != True ):
-		if(len(id_wilayah) != exist[0]['len'] ):
+		if(len(id_wilayah) != exist[0]['len'] or id_wilayah.isnumeric() != True ):
 			return jsonify(error=True, err_msg="Id wilayah tidak cocok dengan level group" )
-		
+
 		len_id = exist[0]['len']
 		table_name = 'taswil.m_provinsi'
 		table_col_id = 'id_provinsi'
-		username = id_wilayah[0:5] +'.'
-		if(len_id == 5):
+		username = id_wilayah[0:4] +'.'
+		if(len_id == 4):
 			table_name = 'taswil.m_kabkota'
 			table_col_id = 'id_kabkota'
-		elif(len_id == 8):
+		elif(len_id == 7):
 			table_name = 'taswil.m_kecamatan'
 			table_col_id = 'id_kecamatan'
 			username += "kec."
-		elif (len_id== 13):
+		elif (len_id== 10):
 			table_name = 'taswil.m_desa'
 			table_col_id = 'id_desa'
-			print(id_wilayah[9])
-			if id_wilayah[9] == "1":
-				username += "kl."
-			else:
-				username += "ds."
-		 
+			username += "ds."
+
 		c.execute(f'SELECT nama from {table_name} where {table_col_id} = %s',[id_wilayah])
 		full_name =c.fetchone()[0]
 	

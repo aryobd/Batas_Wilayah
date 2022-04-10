@@ -1,326 +1,40 @@
-<style>
-    .badge-fs {
-        font-size: 16px !important;
-    }
-</style>
-
-
 <div class="col-12">
-    <div class="card">
-        <div class="card-header">
-            <h4>Daftar Batas Desa</h4>
-        </div>
-        <div class="card-body">
-            <div>
-                <div class="form-group row s-filter">
-                    <label for="password_active" class="col-sm-2 col-form-label">Provinsi</label>
-                    <div class="col-sm-8">
-                        <select id="filter_provinsi" class="form-control">
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">List</h4>
+			
+			<div class="table-responsive mt-4">
 
-                            <option value="" selected disabled>--Pilih Provinsi--</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row s-filter">
-                    <label for="password_baru" class="col-sm-2 col-form-label">Kabupaten/Kota</label>
-                    <div class="col-sm-8">
-                        <select id="filter_kabkota" class="form-control">
-                            <option value="" selected disabled>--Pilih Kabupaten/Kota--</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row s-filter">
-                    <label for="password_konfirmasi" class="col-sm-2 col-form-label">Kecamatan</label>
-                    <div class="col-sm-8">
-                        <select id="filter_kecamatan" class="form-control">
-                            <option value="" selected disabled>--Pilih Kecamatan--</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row s-filter">
-                    <label for="password_konfirmasi" class="col-sm-2 col-form-label">Desa</label>
-                    <div class="col-sm-8">
-                        <select id="filter_desa" class="form-control">
-                            <option value="" selected disabled>--Pilih Desa--</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="mb-4 d-flex flex-row-reverse">
-                    <div class="d-flex flex-column">
-                        <button onclick="resetFilter()" class="btn btn-primary pull-right tp-enabled"
-                            data-toggle="tooltip" data-placement="left" title=""><i class="mdi mdi-restart"></i>Reset
-                            Filter</button>
+				<table id="example23" class="display nowrap table table-hover table-striped table-bordered"
+					cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th style="text-align: center;">Kecamatan</th>
+							<th style="text-align: center;">Desa</th>
+							<th style="text-align: center;">Jumlah Peta Klaim</th>
+							<th style="text-align: center;">Set Peta Utama</th>
 
-                    </div>
-                </div>
-                <table class="mb-4">
-                    <tr>
-                        <td>Desa Belum Klaim Batas</td>
-                        <td ><span class="mr-2">:</span></td>
-                        <td style="width: 20px;text-align: right;"><strong id="num-klaim"></strong></td>
-                    </tr>
-                    <tr>
-                        <td>Desa Sudah Klaim Batas dan Mempunyai Peta Utama</td>
-                        <td><span class="mr-2">:</span></td>
-                        <td style="width: 20px;text-align: right;"><strong id="num-mainmap"></strong></td>
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td><span class="mr-2">:</span></td>
-                        <td style="width: 20px;text-align: right;"><strong id="num-total"></strong></td>
-                    </tr>
-                </table>
-                <table id="table-data-batas-desa" class="table table-striped">
-                    <thead>
-                        <tr>
+						</tr>
+					</thead>
+					<tbody>
+					{% for loopdata in loopdatas %}
+						<tr>
+						  <td>{{loopdata.kecamatan}}</td>
+						  <td>{{loopdata.desa}}</td>
+						  <td style="text-align: center;">{{loopdata.jumlah}}</td>
+						   {% if loopdata.jumlah > 0 %} 
+								 <td  style="text-align: center;"><i class="fas fa-check"></i></td>
+							{% else %}
+								 <td></td>
+							{% endif %}
+						  
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-                            <th style="text-align: center;">Provinsi</th>
-                            <th style="text-align: center;">Kab/Kota</th>
-                            <th style="text-align: center;">Kecamatan</th>
-                            <th style="text-align: center;">Desa</th>
-                            <th style="text-align: center;">Jumlah Peta Klaim</th>
-                            <th style="text-align: center;">Set Peta Utama</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div id="top-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-top">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="topModalLabel">Konfirmasi</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <h5>Apakah anda yakin akan menghapus data tersebut ?</h5>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
-                    <button type="button" class="btn btn-danger" id='btnDelete'>Ya</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <div id="top-modal-c" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-top">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="topModalLabel">Konfirmasi</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <h5>Apakah anda yakin akan menjadikan peta tersebut sebagai peta utama ?</h5>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">Kembali</button>
-                    <button type="button" class="btn btn-success" id='setmainmap'>Ya</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
 </div>
 
-
-<script>
-    var idd = ""
-    var mainMapIdWil = ""
-    var fSelectedIdWilayah = null
-    var tblBatasdesa = $("#table-data-batas-desa")
-    // let aa= 0
-    function getSelectedIdWilayah() {
-        let selectorFilter = ["filter_desa", "filter_kecamatan", "filter_kabkota", "filter_provinsi"]
-        let i = 0
-        fSelectedIdWilayah = null
-        while (fSelectedIdWilayah == null) {
-            fSelectedIdWilayah = $("#" + selectorFilter[i]).val()
-            // console.log(fSelectedIdWilayah, "#" + selectorFilter[i])
-            i++
-            if (i > selectorFilter.length) {
-                fSelectedIdWilayah = ""
-            }
-
-        }
-        // console.log(aa++)
-        if (fSelectedIdWilayah.length == LEN_ID_DESA) {
-            $("#btnInsert").attr("disabled", false)
-        } else {
-            $("#btnInsert").attr("disabled", true)
-        }
-        if (fSelectedIdWilayah.length != 0) {
-            generateTableMonitoring()
-        }
-    }
-
-    resetFilter = function () {
-        let initialValue = '{{a_user_id_wilayah}}'
-        fSelectedIdWilayah = initialValue;
-        switch (initialValue.length) {
-            case 0:
-                $("#filter_provinsi").val('')
-                $("#filter_kabkota").val('')
-                $("#filter_kecamatan").val('')
-                $("#filter_desa").val('')
-                break;
-            case LEN_ID_PROVINSI:
-                $("#filter_provinsi").val(initialValue)
-                $("#filter_kabkota").val('')
-                $("#filter_kecamatan").val('')
-                $("#filter_desa").val('')
-                break;
-            case LEN_ID_KABKOTA:
-                $("#filter_kabkota").val(initialValue)
-                $("#filter_kecamatan").val('')
-                $("#filter_desa").val('')
-                break;
-            case LEN_ID_KECAMATAN:
-                $("#filter_kecamatan").val(initialValue)
-                $("#filter_desa").val('')
-                break;
-
-
-            default:
-                break;
-        }
-        generateTableMonitoring()
-    }
-
-    function setFilter() {
-        let initialValue = '{{a_user_id_wilayah}}'
-        // console.log(initialValue, lenIdWil)
-        // console.log(initialValue)
-        // let lenIdWil = 
-        if (initialValue.length == LEN_ID_DESA) {
-            $("#btnInsert").attr("disabled", false)
-            fSelectedIdWilayah = initialValue;
-            generateTableMonitoring()
-        } else if (initialValue.length == 0) {
-            fSelectedIdWilayah = initialValue;
-            generateTableMonitoring()
-        }
-        let lenIdWil = initialValue.length;
-        // return
-        $(".s-filter").hide()
-        switch (lenIdWil) {
-            case 0:
-            case LEN_ID_PROVINSI:
-                $("#filter_provinsi").parent().parent().show()
-                generateDropdownProvinsi({
-                    selector: "#filter_provinsi", initialValue: initialValue.substring(0, 2), onChangeEvent: function (val) {
-                        // getSelectedIdWilayah()
-                        generateDropdownKabKota({ selector: "#filter_kabkota", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
-                    }
-                })
-            case LEN_ID_KABKOTA:
-                $("#filter_kabkota").parent().parent().show()
-                generateDropdownKabKota({
-                    selector: "#filter_kabkota", initialValue: initialValue.substring(0, 4), onChangeEvent: function (val) {
-                        // getSelectedIdWilayah()
-                        generateDropdownKecamatan({ selector: "#filter_kecamatan", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
-                    }, initChild: true,
-                })
-            case LEN_ID_KECAMATAN:
-                $("#filter_kecamatan").parent().parent().show()
-                generateDropdownKecamatan({
-                    selector: "#filter_kecamatan", initialValue: initialValue.substring(0, 7), onChangeEvent: function (val) {
-                        // getSelectedIdWilayah()
-                        generateDropdownDesa({ selector: "#filter_desa", parentValue: val, onComplete: () => { getSelectedIdWilayah() } })
-                    }, initChild: true
-                })
-            case LEN_ID_DESA:
-                $("#filter_desa").parent().parent().show()
-                generateDropdownDesa({ selector: "#filter_desa", initialValue: initialValue.substring(0, 10), onChangeEvent: () => { getSelectedIdWilayah() } })
-
-
-
-                break;
-
-            default:
-                break;
-        }
-    }
-
-
-    function initCom() {
-        $('#table-data-batas-desa').on('click', '.btnDeleteForm', function () {
-            idd = $(this).attr('dataid');
-            // console.log(idd);
-        });
-    }
-    function generateTableMonitoring() {
-        // $("#table-data-batas-desa").DataTable().destroy()
-        // $("#table-data-batas-desa").replaceWith(tblBatasdesa)
-        let paramss = ""
-        if (fSelectedIdWilayah.length != 0) paramss += "?id_wilayah=" + fSelectedIdWilayah;
-        let showProv = showKabkot = showKec = true;
-        switch (fSelectedIdWilayah.length) {
-            case LEN_ID_DESA:
-            case LEN_ID_KECAMATAN:
-                showKec = false
-            case LEN_ID_KABKOTA:
-                showKabkot = false
-            case LEN_ID_PROVINSI:
-                showProv = false;
-                break;
-
-            default:
-                break;
-        }
-        getTotal();
-        generateDataTable('#table-data-batas-desa', "monitoring/klaimdesa/data" + paramss, [
-            { "data": "provinsi", "visible": showProv },
-            { "data": "kabkota", "visible": showKabkot },
-            { "data": "kecamatan", "visible": showKec },
-            { "data": "desa" },
-            { "data": "jumlah", width: "100px" },
-            { "data": "mainmap", width: "100px" }
-        ], initCom, false)
-    }
-
-    async function getTotal() {
-        let paramss = ""
-        if (fSelectedIdWilayah.length != 0) paramss += "?id_wilayah=" + fSelectedIdWilayah;
-        let url = "monitoring/klaimdesa/total" + paramss
-        $.ajax({ url: url, method: "GET", success: function (res) { 
-            let data = res.data;
-            let {jumlah,main} =data;
-            $("#num-klaim").html(jumlah)
-            $("#num-mainmap").html(main)
-            $("#num-total").html(main+jumlah)
-         } })
-    }
-
-    viewData = function (obj) {
-        let id = $(obj).attr("dataid")
-        let idwilayah = $(obj).attr("dataidwilayah")
-        // console.log(id,idwilayah)
-        execURL("transaction/klaimbatasdesa/editor?id_wilayah=" + idwilayah + "&gid=" + id)
-    }
-    $(document).ready(function () {
-        setFilter()
-        $(".tp-enabled").tooltip('enable')
-        $('#btnDelete').bind('click', function () {
-            //alert(idd);
-            $("#top-modal").on("hidden.bs.modal", function () {
-                execData('transaction/klaimbatasdesa/delete', {
-                    'id': idd
-                }, () => {
-                    generateTableMonitoring()
-                })
-            })
-            $('#top-modal').modal('hide');
-
-
-        });
-
-    })
-</script>

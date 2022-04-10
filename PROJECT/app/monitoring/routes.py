@@ -19,145 +19,28 @@ mod = Blueprint('monitoring', __name__, template_folder='templates')
 @mod.route('/klaimdesa')
 @check_session
 def klaimdesa_index():	
-
+	#res
+	#return render_template('userprofile.html',header_menu='USER PROFILE')
+	con  = connect_db()
+	id_wilayah = noneToStringNull(session["id_wilayah"])
+	
+	whereCondition = " A.ID_KABKOTA"
+	if len(id_wilayah) > 6:
+		whereCondition = " C.ID_DESA "
+		
+	cur = con.cursor() 		
+	cur.execute('select A.NAMA,B.NAMA,C.NAMA,coalesce(TEMPTABLE.JUMLAH,0) JUMLAH,coalesce(TEMPTABLE.MAINMAP,0) MAINMAP from taswil.m_kabkota A JOIN TASWIL.M_KECAMATAN B ON A.ID_KABKOTA = B.ID_KABKOTA JOIN TASWIL.M_DESA C ON C.ID_KECAMATAN = B.ID_KECAMATAN LEFT JOIN 	( 	SELECT ID_DESA, COUNT(1) JUMLAH,SUM(CASE WHEN ISMAINMAP = TRUE THEN 1 ELSE 0 END) MAINMAP FROM TASWIL.T_KLAIM_BATAS_DESA GROUP BY ID_DESA ) TEMPTABLE ON C.ID_dESA = TEMPTABLE.ID_dESA 	where '+whereCondition+' = %s ORDER BY B.NAMA,C.NAMA',[id_wilayah])
+	
+	es = [dict(kecamatan=row[1], desa=row[2], jumlah=row[3], mainmap=row[4]) for row in cur.fetchall()]
+	
+	cur.close()
+		
+	con.close()
 	return jsonify(
-        data=render_template('monitorklaimdesa.html',a_user_id_wilayah=session['id_wilayah']),        
+        data=render_template('monitorklaimdesa.html',loopdatas=es),        
         header='Monitoring Klaim Batas Desa'
 		
     )
-
-@mod.route('/klaimdesa/data')
-@check_session
-def klaimdesa_data():	
-	con = connect_db()
-	cur = con.cursor()
-    # print(username[0].get('id'))
-    # cur.execute('SELECT * FROM m_patient ')
-	filterIdWil = noneToStringNull(request.args.get("id_wilayah"))
-	sesIdWil = noneToStringNull(session['id_wilayah'])
-	filterQueryCond = ""
-	if filterIdWil != "":
-	    if(len(filterIdWil) < len(sesIdWil)):
-	        filterIdWil = sesIdWil	
-	    filterQueryCond += " c.id_desa LIKE '" + filterIdWil + "%' "
-	else:
-	    filterQueryCond += " c.id_desa LIKE '" + sesIdWil + "%' "	
-
-	queryy =    """
-			select
-				Z.nama as nama_provinsi,
-				A.NAMA as nama_kabkota,
-				B.NAMA as nama_kecamatan,
-				C.NAMA as nama_desa,
-				coalesce(TEMPTABLE.JUMLAH, 0) JUMLAH,
-				coalesce(TEMPTABLE.MAINMAP, 0) MAINMAP
-			from
-				taswil.m_provinsi Z
-			join
-				taswil.m_kabkota A on
-				A.id_provinsi = Z.id_provinsi
-			join TASWIL.M_KECAMATAN B on
-				A.ID_KABKOTA = B.ID_KABKOTA
-			join TASWIL.M_DESA C on
-				C.ID_KECAMATAN = B.ID_KECAMATAN
-			left join (
-				select
-					ID_DESA,
-					COUNT(1) JUMLAH,
-					SUM(case when ISMAINMAP = true then 1 else 0 end) MAINMAP
-				from
-					TASWIL.T_KLAIM_BATAS_DESA
-				group by
-					ID_DESA ) TEMPTABLE on
-				C.ID_dESA = TEMPTABLE.ID_dESA
-			WHERE			
-			""" + filterQueryCond
-	# print(queryy)
-	cur.execute(
-        convertSQLDataTable(queryy))
-    # es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
-	es = [
-        dict(
-		provinsi=row[0],kabkota=row[1],
-        kecamatan=row[2], desa=row[3], 
-		jumlah=row[4], mainmap=row[5]
-        ) for row in cur.fetchall()
-    ]
-	cur.close()
-	con.close()
-
-    # print(list)
-    # print(es)
-	jmldata = getCountTable("SELECT count(*) count1 from ("+queryy+") a")
-	return jsonify(draw=int(request.args.get('draw')),
-                   recordsTotal=jmldata,
-                   recordsFiltered=jmldata,
-                   data=es)
-
-@mod.route('/klaimdesa/total')
-@check_session
-def klaimdesa_total():
-	con = connect_db()
-	cur = con.cursor()
-    # print(username[0].get('id'))
-    # cur.execute('SELECT * FROM m_patient ')
-	filterIdWil = noneToStringNull(request.args.get("id_wilayah"))
-	sesIdWil = noneToStringNull(session['id_wilayah'])
-	filterQueryCond = ""
-	if filterIdWil != "":
-	    if(len(filterIdWil) < len(sesIdWil)):
-	        filterIdWil = sesIdWil	
-	    filterQueryCond += " c.id_desa LIKE '" + filterIdWil + "%' "
-	else:
-		filterIdWil=sesIdWil
-		filterQueryCond += " c.id_desa LIKE '" + sesIdWil + "%' "
-
-	lenId = len(filterIdWil) 
-	groupBy = " "
-	if(lenId == 2):
-		groupBy += "GROUP BY Z.id_provinsi"
-	elif (lenId == 4):
-		groupBy += "GROUP BY A.id_kabkota"
-	elif (lenId == 7):
-		groupBy += "GROUP BY B.id_kecamatan"	
-	elif (lenId ==10):
-		groupBy += "GROUP BY C.id_desa"
-
-	queryy =    """
-			select
-				count(*) FILTER (WHERE TEMPTABLE.JUMLAH is not null and TEMPTABLE.MAINMAP is not null ) done,
-				count(*) FILTER (WHERE TEMPTABLE.JUMLAH is null) undone
-			from
-				taswil.m_provinsi Z
-			join
-				taswil.m_kabkota A on
-				A.id_provinsi = Z.id_provinsi
-			join TASWIL.M_KECAMATAN B on
-				A.ID_KABKOTA = B.ID_KABKOTA
-			join TASWIL.M_DESA C on
-				C.ID_KECAMATAN = B.ID_KECAMATAN
-			left join (
-				select
-					ID_DESA,
-					COUNT(1) JUMLAH,
-					SUM(case when ISMAINMAP = true then 1 else 0 end) MAINMAP
-				from
-					TASWIL.T_KLAIM_BATAS_DESA
-				group by
-					ID_DESA ) TEMPTABLE on
-				C.ID_dESA = TEMPTABLE.ID_dESA
-			WHERE			
-			""" + filterQueryCond + groupBy
-
-	cur.execute(queryy)
-	data = cur.fetchall()
-	print(data)
-	if(len(data) > 0 ):
-		result=	dict(jumlah=int(data[0][1]),main=int(data[0][0]))
-	else:
-		result = dict(jumlah=0,main=0)
-	return jsonify(data =result)
-	
 
 @mod.route('/tahapan')
 @check_session

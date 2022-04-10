@@ -438,14 +438,6 @@
 
 
     <script>
-        /*const LEN_ID_PROVINSI = 2;
-        const LEN_ID_KABKOTA = 4;
-        const LEN_ID_KECAMATAN = 7;
-        const LEN_ID_DESA = 10;*/
-		const LEN_ID_PROVINSI = 2;
-        const LEN_ID_KABKOTA = 5;
-        const LEN_ID_KECAMATAN = 8;
-        const LEN_ID_DESA = 13;
         // Modal ganti akun
         document.addEventListener('keydown', (ev) => {
             if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === 'u') {
@@ -665,7 +657,7 @@
         var tableDataTable
         var initComplete
 
-        generateDataTable = function (id, url, columns, fninitComplete,responsive=true) {
+        generateDataTable = function (id, url, columns, fninitComplete) {
             // console.log(tableDataTable)
             if (typeof tableDataTable != "undefined") {
                 tableDataTable.destroy()
@@ -676,7 +668,7 @@
                 language: {
                     url: "./static/dataTables.lang.id.json"
                 },
-                responsive: responsive,
+                responsive: true,
                 serverSide: true,
                 columns: columns
                 , ajax: url
@@ -1022,13 +1014,12 @@ $("input[data-type='currency']").on({
                 if (parentValue.length == 0) {
                     parentValue = initialValue.substring(0, 2)
                 }
-				console.log("fsdfsdfsd",parentValue)
                 if (parentValue.length != 0) {
                     let listProvinsi = await $.get("/master/kabkota/dropdownlist?type=2&id_provinsi=" + parentValue);
 
                     listProvinsi.data.forEach(el => {
                         let selected = "";
-                        if (initialValue.substring(0, 5) == el.id) {
+                        if (initialValue.substring(0, 4) == el.id) {
                             selected = 'selected';
                         }
                         listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
@@ -1063,14 +1054,14 @@ $("input[data-type='currency']").on({
                 }
                 // console.log(parentValue, initialValue)
                 if (parentValue.length == 0) {
-                    parentValue = initialValue.substring(0, 5)
+                    parentValue = initialValue.substring(0, 4)
                 }
                 if (parentValue.length != 0) {
                     let listProvinsi = await $.get("/master/kecamatan/dropdownlist?type=2&id_kabkota=" + parentValue);
 
                     listProvinsi.data.forEach(el => {
                         let selected = "";
-                        if (initialValue.substring(0, 8) == el.id) {
+                        if (initialValue.substring(0, 7) == el.id) {
                             selected = 'selected';
                         }
                         listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
@@ -1095,13 +1086,13 @@ $("input[data-type='currency']").on({
         }
         generateDropdownDesa = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { },deactivatefilter=false,parentType="kecamatan",withParentName=false }) {
             try {
-                let listHtml = '<option value="" disabled selected>--Pilih Desa / Kelurahan--</option>';
+                let listHtml = '<option value="" disabled selected>--Pilih Desa--</option>';
                 if (initialValue != "") {
-                    listHtml = '<option value="" disabled selected>--Pilih Desa / Kelurahan--</option>'
+                    listHtml = '<option value="" disabled selected>--Pilih Desa--</option>'
                 }
                 // console.log(parentValue, initialValue)
                 if (parentValue.length == 0) {
-                    parentValue = initialValue.substring(0, 8)
+                    parentValue = initialValue.substring(0, 7)
                 }
                 let strDeactivate = ""
                 if(deactivatefilter){
@@ -1112,7 +1103,7 @@ $("input[data-type='currency']").on({
 
                     listProvinsi.data.forEach(el => {
                         let selected = "";
-                        if (initialValue.substring(0, 13) == el.id) {
+                        if (initialValue.substring(0, 10) == el.id) {
                             selected = 'selected';
                         }
                         if(withParentName){

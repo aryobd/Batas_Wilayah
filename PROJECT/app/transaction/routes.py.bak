@@ -74,7 +74,7 @@ def dokumendesa_form():
     elif (len(id_wilayah_selected) == len(a_user_id_wilayah)):
         id_wilayah_selected = a_user_id_wilayah
 
-    if(len(id_wilayah_selected) >= 13):
+    if(len(id_wilayah_selected) == 10):
         nama_wilayah = getWilayahById(id_wilayah_selected)['fullname_wilayah']
         return jsonify(data=render_template('dokumendesa_form.html', nama_wilayah=nama_wilayah, id_desa=id_wilayah_selected))
     else:
@@ -557,46 +557,45 @@ def klaimbatasdesa_setmainmap():
 @mod.route('/klaimbatasdesa/editor')
 @check_session
 def klaimbatasdesa_editor():
-	con = connect_db()
-	c = con.cursor()
-	a_user_id_wilayah = noneToStringNull(session["id_wilayah"])
-	a_id_klaim_batas_desa = noneToStringNull(request.args.get("gid"))
-	# print((a_user_id_wilayah))
-	id_wilayah_selected = noneToStringNull(request.args.get("id_wilayah"))
-	
-	if (len(id_wilayah_selected) < len(a_user_id_wilayah)):
-		id_wilayah_selected = a_user_id_wilayah
-	elif (len(id_wilayah_selected) == len(a_user_id_wilayah)):
-		id_wilayah_selected = a_user_id_wilayah
-	
-	data = False
-	header = "Terjadi kesalahan memuat halaman"
+    con = connect_db()
+    c = con.cursor()
+    a_user_id_wilayah = noneToStringNull(session["id_wilayah"])
+    a_id_klaim_batas_desa = noneToStringNull(request.args.get("gid"))
+    # print((a_user_id_wilayah))
+    id_wilayah_selected = noneToStringNull(request.args.get("id_wilayah"))
 
-	if (len(id_wilayah_selected) >= 13):
+    if (len(id_wilayah_selected) < len(a_user_id_wilayah)):
+        id_wilayah_selected = a_user_id_wilayah
+    elif (len(id_wilayah_selected) == len(a_user_id_wilayah)):
+        id_wilayah_selected = a_user_id_wilayah
+
+    data = False
+    header = "Terjadi kesalahan memuat halaman"
+
+    if (len(id_wilayah_selected) == 10):
         # print()
-		id_button = "btnInsert"
-		class_button = ""
-		nama_wilayah = getWilayahById(id_wilayah_selected)['fullname_wilayah']
-		geodata = ""
-		
-		if (len(a_id_klaim_batas_desa) != 0):
-			c.execute("SELECT  ST_AsGeoJSON(geom) FROM taswil.t_klaim_batas_desa WHERE id_desa= %s and id_klaim_batas_desa=%s ", [
+        id_button = "btnInsert"
+        class_button = ""
+        nama_wilayah = getWilayahById(id_wilayah_selected)['fullname_wilayah']
+        geodata = ""
+        if (len(a_id_klaim_batas_desa) != 0):
+            c.execute("SELECT  ST_AsGeoJSON(geom) FROM taswil.t_klaim_batas_desa WHERE id_desa= %s and id_klaim_batas_desa=%s ", [
                       id_wilayah_selected, a_id_klaim_batas_desa])
-			data = c.fetchall()
-			if(len(data) == 1):
+            data = c.fetchall()
+            if(len(data) == 1):
                 # print(data[0][0])
-				geodata = "=" + data[0][0]
+                geodata = "=" + data[0][0]
 
-		result = render_template("gambarbatasdesa.html",
+        result = render_template("gambarbatasdesa.html",
                                  nama_wilayah=nama_wilayah,
                                  id_wilayah=id_wilayah_selected,
                                  id_button=id_button,
                                  class_button=class_button,
                                  a_id_klaim_batas_desa=a_id_klaim_batas_desa,
                                  geodata=Markup(geodata))
-		header = "Editor Batas Desa"
-		
-	return jsonify(data=result, header=header)
+        header = "Editor Batas Desa"
+
+    return jsonify(data=result, header=header)
 
 
 @mod.route('/klaimbatasdesa/upload', methods=["POST"])
@@ -607,8 +606,8 @@ def klaimbatasdesa_upload():
 
     id_wilayah = request.json["id_wilayah"]
     feature = request.json["geom"]
-  #  print(feature["geometry"])
-  #  geom = json.dumps(feature["geometry"])
+    print(feature["geometry"])
+    geom = json.dumps(feature["geometry"])
     id_klaim_batas_desa = request.json['id_klaim_batas_desa']
 
     # print(type(geom))
@@ -622,13 +621,13 @@ def klaimbatasdesa_upload():
         if(id_klaim_batas_desa == ""):
             insert_id = str(uuid.uuid4())
             params = [insert_id, id_wilayah,
-                      username, username, feature]
+                      username, username, geom]
             c.execute("""
             INSERT INTO taswil.t_klaim_batas_desa
             (id_klaim_batas_desa,id_desa,createdby,modifiedby,geom)
             VALUES (%s,  %s, %s,%s,ST_GeomFromGeoJSON(%s))
             """, params)
-            
+            # print(c.query)
             con.commit()
         else:
             insert_id = id_klaim_batas_desa
@@ -636,7 +635,7 @@ def klaimbatasdesa_upload():
                 "SELECT * FROM taswil.t_klaim_batas_desa WHERE id_desa= %s and id_klaim_batas_desa=%s ", [id_wilayah, insert_id])
             exist = c.fetchall()
             if (len(exist) > 0):
-                params = [username, feature, insert_id]
+                params = [username, geom, insert_id]
 
                 c.execute(
                     "UPDATE taswil.t_klaim_batas_desa SET modifiedby = %s, modifiedat = now(), geom = ST_GeomFromGeoJSON(%s) WHERE id_klaim_batas_desa = %s", params)
@@ -677,7 +676,7 @@ def klaimbatasdesadata_index():
 
     cur.execute(
         convertSQLDataTable(
-            "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,a.createdby,a.modifiedby, to_char(a.createdat, 'YYYY-MM-DD HH24:MI:SS') as createdat,to_char(a.modifiedat, 'YYYY-MM-DD HH24:MI:SS') as modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
+            "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,a.createdby,a.modifiedby, to_char(a.createdat, 'HH24:MI:SS') as createdat,to_char(a.modifiedat, 'HH24:MI:SS') as modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
             + filterQueryCond))
     # es = [dict(id=row[0], movie_name=row[1]) for row in cur.fetchall()]
     # print( "SELECT id_klaim_batas_desa, a.id_desa,ismainmap,createdby,modifiedby,createdat,modifiedat,b.nama FROM taswil.t_klaim_batas_desa a, m_desa b WHERE a.id_desa=b.id_desa"
@@ -925,47 +924,10 @@ def desabersebelahan_delete():
     con.close()
     return jsonify(result=result, error=error)
 
-
+    con.close()
+    return jsonify(result=result, error=error)
 
 
 def generateIdDesaBersebelahan(desa1,desa2):
     a =['id.'+desa1,'id.'+desa2]
     return ''.join(sorted(a))
-
-
-
-############ PETA DESA ##############
-@mod.route("/petadesa")
-@check_session
-def petadesa_index():
-    return jsonify(
-        data=render_template('petadesa.html',a_user_id_wilayah=session['id_wilayah']),        
-        header='Peta Batas Desa'
-		
-    )
-	
-
-@mod.route('/petadesa/geojson')
-@check_session
-def petadesa_geojson():
-	
-	id = request.args.get('id')
-	con  = connect_db()
-	cur = con.cursor() 	
-	cur.execute("SELECT ST_AsGeoJSON(a.geom)  geom,ST_X(ST_Centroid(a.geom)),ST_y(ST_Centroid(a.geom)) FROM TASWIL.T_SUBSEGMEN A 	JOIN TASWIL.T_DESA_BERSEBELAHAN_2 B ON A.ID_DESA_BERSEBELAHAN = B.ID_DESA_BERSEBELAHAN 	WHERE DESA_1 = %s or DESA_2 = %s ",[id,id])
-	test1 = []
-	i = 0;
-	center = ""
-	nama = ""
-	for  es in cur.fetchall():	
-		i = i+1;
-		aaa = json.loads(es[0])		
-		obj = {'type' : 'Feature','id':es[0],'properties':{'x':es[1],'y':es[2]},'geometry' :aaa }
-		test1.append(obj)
-		
-	cur.close()
-	con.close()
-	test = {'type': 'FeatureCollection','crs': {'type': 'name','properties': {'name': 'EPSG:4326'}},'features' : test1}
-	return jsonify(
-       data = test
-    )

@@ -4,7 +4,6 @@ from app import connect_db,validJWT,noneToStringNull,decodeBase64,encodeBase64,g
 from psycopg2 import Error
 
 from markupsafe import Markup
-import json
 
 mod = Blueprint('master', __name__, template_folder='templates')
 
@@ -42,7 +41,7 @@ def desa_dropdownlist():
 		if len(deactivateFilter) ==0:
 			if(filterWil != ""):
 				# print("null")
-				strQuery+= " and a.id_desa like '"+filterWil[:13]+"%'"
+				strQuery+= " and a.id_desa like '"+filterWil[:10]+"%'"
 
 		strQuery += " ORDER BY a.nama asc"
 
@@ -73,19 +72,16 @@ def kecamatan_dropdownlist():
 		strQuery = "select b.id_kecamatan,(d.nama||' - '||c.nama||' - '||b.nama) ket from taswil.m_kecamatan b join taswil.m_kabkota c on b.id_kabkota = c.id_kabkota join taswil.m_provinsi d on c.id_provinsi = d.id_provinsi 	where lower(b.id_kecamatan) like lower('%"+search+"%') or lower(d.nama||' - '||c.nama||' - '||b.nama) like lower('%"+search+"%')"
 	elif type =="2":
 		filterWil = noneToStringNull(session['id_wilayah'])
-		deactivateFilter = noneToStringNull(request.args.get("deactivatefilter"))
-
 		strQuery = "select b.id_kecamatan,b.nama from taswil.m_kecamatan b join taswil.m_kabkota c on b.id_kabkota = c.id_kabkota join taswil.m_provinsi d on c.id_provinsi = d.id_provinsi where lower(b.nama) like lower('%"+search+"%') "
 		if id_provinsi !="":
 			strQuery += " and d.id_provinsi='"+id_provinsi+"'"
 		
 		if id_kabkota != "":
 			strQuery += " and c.id_kabkota='"+id_kabkota+"'"
-	
-		if len(deactivateFilter) ==0:
-			if(filterWil != ""):
+
+		if(filterWil != ""):
 			# print("null")
-				strQuery+= " and b.id_kecamatan like '"+filterWil[:8]+"%'"
+			strQuery+= " and b.id_kecamatan like '"+filterWil[:7]+"%'"
 
 		strQuery += " ORDER BY b.nama asc"
 
@@ -122,7 +118,7 @@ def kabkota_dropdownlist():
 
 		if(filterWil != ""):
 			# print("null")
-			strQuery+= " and id_kabkota like '"+filterWil[:5]+"%'"
+			strQuery+= " and id_kabkota like '"+filterWil[:4]+"%'"
 
 		strQuery += " ORDER BY c.nama asc"
 
@@ -173,6 +169,7 @@ def provinsi_dropdownlist():
     )
 
 
+
 @mod.route('/petadesa')
 @check_session
 def petadesa_index():
@@ -215,33 +212,3 @@ def petadesa_index():
 	con.close()
 	
 	return jsonify(data=result,id_desa=id_desa)
-
-
-@mod.route('/petadesa1')
-# @check_session
-def petadesa1_index():
-	con  = connect_db()
-	cur = con.cursor() 
-
-	allowedType = ['geojson']
-
-	id_desa = noneToStringNull(request.args.get("id_desa"))
-	
-	cur.execute("select  ST_AsGeoJSON(c.geom) wilayah_desa_asal,ST_AsText(ST_Centroid(c.geom)) center, b.nama ,c.description from taswil.t_klaim_batas_desa a join taswil.m_Desa b on a.id_desa = b.id_Desa join taswil.t_klaim_batas_desa_Detil c on a.id_klaim_batas_desa = c.id_klaim_batas_desa where a.ismainmap = true and a.id_Desa = %s ",[id_desa])
-	test1 = []
-	i = 0;
-	center = ""
-	nama = ""
-	for  es in cur.fetchall():	
-		i = i+1;
-		aaa = json.loads(es[0])
-		obj = {'type' : 'Feature','id':'A'+str(i),'properties':{'nama':es[2]},'geometry' :aaa }
-		test1.append(obj)
-		center = es[1]
-		nama = es[2]
-	cur.close()
-	con.close()
-	test = {'type': 'FeatureCollection','crs': {'type': 'name','properties': {'name': 'EPSG:4326'}},'features' : test1}
-	return jsonify(
-       data = test,center = center,nama = nama
-    )

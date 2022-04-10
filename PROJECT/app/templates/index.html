@@ -13,7 +13,7 @@
     <link rel="canonical" href="https://www.wrappixel.com/templates/materialpro/">
     <link rel="stylesheet" type="text/css" href="static/dataTables.bootstrap4.css">
     <link rel="stylesheet" type="text/css" href="static/responsive.dataTables.min.css">
-
+    
     <!-- Custom CSS -->
     <link href="static/jquery.toast.css" rel="stylesheet">
     <link href="static/style.css" rel="stylesheet">
@@ -127,7 +127,6 @@
             font-weight: 500;
             font-size: 12px;
         }
-
         .c-pointer {
             cursor: pointer;
         }
@@ -427,7 +426,7 @@
     <script src="static/jquery.toast.js"></script>
     <script src="static/validation.js"></script>
 
-
+   
 
     <!-- end - This is for export functionality only -->
     <script>
@@ -439,14 +438,10 @@
 
 
     <script>
-        /*const LEN_ID_PROVINSI = 2;
+        const LEN_ID_PROVINSI = 2;
         const LEN_ID_KABKOTA = 4;
         const LEN_ID_KECAMATAN = 7;
-        const LEN_ID_DESA = 10;*/
-        const LEN_ID_PROVINSI = 2;
-        const LEN_ID_KABKOTA = 5;
-        const LEN_ID_KECAMATAN = 8;
-        const LEN_ID_DESA = 13;
+        const LEN_ID_DESA = 10;
         // Modal ganti akun
         document.addEventListener('keydown', (ev) => {
             if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === 'u') {
@@ -507,7 +502,7 @@
                 let a_id_wilayah = '{{a_id_wilayah}}'
                 // infopermintaan
                 console.log(a_id_wilayah)
-                if (a_id_wilayah.length == LEN_ID_DESA) {
+                if (a_id_wilayah.length == 10) {
                     let url = "/transaction/desabersebelahan/data?tipe=2&id_wilayah=" + a_id_wilayah;
                     $.get(url, function (res) {
                         if (res.status) {
@@ -666,12 +661,7 @@
         var tableDataTable
         var initComplete
 
-        generateDataTable = function (id, url, columns, fninitComplete, responsive = true) {
-            // nambahin kolom di thead
-            if ($(id + ">thead>tr th.col-number").length == 0) {
-                $(id + ">thead>tr").prepend('<th class="col-number"></th>')
-            }
-
+        generateDataTable = function (id, url, columns, fninitComplete) {
             // console.log(tableDataTable)
             if (typeof tableDataTable != "undefined") {
                 tableDataTable.destroy()
@@ -682,44 +672,17 @@
                 language: {
                     url: "./static/dataTables.lang.id.json"
                 },
-                "order": [[ 1, 'asc' ]],
-                responsive: responsive,
+                responsive: true,
                 serverSide: true,
-                columns: [{
-                    data: null,
-                    render: function (data, type, row, meta) {
-                        let {page,length} = tableDataTable.page.info()
-                        // console.log(info)
-                        // console.log(meta);
-                        return meta.row + 1 + (page * length);
-                    }
-                }, ...columns]
+                columns: columns
                 , ajax: url
                 //,"initComplete":fninitComplete
                 , "initComplete": function () {
                     fninitComplete(); // add this here too
                     checkRoleButton();
-                },
-                "columnDefs": [{
-                    "searchable": false,
-                    "orderable": false,
-                    "targets": 0
-                }],
+                }
 
             })
-            // tableDataTable.on('page.dt', function () {
-            //     var info = tableDataTable.page.info();
-            //     // console.log(info)
-            //     tableDataTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-            //         cell.innerHTML = i + 1 + (info.page *info.length);
-            //     });
-            //     // $('#pageInfo').html('Showing page: ' + info.page + ' of ' + info.pages);
-            // });
-            // tableDataTable.on('order.dt search.dt', function () {
-            //     tableDataTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-            //         cell.innerHTML = i + 1;
-            //     });
-            // }).draw();
 
             //tableDataTable.on( 'draw.dt', fninitComplete );
 
@@ -756,30 +719,30 @@
             setPageContentByUrl()
             let a_id_wilayah = '{{a_id_wilayah}}'
             // infopermintaan
-            if (a_id_wilayah.length == LEN_ID_DESA) {
-                let url = "/transaction/desabersebelahan/data?tipe=2&id_wilayah=" + a_id_wilayah;
-                $.get(url, function (res) {
-                    if (res.status) {
-                        let { permintaan } = res.data;
+            if(a_id_wilayah.length ==10){
+                let url =  "/transaction/desabersebelahan/data?tipe=2&id_wilayah="+a_id_wilayah;
+                $.get(url,function(res){
+                    if(res.status){
+                        let {permintaan}=res.data;
                         let c = 0
-                        if (permintaan)
-                            permintaan.forEach(val => { if (val.status.toLowerCase() == "belum dikonfirmasi") { c++ } })
+						if (permintaan)
+							permintaan.forEach(val=>{if(val.status.toLowerCase()=="belum dikonfirmasi"){c++}})
 
-                        let notif = '   <a class="col-4" href="javascript:void(0)" onclick="execURL(' + "'/transaction/desabersebelahan'" + ')">' +
-                            '<div class="card">' +
-                            '<h4 class="card-header">Permintaan Desa Bersebelahan</h4>' +
-                            '<div class="card-body">' +
-                            'Menunggu Konfirmasi : <label class="badge badge-info">' + c + '</label>' +
-                            '</div>' +
-                            '</div>' +
-                            ' </a>'
-                        if (c > 0) {
-                            $("#pageContent").append(notif)
-                        }
+                        let notif ='   <a class="col-4" href="javascript:void(0)" onclick="execURL('+"'/transaction/desabersebelahan'"+')">'+
+                '<div class="card">'+
+                    '<h4 class="card-header">Permintaan Desa Bersebelahan</h4>'+
+                    '<div class="card-body">'+
+                        'Menunggu Konfirmasi : <label class="badge badge-info">'+c+'</label>'+
+                    '</div>'+
+                '</div>'+
+                ' </a>'
+                if(c >0){
+                    $("#pageContent").append(notif)
+                }
                     }
                 })
             }
-
+            
         });
 
 
@@ -1055,13 +1018,12 @@ $("input[data-type='currency']").on({
                 if (parentValue.length == 0) {
                     parentValue = initialValue.substring(0, 2)
                 }
-                //console.log("fsdfsdfsd", parentValue)
                 if (parentValue.length != 0) {
                     let listProvinsi = await $.get("/master/kabkota/dropdownlist?type=2&id_provinsi=" + parentValue);
 
                     listProvinsi.data.forEach(el => {
                         let selected = "";
-                        if (initialValue.substring(0, 5) == el.id) {
+                        if (initialValue.substring(0, 4) == el.id) {
                             selected = 'selected';
                         }
                         listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
@@ -1088,7 +1050,7 @@ $("input[data-type='currency']").on({
 
         }
 
-        generateDropdownKecamatan = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { }, deactivatefilter = false }) {
+        generateDropdownKecamatan = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { }, }) {
             try {
                 let listHtml = '<option value="" disabled selected>--Pilih Kecamatan--</option>';
                 if (initialValue != "") {
@@ -1096,18 +1058,14 @@ $("input[data-type='currency']").on({
                 }
                 // console.log(parentValue, initialValue)
                 if (parentValue.length == 0) {
-                    parentValue = initialValue.substring(0, 5)
-                }
-                let strDeactivate = ""
-                if (deactivatefilter) {
-                    strDeactivate = "&deactivatefilter=true"
+                    parentValue = initialValue.substring(0, 4)
                 }
                 if (parentValue.length != 0) {
-                    let listProvinsi = await $.get("/master/kecamatan/dropdownlist?type=2&id_kabkota=" + parentValue +strDeactivate);
+                    let listProvinsi = await $.get("/master/kecamatan/dropdownlist?type=2&id_kabkota=" + parentValue);
 
                     listProvinsi.data.forEach(el => {
                         let selected = "";
-                        if (initialValue.substring(0, 8) == el.id) {
+                        if (initialValue.substring(0, 7) == el.id) {
                             selected = 'selected';
                         }
                         listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
@@ -1130,32 +1088,32 @@ $("input[data-type='currency']").on({
             }
 
         }
-        generateDropdownDesa = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { }, deactivatefilter = false, parentType = "kecamatan", withParentName = false }) {
+        generateDropdownDesa = async function ({ selector = "", initialValue = "", onChangeEvent = () => { }, parentValue = "", initChild = false, onComplete = () => { },deactivatefilter=false,parentType="kecamatan",withParentName=false }) {
             try {
-                let listHtml = '<option value="" disabled selected>--Pilih Desa / Kelurahan--</option>';
+                let listHtml = '<option value="" disabled selected>--Pilih Desa--</option>';
                 if (initialValue != "") {
-                    listHtml = '<option value="" disabled selected>--Pilih Desa / Kelurahan--</option>'
+                    listHtml = '<option value="" disabled selected>--Pilih Desa--</option>'
                 }
                 // console.log(parentValue, initialValue)
                 if (parentValue.length == 0) {
-                    parentValue = initialValue.substring(0, 8)
+                    parentValue = initialValue.substring(0, 7)
                 }
                 let strDeactivate = ""
-                if (deactivatefilter) {
+                if(deactivatefilter){
                     strDeactivate = "&deactivatefilter=true"
                 }
                 if (parentValue.length != 0) {
-                    let listProvinsi = await $.get("/master/desa/dropdownlist?type=2&id_" + parentType + "=" + parentValue + strDeactivate);
+                    let listProvinsi = await $.get("/master/desa/dropdownlist?type=2&id_"+parentType+"=" + parentValue+strDeactivate);
 
                     listProvinsi.data.forEach(el => {
                         let selected = "";
-                        if (initialValue.substring(0, 13) == el.id) {
+                        if (initialValue.substring(0, 10) == el.id) {
                             selected = 'selected';
                         }
-                        if (withParentName) {
+                        if(withParentName){
 
-                            listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + ', ' + el.parent_name + '</option>';
-                        } else {
+                            listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name+', '+el.parent_name + '</option>';
+                        }else{
 
                             listHtml += '<option value="' + el.id + '" ' + selected + '>' + el.name + '</option>';
                         }
